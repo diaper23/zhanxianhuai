@@ -1356,13 +1356,13 @@
         启用: true
         类型: 脚本
         内容: |-
-          import 'https://testingcf.jsdelivr.net/gh/diaper23/zhanxianhuai@main/dist/斩仙槐/脚本/变量结构/index.js';
+          import 'https://testingcf.jsdelivr.net/gh/diaper23/zhanxianhuai@main/cdn/zx/script/schema/index.js';
 
       - 名称: 骰子检定样式
         启用: true
         类型: 脚本
         内容: |-
-          import 'https://testingcf.jsdelivr.net/gh/diaper23/zhanxianhuai@main/dist/斩仙槐/脚本/骰子检定样式/index.js';
+          import 'https://testingcf.jsdelivr.net/gh/diaper23/zhanxianhuai@main/cdn/zx/script/dice/index.js';
 
   正则:
     - 正则名称: '[界面]格式化检定结果'
@@ -1384,7 +1384,7 @@
         ```
         <body>
         <script>
-        $('body').load('https://testingcf.jsdelivr.net/gh/diaper23/zhanxianhuai@main/dist/斩仙槐/界面/创建主角/index.html')
+        $('body').load('https://testingcf.jsdelivr.net/gh/diaper23/zhanxianhuai@main/cdn/zx/ui/create/index.html')
         </script>
         </body>
         ```
@@ -1402,7 +1402,7 @@
         ```
         <body>
         <script>
-        $('body').load('https://testingcf.jsdelivr.net/gh/diaper23/zhanxianhuai@main/dist/斩仙槐/界面/状态栏/index.html')
+        $('body').load('https://testingcf.jsdelivr.net/gh/diaper23/zhanxianhuai@main/cdn/zx/ui/status/index.html')
         </script>
         </body>
         ```
