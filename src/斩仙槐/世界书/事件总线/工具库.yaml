@@ -16,6 +16,13 @@
     define('scene',    () => String(this.getvar('stat_data.剧情进度.当前场景', { defaults: '' })));
     define('chapter',  () => String(this.getvar('stat_data.剧情进度.当前章节', { defaults: '第一章·诏起龙庭' })));
     define('identity', () => String(this.getvar('stat_data.主角.身份',       { defaults: '' })));
+    // ── 攻线读取：NPC 好感（无记录视为 0）──
+    define('affinity', (name) => {
+      const rel = this.getvar('stat_data.NPC关系表', { defaults: {}, noCache: true }) || {};
+      const r = rel[String(name)];
+      return r ? (Number(r.好感) || 0) : 0;
+    });
+
     // ── 硬时钟读取：时段（六格）与当前日 ──
     define('time', () => String(this.getvar('stat_data.世界.时段',        { defaults: '清晨' })));
     define('day',  () => Number(this.getvar('stat_data.剧情进度.当前日',   { defaults: 1 })) || 1);
