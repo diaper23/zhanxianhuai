@@ -1,0 +1,8 @@
+﻿---
+P022_Fame_Spreads: |-
+  <%_/* 插入 :line: "名声外传" */
+  if ((matchChatMessages(['冷翎瑶', '家属', '侠之大者', '圣心宫'], { start: -4 })) && !hitDone('P022_Fame_Spreads')) {
+    markHit('插入', 'P022_Fame_Spreads', `<span style="display:none;">[插入剧情：P022_Fame_Spreads]</span>
+    可插入赵田/姜燕家属抵达、冷翎瑶震撼、字条传回圣心宫、祝月曦侧目。
+    推进目标：让地方治理结果进入江湖与建康视野。`);
+  } _%>

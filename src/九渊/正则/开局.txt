@@ -1,0 +1,601 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>九渊旧卷-入世阵盘</title>
+    <style>
+        :root {
+            --c-bg: #110e0c;
+            --c-paper: #1c1814;
+            --c-line: #a68a5c;
+            --c-qing: #5bc0be;
+            --c-dark: #6e5836;
+            --c-text-sub: #8c8378;
+            --c-text-main: #e6dbcd;
+            --c-glow-gold: rgba(166, 138, 92, 0.4);
+            --c-glow-qing: rgba(91, 192, 190, 0.5);
+
+            --f-title: "楷体", "KaiTi", "STKaiti", serif;
+            --f-text: "仿宋", "FangSong", "STFangsong", serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--f-text);
+            background-color: var(--c-bg);
+            color: var(--c-text-main);
+            padding: 20px 10px;
+            overflow-x: hidden;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+        }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+        ::-webkit-scrollbar-thumb { background: rgba(166,138,92,0.5); border-radius: 2px; }
+
+        .scroll-container {
+            width: 100%;
+            max-width: 650px;
+            background-color: var(--c-paper);
+            position: relative;
+            padding: 20px 25px;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.8);
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .scroll-container::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23a68a5c' fill='none' opacity='0.08' stroke-width='0.5'%3E%3Ccircle cx='100' cy='100' r='90' stroke-dasharray='2 4'/%3E%3Ccircle cx='100' cy='100' r='75'/%3E%3Ccircle cx='100' cy='100' r='60'/%3E%3Cpath d='M100 25 L100 175 M25 100 L175 100 M47 47 L153 153 M47 153 L153 47'/%3E%3Ccircle cx='100' cy='100' r='20'/%3E%3Cpath d='M100 80 A 20 20 0 0 1 100 120 A 10 10 0 0 0 100 100 A 10 10 0 0 1 100 80' fill='%23a68a5c' opacity='0.05'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 0;
+            animation: slowSpin 60s linear infinite; pointer-events: none;
+            opacity: 0.5;
+        }
+
+        @keyframes slowSpin { 100% { transform: rotate(360deg); } }
+
+        .header, .step-nav, .step-content { position: relative; z-index: 1; }
+
+        .header { display: flex; justify-content: center; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid rgba(166,138,92,0.2); }
+        .title { font-family: var(--f-title); font-size: 22px; color: var(--c-line); letter-spacing: 4px; text-shadow: 0 0 10px var(--c-glow-gold); font-weight: bold; }
+
+        .step-nav { display: flex; justify-content: space-between; margin-bottom: 20px; position: relative; }
+        .step-nav::after { content: ''; position: absolute; top: 50%; left: 10%; width: 80%; height: 1px; background: rgba(166,138,92,0.2); z-index: -1; }
+        .step-dot { flex: 1; text-align: center; font-family: var(--f-title); color: var(--c-text-sub); font-size: 14px; transition: 0.3s; cursor: pointer; letter-spacing: 1px; background: var(--c-paper); padding: 0 5px; }
+        .step-dot.active { color: var(--c-line); transform: scale(1.05); font-weight: bold; text-shadow: 0 0 8px var(--c-glow-gold); }
+
+        .step-content { display: none; animation: emerge 0.3s forwards; }
+        .step-content.active { display: block; }
+        @keyframes emerge { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .field { display: flex; flex-direction: column; gap: 6px; }
+        .lbl { font-size: 12px; color: var(--c-line); letter-spacing: 1px; font-weight: bold; display: flex; align-items: center; }
+        .lbl::before { content: '◈'; font-size: 10px; margin-right: 6px; color: var(--c-dark); }
+
+        .inp, .sel, .txt {
+            width: 100%; background: rgba(0,0,0,0.6); border: 1px solid rgba(166,138,92,0.3);
+            padding: 8px 10px; font-family: var(--f-text); font-size: 13px; color: var(--c-text-main);
+            transition: 0.3s; border-radius: 2px; box-sizing: border-box;
+        }
+        .inp:focus, .sel:focus, .txt:focus { border-color: var(--c-line); outline: none; background: rgba(0,0,0,0.8); box-shadow: 0 0 5px var(--c-glow-gold); }
+        .sel { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23a68a5c'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 20px;}
+        .txt { height: 60px; resize: none; line-height: 1.5; }
+
+        .grp { display: flex; gap: 6px; align-items: center; width: 100%; }
+        .btn-edit { width: 32px; height: 33px; border: 1px solid rgba(166,138,92,0.3); background: rgba(0,0,0,0.4); color: var(--c-text-sub); cursor: pointer; border-radius: 2px; flex-shrink: 0;}
+        .btn-edit:hover { color: var(--c-line); border-color: var(--c-line); }
+
+        .foot { margin-top: 20px; padding-top: 15px; border-top: 1px dashed rgba(166,138,92,0.2); display: flex; gap: 10px; }
+        .btn {
+            flex: 1; padding: 10px; border: 1px solid var(--c-dark); font-family: var(--f-title); font-size: 14px;
+            letter-spacing: 2px; cursor: pointer; border-radius: 2px; transition: 0.3s;
+        }
+        .btn-rnd { background: rgba(28,25,22,0.9); color: var(--c-line); }
+        .btn-rnd:hover { background: rgba(166,138,92,0.2); border-color: var(--c-line); color: #fff; }
+        .btn-go { background: linear-gradient(90deg, #1f3b3b, #2a4a4a); border-color: #3b6b6b; color: #fff; font-weight: bold; }
+        .btn-go:hover { background: linear-gradient(90deg, #2a4a4a, #3b6b6b); border-color: var(--c-qing); }
+
+        .hidden { display: none !important; }
+
+        /* 灵根行 */
+        #linggen-row {
+            animation: emerge 0.3s forwards;
+        }
+        #linggen-row .lbl { color: var(--c-qing); }
+        #linggen-row .lbl::before { color: var(--c-qing); }
+        .linggen-grade {
+            font-family: var(--f-title); font-size: 13px; color: var(--c-qing);
+            text-shadow: 0 0 6px var(--c-glow-qing); text-align: center; min-width: 60px;
+        }
+        .linggen-hint { font-size: 10px; color: var(--c-text-sub); margin-top: 2px; }
+
+        /* 弹窗系统 */
+        .sys-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(2px); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.2s; padding: 20px; }
+        .sys-modal.show { opacity: 1; pointer-events: auto; }
+        .sys-modal-content { width: 100%; max-width: 450px; background: var(--c-paper); border: 1px solid var(--c-line); border-radius: 2px; display: flex; flex-direction: column; transform: scale(0.95); transition: 0.2s; max-height: 80vh; }
+        .sys-modal.show .sys-modal-content { transform: scale(1); }
+        .sys-modal-header { padding: 10px 15px; border-bottom: 1px dashed rgba(166,138,92,0.3); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); }
+        .sys-modal-title { font-family: var(--f-title); color: var(--c-line); font-size: 15px; font-weight: bold; }
+        .sys-modal-close { color: var(--c-text-sub); cursor: pointer; font-size: 16px; }
+        .sys-modal-body { padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+
+        .opt-item { padding: 8px; border: 1px solid rgba(166,138,92,0.2); background: rgba(0,0,0,0.4); cursor: pointer; border-radius: 2px; }
+        .opt-item:hover { background: rgba(166,138,92,0.15); border-color: var(--c-line); }
+        .opt-cate { font-size: 10px; color: var(--c-line); background: rgba(166,138,92,0.1); padding: 2px 6px; border-radius: 2px; display: inline-block; margin-bottom: 4px; }
+        .opt-name { font-family: var(--f-title); font-size: 14px; color: var(--c-qing); font-weight: bold; margin-bottom: 2px; }
+        .opt-desc { font-size: 12px; color: var(--c-text-sub); line-height: 1.4; }
+
+        @media (max-width: 500px) {
+            .grid { grid-template-columns: 1fr; gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sys_modal" class="sys-modal">
+        <div class="sys-modal-content">
+            <div class="sys-modal-header">
+                <div class="sys-modal-title" id="sys_modal_title">请选择</div>
+                <div class="sys-modal-close" id="btn_close_modal">✖</div>
+            </div>
+            <div class="sys-modal-body" id="sys_modal_list"></div>
+        </div>
+    </div>
+
+    <div class="scroll-container">
+        <div class="header">
+            <div class="title">九渊入世·天命阵盘</div>
+        </div>
+
+        <div class="step-nav">
+            <div class="step-dot active" id="nav1">一·基本信息</div>
+            <div class="step-dot" id="nav2">二·出生道途</div>
+            <div class="step-dot" id="nav3">三·随身底蕴</div>
+        </div>
+
+        <div id="step1" class="step-content active">
+            <div class="grid">
+                <div class="field"><span class="lbl">姓名</span><input type="text" id="i_nm" class="inp" value="无名"></div>
+                <div class="field">
+                    <span class="lbl">年龄</span>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <input type="range" id="i_ag_slider" min="12" max="150" value="18" style="flex:1; accent-color: var(--c-line);">
+                        <input type="text" id="i_ag" class="inp" value="18" style="width:40px; text-align:center; padding: 8px 0;" readonly>
+                    </div>
+                </div>
+                <div class="field">
+                    <span class="lbl">性别</span>
+                    <div class="grp">
+                        <div class="sel inp" id="disp_i_gd">男</div>
+                        <input type="hidden" id="i_gd" value="男">
+                    </div>
+                </div>
+                <div class="field">
+                    <span class="lbl">入世身份</span>
+                    <div class="grp">
+                        <div class="sel inp" id="disp_i_id">路边客栈的跑堂</div>
+                        <input type="hidden" id="i_id" value="路边客栈的跑堂">
+                        <button class="btn-edit" data-t="i_id">改</button>
+                        <input type="text" id="i_id_c" class="inp hidden" placeholder="自定义...">
+                    </div>
+                </div>
+                <div class="field" style="grid-column: 1 / -1;">
+                    <span class="lbl">容貌特征</span>
+                    <input type="text" id="i_ap" class="inp" placeholder="例如：面容清秀，眼角有一道浅疤..." value="相貌平平，属于扔进人堆里找不出来的那种。">
+                </div>
+            </div>
+            <div class="foot">
+                <button class="btn btn-rnd" id="btn_next_1">下一步</button>
+            </div>
+        </div>
+
+        <div id="step2" class="step-content hidden">
+            <div class="grid">
+                <div class="field" style="grid-column: 1 / -1;">
+                    <span class="lbl">出生地点</span>
+                    <div class="grp">
+                        <div class="sel inp" id="disp_i_lc">大朔·洛川的繁华集市</div>
+                        <input type="hidden" id="i_lc" value="大朔·洛川的繁华集市">
+                        <button class="btn-edit" data-t="i_lc">改</button>
+                        <input type="text" id="i_lc_c" class="inp hidden" placeholder="自定义...">
+                    </div>
+                </div>
+                <div class="field" style="grid-column: 1 / -1;">
+                    <span class="lbl">修习学派</span>
+                    <div class="grp">
+                        <div class="sel inp" id="disp_i_sc">散修</div>
+                        <input type="hidden" id="i_sc" value="散修">
+                    </div>
+                </div>
+                <!-- 灵根选择区域，仅气脉可见 -->
+                <div class="field hidden" id="linggen-row" style="grid-column: 1 / -1;">
+                    <span class="lbl">先天灵根</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <input type="range" id="i_lg_slider" min="1" max="9" value="5" style="flex:1; accent-color: var(--c-qing);">
+                        <span class="linggen-grade" id="linggen-grade-text">五品</span>
+                    </div>
+                    <div class="linggen-hint">一品为天纵之资，九品为凡骨之质。灵根决定气脉修行的上限与速度。</div>
+                </div>
+            </div>
+            <div class="foot">
+                <button class="btn btn-rnd" id="btn_prev_2">返回</button>
+                <button class="btn btn-rnd" id="btn_next_2">下一步</button>
+            </div>
+        </div>
+
+        <div id="step3" class="step-content hidden">
+            <div class="grid">
+                <div class="field">
+                    <span class="lbl">初始功法</span>
+                    <div class="grp">
+                        <div class="sel inp" id="disp_i_sk">无名吐纳法</div>
+                        <input type="hidden" id="i_sk" value="无名吐纳法">
+                        <button class="btn-edit" data-t="i_sk">改</button>
+                        <input type="text" id="i_sk_c" class="inp hidden" placeholder="自定义...">
+                    </div>
+                </div>
+                <div class="field"><span class="lbl">盘缠</span><input type="text" id="i_mo" class="inp" value="3颗碎灵石, 10两白银"></div>
+                <div class="field" style="grid-column: 1 / -1;">
+                    <span class="lbl">行囊 (随身物品)</span>
+                    <div class="grp">
+                        <div class="sel inp" id="disp_i_bg">一把卷刃的铁剑，半个硬馒头</div>
+                        <input type="hidden" id="i_bg" value="一把卷刃的铁剑，半个硬馒头">
+                        <button class="btn-edit" data-t="i_bg">改</button>
+                        <input type="text" id="i_bg_c" class="inp hidden" placeholder="自定义...">
+                    </div>
+                </div>
+            </div>
+            <div class="field" style="margin-top:15px">
+                <span class="lbl">前尘旧梦 (背景概述)</span>
+                <textarea id="i_ds" class="txt" placeholder="简述你的来历与目的..."></textarea>
+            </div>
+            <div class="foot">
+                <button class="btn btn-rnd" id="btn_prev_3">返回</button>
+                <button class="btn btn-go" id="b_go">确认，以此身入世</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 灵根品级文本映射 */
+        const LINGGEN_GRADE_TEXT = ['','一品','二品','三品','四品','五品','六品','七品','八品','九品'];
+
+        setTimeout(() => {
+            try {
+                const DB = {
+                    Gender: [ {n: "男", d: ""}, {n: "女", d: ""}, {n: "保密", d: ""} ],
+                    Identity: [
+                        {c: "平淡营生", n: "路边客栈的跑堂", d: "每天端茶倒水听八卦，偶尔能从喝醉的散修嘴里听到点真东西。"},
+                        {c: "平淡营生", n: "小镇的木匠学徒", d: "跟着老师傅学手艺，手上的老茧厚厚一层，梦想是攒钱去大城市开工坊。"},
+                        {c: "平淡营生", n: "商队的跟车帮工", d: "不属于商会核心，只是为了混口饭吃跟着商队走南闯北，负责喂马和搬货。"},
+                        {c: "平淡营生", n: "无名道观的扫地童子", d: "老道士去世后道观就荒了，每天除了扫地就是发呆，没见过世面。"},
+
+                        {c: "略有家资", n: "大朔世家的边缘旁支", d: "虽然接触不到核心功法，但每个月有固定月钱，生活比底层散修体面得多。"},
+                        {c: "略有家资", n: "中型商会管事的独子", d: "老爹在商於有点人脉，吃穿不愁，还能偶尔买点低阶丹药强身健体。"},
+                        {c: "略有家资", n: "天衡宗外门执事的侄子", d: "靠着这层关系拿到了免试外门推荐信，别人眼红的敲门砖你唾手可得。"},
+                        {c: "略有家资", n: "隐元阁分号的账房学徒", d: "掌柜的远房亲戚，偶尔能瞥见一些不太机密的公开情报简报。"},
+
+                        {c: "大朔遗孤", n: "被贬黜的五品主事", d: "原本在大朔礼部任职，因卷入儒法政争被流放，带出了一点内幕。"},
+                        {c: "大朔遗孤", n: "天衡宗被除名的废徒", d: "曾是内门天骄，因私研禁忌气脉导致经脉寸断被逐出山门。"},
+                        {c: "西戈重炮", n: "战败的西戈溃兵", d: "背着悬赏还要忍受旧伤复发的折磨，铁穹商团的追兵还在身后。"},
+                        {c: "西戈重炮", n: "金沙矿政局的寻脉官", d: "发现了一条未被记录的灵石主脉，被多方势力追杀灭口。"},
+                        {c: "南烬禁忌", n: "被放逐的守禁派后裔", d: "家族在神庙长老会的清洗中覆灭，带着上古石碑的拓片逃亡。"},
+                        {c: "南烬禁忌", n: "未注册的冥契者", d: "在南烬境外偶然与深渊契灵建立了微弱联系，必须躲避大朔断罪者的追杀。"},
+                        {c: "千岛游魂", n: "破产的东屿海商", d: "在一次海兽袭击中失去了所有的海铭商船，还欠着商於银号一笔烂账。"},
+                        {c: "千岛游魂", n: "心炉盟的失火者", d: "经历过极度绝望导致心炉几近烬灭，正在寻找重新点燃燃料的契机。"},
+                        {c: "边缘行者", n: "隐元阁的叛逃谍子", d: "知晓了某大国不可告人的机密，被迫改头换面隐藏身份。"},
+                        {c: "边缘行者", n: "渊下野的拾荒散修", d: "靠捡残片度日，身体已被紊乱的灵气轻度侵蚀，寿命无多。"},
+
+                        {c: "天道戏言", n: "被退婚的世家废柴", d: "曾是天才，遭人暗算经脉堵塞被大朔世家当众退婚剥夺资源，其实灵窍正在悄然重组。"},
+                        {c: "天道戏言", n: "出逃的极品鼎炉", d: "被南烬某位高阶女祭司当成药引，拼死逃出后，那位祭司发现功法反噬，正在疯狂全境追捕你。"},
+                        {c: "天道戏言", n: "假死脱身的替身白月光", d: "被天衡宗长老当成某人的替补养了十年，发现真相后炸了灵脉假死，顺走了核心残卷。"},
+                        {c: "天道戏言", n: "隐忍三年的受气赘婿", d: "隐姓埋名的前渊守人统领，在商於某商会当了三年打不还手的赘婿，直到今天看到了封印异动的密信。"},
+                        {c: "天道戏言", n: "流落矿区的真少爷", d: "刚在西戈黑窑沟得知自己是大朔某门阀的真血脉，但假少爷雇的杀手已经到了门外。"}
+                    ],
+                    Location: [
+                        /* 市井烟火 — 普通人的日常场景 */
+                        {c: "市井烟火", n: "大朔·洛川的繁华集市", d: "商贾云集，叫卖声不绝于耳，充满了最普通也最安稳的人间烟火气。"},
+                        {c: "市井烟火", n: "商於·市邑的客栈大堂", d: "人来人往的交通枢纽，打尖住店的客人带来各国的奇闻异事。"},
+                        {c: "市井烟火", n: "涪陵·回湾渡的渔船上", d: "水网密布的泽国，船板随波摇晃，空气里满是水草和鱼腥味。"},
+                        {c: "市井烟火", n: "东屿·鸣螺港的卸货码头", d: "装卸工喊着号子，海盐的味道混杂着缆绳的汗臭味。"},
+                        {c: "市井烟火", n: "西戈·荒泉镇的驿站", d: "风沙中难得的歇脚处，几匹老马在槽边嚼着干草。"},
+                        {c: "市井烟火", n: "大朔·天京的书坊街", d: "儒生们捧着新印的策论在街上边走边读，笔墨铺的伙计在门口研墨招揽生意。"},
+                        {c: "市井烟火", n: "东屿·海市的珍珠拍卖场", d: "珠光宝气的大厅里挤满了各国商贾，叫价声一浪高过一浪。"},
+                        {c: "市井烟火", n: "郢丘·明法堂前的论道广场", d: "七大学派的学子在此辩经，围观者时而喝彩时而嘘声，热闹非凡。"},
+                        {c: "市井烟火", n: "北朔·镜廊关市的皮货集市", d: "冰原猎人们用兽皮换取铁器和盐巴，空气中弥漫着鞣制皮革的酸味。"},
+
+                        /* 绝地逢生 — 危险地带 */
+                        {c: "绝地逢生", n: "渊下野·大裂谷墟市", d: "灵暴肆虐的无主之地，这里没有法律，只有拳头和情报。"},
+                        {c: "绝地逢生", n: "西戈·铁门城外的黑窑沟", d: "矿工与流民的聚集地，空气里全是机油味和绝望。"},
+                        {c: "绝地逢生", n: "越棘·腐败沼泽的边缘", d: "稍有不慎就会陷入泥潭，周围潜伏着毒虫与未开化的山民。"},
+                        {c: "绝地逢生", n: "南烬·白骨渡的弃尸滩", d: "被处决的异端尸体顺流漂到此处堆积，腐臭味浓得令人窒息，却也是情报贩子捡漏的好地方。"},
+                        {c: "绝地逢生", n: "北朔·万骨冰窟的入口", d: "数百具冻僵的探险者尸体半埋在冰层中，他们的遗物还挂在腰间闪烁微光。"},
+                        {c: "绝地逢生", n: "渊下野·暗渠码头的地下暗河", d: "没有光照的地下河道，只有水声和远处未知生物的呼吸声，走私者在此交易违禁品。"},
+                        {c: "绝地逢生", n: "涪陵·黑沼窟的深处", d: "沼气弥漫的洞穴迷宫，失足落入沼气池中便再也浮不上来。"},
+                        {c: "绝地逢生", n: "南烬·滴血崖的崖底", d: "祭祀坑中堆积着千年以来的牺牲骸骨，偶尔有冥契者来此感应残留的契痕。"},
+
+                        /* 波云诡谲 — 各方势力交织的灰色地带 */
+                        {c: "波云诡谲", n: "大朔·天京外城贫民窟", d: "表面繁华的皇都阴暗面，帮派和法家暗探在此混杂。"},
+                        {c: "波云诡谲", n: "南烬·炎丘的冥木树下", d: "正午阳光最烈，却是冥契者唯一不觉得契痕刺痛的时刻。"},
+                        {c: "波云诡谲", n: "梁川·被遗弃的缓冲要塞", d: "大朔和西戈交战后的废墟，掩埋着无数未能带走的物资。"},
+                        {c: "波云诡谲", n: "东屿·炉心屿的秘密拍卖会", d: "只对特定会员开放的拍卖场，交易的从来不是明面上的货物，而是情报与人命。"},
+                        {c: "波云诡谲", n: "西戈·铁门城的军械黑市", d: "从军队仓库里流出的制式铭痕武器在此转手，买主从不问来路。"},
+                        {c: "波云诡谲", n: "越棘·三岔口的走私集市", d: "三国交界处的法外之地，各国的逃兵、间谍和走私贩在此混迹。"},
+                        {c: "波云诡谲", n: "磐丘·索道台的跨国商队营地", d: "东西贸易的必经之路，每一支商队都可能是某国情报机构的马甲。"},
+
+                        /* 暂得安息 — 相对安全的地方 */
+                        {c: "暂得安息", n: "东屿·海市的沉船残骸", d: "商船已被撕碎，但侥幸抱住了一块浮木飘到了浅滩。"},
+                        {c: "暂得安息", n: "郢丘·内城清雅别院", d: "治安极佳，窗外就是学子们论道的讲坛，学术中立区。"},
+                        {c: "暂得安息", n: "商於·中立商会内室", d: "绝对安全的贸易中心，没有任何国家敢在这里动武。"},
+                        {c: "暂得安息", n: "天柱峰·天衡宗外门客房", d: "不受世俗皇权管辖的修行圣地，暂时远离了尔虞我诈。"},
+                        {c: "暂得安息", n: "郢丘·静心禅院的藏经阁", d: "千年古刹的幽静角落，翻动经卷的沙沙声是这里唯一的声响。"},
+                        {c: "暂得安息", n: "东屿·传心屿的冥想室", d: "专为心炉行者设立的静修地，墙壁上嵌有隔断灵气干扰的海铭阵。"},
+                        {c: "暂得安息", n: "北朔·白鹿温谷的温泉池畔", d: "地热温暖的白鹿温谷，冰天雪地中唯一的暖意，疲惫旅人最渴望的终点。"},
+                        {c: "暂得安息", n: "涪陵·白鹭洲的竹筏上", d: "水泽深处的一片净土，白鹭成群，偶尔有隐居的失意学者在此垂钓。"},
+
+                        /* 命运交汇 — 特殊地点 */
+                        {c: "命运交汇", n: "天柱峰·天衡宗入山试炼场", d: "气脉修行者的圣地，每年都有无数少年在此赌上命运参加入山试炼。"},
+                        {c: "命运交汇", n: "渊下野·封印观测站废墟", d: "废弃的渊守人前哨站，仍残留着上古封印的微弱脉动，偶尔有异象闪现。"},
+                        {c: "命运交汇", n: "隐元阁·某分号的密谈室", d: "连墙上都有隔音铭痕的小房间，在这里听到的每句话都可能改写一国命运。"},
+                        {c: "命运交汇", n: "南烬·妫氏观星台的废墟", d: "被神庙长老会摧毁的观星台遗址，断裂的石柱上还刻着未完成的星图预言。"},
+                        {c: "命运交汇", n: "大朔·铭城的核心铭阵室", d: "为整个大朔铭痕武器供能的巨型铭阵中枢，站在阵眼能感受到整个国家的脉动。"},
+                        {c: "命运交汇", n: "磐丘·税关门洞的暗室", d: "东西贸易的税收命脉，暗室里堆满了记录了各国军备采购细节的账本。"},
+                        {c: "命运交汇", n: "西戈·金沙矿政局档案库", d: "存放着西戈所有灵石矿脉的地质勘探报告，每一份报告都价值连城。"}
+                    ],
+                    School: [
+                        {n: "散修", d: "无正统传承，在生死间摸爬滚打。"},
+                        {n: "儒门", d: "养浩然气，行善践履。"},
+                        {n: "道宗", d: "观象合真，与自然共振。"},
+                        {n: "法家", d: "格物量化，严守规程。"},
+                        {n: "兵家", d: "战意淬体，生死极限。"},
+                        {n: "墨门", d: "制器利天下，机关造物。"},
+                        {n: "释家", d: "禅定明心，破除执念。"},
+                        {n: "纵横家", d: "观势借力，拨弄因果。"},
+                        {n: "气脉", d: "天衡宗古老传承，以灵根定品，引天地灵气淬炼经脉。"},
+                        {n: "心炉", d: "燃烧情绪意志为薪柴。"},
+                        {n: "冥契", d: "与深渊契灵共息借力。"}
+                    ],
+                    Skill: [
+                        {n: "无名吐纳法", d: "[散修] 最基础的引气法门。"},
+                        {n: "浩然正气诀残篇", d: "[儒门] 蕴含微弱的正气，克制阴邪。"},
+                        {n: "太玄重水诀初卷", d: "[道宗] 借水脉之势，消解攻击。"},
+                        {n: "执衡九章·基础规程", d: "[法家] 绝对稳定的灵气输出路线。"},
+                        {n: "先锋冲阵淬体功", d: "[兵家] 压榨体能极限的搏命之法。"},
+                        {n: "叠铸锻骨法", d: "[墨门] 借锻打之理淬炼筋骨。"},
+                        {n: "大周天通脉功", d: "[气脉] 天衡宗正脉，需天赋与师承。"},
+                        {n: "怒焚锻骨", d: "[心炉] 以愤怒为燃料的霸道心法。"},
+                        {n: "契灵·炎渊共生", d: "[冥契] 借炽渊契灵之力，承受高温。"}
+                    ],
+                    Bag: [
+                        {n: "一把卷刃的铁剑，半个硬馒头", d: "底层散修的穷酸标配。"},
+                        {n: "墨门基础工具箱，三颗碎灵石", d: "带有一套精密的刻刀和打磨石。"},
+                        {n: "低阶制式铭痕匕首，一瓶止血散", d: "西戈军队发配的基础防身武器。"},
+                        {n: "破旧的规程手册，两支炭笔", d: "法家基层官吏的随身记录本。"},
+                        {n: "一块不知材质的神秘古玉", d: "贴身佩戴时会随灵气浓度发热。"}
+                    ]
+                };
+
+                const QUEST = {
+                    '平淡营生': '在这乱世里站稳脚跟，给自己挣一个不被碾碎的前程',
+                    '略有家资': '守住家业根基，找到真正属于自己的道途',
+                    '大朔遗孤': '查明当年政争/除名的真相，向该讨债的人讨回来',
+                    '西戈重炮': '带着秘密摆脱追兵，活下来或把它卖出天价',
+                    '南烬禁忌': '在追杀中活下去，弄清拓片/契灵背后的真相',
+                    '千岛游魂': '还清烂债，重建自己的船与炉火',
+                    '边缘行者': '改头换面活下去，直到不再需要逃亡',
+                    '天道戏言': '拿回属于自己的一切，让当初轻视你的人付出代价'
+                };
+
+                const I = id => document.getElementById(id);
+                const V = id => { const c = I(id+'_c'); return (c && !c.classList.contains('hidden')) ? (c.value||"无") : (I(id) ? I(id).value : "无"); };
+
+                /* 灵根显隐切换 */
+                const toggleLinggen = (schoolName) => {
+                    const row = I('linggen-row');
+                    if (!row) return;
+                    if (schoolName === '气脉') {
+                        row.classList.remove('hidden');
+                    } else {
+                        row.classList.add('hidden');
+                    }
+                };
+
+                /* 绑定滑块 */
+                if(I('i_ag_slider')) {
+                    I('i_ag_slider').addEventListener('input', function() { if(I('i_ag')) I('i_ag').value = this.value; });
+                }
+
+                /* 灵根滑块绑定 */
+                if(I('i_lg_slider')) {
+                    I('i_lg_slider').addEventListener('input', function() {
+                        const grade = parseInt(this.value);
+                        const text = LINGGEN_GRADE_TEXT[grade] || (grade + '品');
+                        const el = I('linggen-grade-text');
+                        if (el) el.innerText = text;
+                    });
+                }
+
+                /* 导航逻辑 */
+                const navStep = (step) => {
+                    document.querySelectorAll('.step-content').forEach((el, i) => {
+                        el.classList.toggle('active', i + 1 === step);
+                        el.classList.toggle('hidden', i + 1 !== step);
+                    });
+                    document.querySelectorAll('.step-dot').forEach((el, i) => {
+                        el.classList.toggle('active', i + 1 === step);
+                    });
+                };
+
+                /* 绑定按钮点击 */
+                I('btn_next_1').onclick = () => navStep(2);
+                I('btn_prev_2').onclick = () => navStep(1);
+                I('btn_next_2').onclick = () => navStep(3);
+                I('btn_prev_3').onclick = () => navStep(2);
+
+                /* 绑定修改按钮 */
+                document.querySelectorAll('.btn-edit').forEach(b => {
+                    b.onclick = function() {
+                        const id = this.dataset.t; const disp = I('disp_' + id); const cust = I(id + '_c');
+                        if (cust.classList.contains('hidden')) {
+                            disp.classList.add('hidden'); cust.classList.remove('hidden'); cust.focus();
+                            this.style.borderColor = 'var(--c-line)';
+                        } else {
+                            cust.classList.add('hidden'); disp.classList.remove('hidden');
+                            this.style.borderColor = '';
+                            /* 自定义输入完成后也检测灵根显隐 */
+                            if (id === 'i_sc') {
+                                const val = cust.value || '';
+                                toggleLinggen(val);
+                            }
+                        }
+                    }
+                });
+
+                /* 弹窗逻辑 */
+                let currentOptions = [];
+                let currentId = '';
+
+                const openModal = (id, title) => {
+                    let dataList = [];
+                    if (id === 'i_gd') dataList = DB.Gender;
+                    else if (id === 'i_id') dataList = DB.Identity;
+                    else if (id === 'i_lc') dataList = DB.Location;
+                    else if (id === 'i_sc') dataList = DB.School;
+                    else if (id === 'i_sk') dataList = DB.Skill;
+                    else if (id === 'i_bg') dataList = DB.Bag;
+
+                    currentOptions = dataList;
+                    currentId = id;
+                    let html = '';
+                    dataList.forEach((item, idx) => {
+                        let cateTag = item.c ? '<span class="opt-cate">' + item.c + '</span>' : '';
+                        let descTag = item.d ? '<div class="opt-desc">' + item.d + '</div>' : '';
+                        html += '<div class="opt-item" data-idx="' + idx + '">'
+                                    + cateTag
+                                    + '<div class="opt-name">' + item.n + '</div>'
+                                    + descTag
+                                 + '</div>';
+                    });
+                    I('sys_modal_title').innerText = title;
+                    I('sys_modal_list').innerHTML = html;
+                    I('sys_modal').classList.add('show');
+
+                    /* 绑定选项点击 */
+                    document.querySelectorAll('.opt-item').forEach(el => {
+                        el.onclick = function() {
+                            const idx = this.dataset.idx;
+                            const data = currentOptions[idx];
+                            I(currentId).value = data.n;
+                            I('disp_' + currentId).innerText = data.n;
+
+                            /* 如果是学派选择，同步切换灵根显隐 */
+                            if (currentId === 'i_sc') {
+                                toggleLinggen(data.n);
+                            }
+
+                            I('sys_modal').classList.remove('show');
+                        };
+                    });
+                };
+
+                /* 绑定打开弹窗按钮 */
+                I('disp_i_gd').onclick = () => openModal('i_gd', '选择性别');
+                I('disp_i_id').onclick = () => openModal('i_id', '选择身份');
+                I('disp_i_lc').onclick = () => openModal('i_lc', '选择出生地');
+                I('disp_i_sc').onclick = () => openModal('i_sc', '选择学派');
+                I('disp_i_sk').onclick = () => openModal('i_sk', '选择功法');
+                I('disp_i_bg').onclick = () => openModal('i_bg', '选择物品');
+                I('btn_close_modal').onclick = () => I('sys_modal').classList.remove('show');
+
+                /* 发送逻辑 */
+                I('b_go').onclick = () => {
+                    const name = I('i_nm').value || '无名';
+                    const age = I('i_ag').value;
+                    const gender = V('i_gd');
+                    const identity = V('i_id');
+                    const appearance = I('i_ap').value || '相貌平平';
+                    const loc = V('i_lc');
+                    const school = V('i_sc');
+                    const skill = V('i_sk');
+                    const money = I('i_mo').value || '身无分文';
+                    const bag = V('i_bg');
+                    const desc = I('i_ds').value || '在大荒中随波逐流的一介浮萍。';
+
+                    /* 灵根处理：仅气脉途径输出 */
+                    let linggenLine = '';
+                    const isQimai = (school === '气脉');
+                    if (isQimai) {
+                        const lgSlider = I('i_lg_slider');
+                        const linggenGrade = lgSlider ? parseInt(lgSlider.value) : 5;
+                        const gradeText = LINGGEN_GRADE_TEXT[linggenGrade] || (linggenGrade + '品');
+                        linggenLine = '- 先天灵根：' + gradeText + '（' + linggenGrade + '品，一品为最）';
+                    }
+
+                    /* 主线方向：按身份类别取，自定义身份给兜底 */
+                    let questLine = '在九渊活出自己的一条路';
+                    const identityOption = DB.Identity.find(x => x.n === identity);
+                    if (identityOption && QUEST[identityOption.c]) {
+                        questLine = QUEST[identityOption.c];
+                    }
+
+                    const prompt = '【九渊世界·人物入世档案】\n'
+                        + '- 姓名：' + name + ' (' + gender + ', ' + age + '岁)\n'
+                        + '- 容貌特征：' + appearance + '\n'
+                        + '- 入世身份：' + identity + '\n'
+                        + '- 降生地点：' + loc + '\n'
+                        + '\n'
+                        + '【道途与底蕴】\n'
+                        + '- 学派传承：' + school + '\n'
+                        + (linggenLine ? linggenLine + '\n' : '')
+                        + '- 境界：凡胎境 (强制锁定，绝对不可因学派自动提升至第一境)\n'
+                        + '- 通用境界：凡胎境 (强制锁定，当前为第〇境凡人)\n'
+                        + '- 运转功法：' + skill + '\n'
+                        + '\n'
+                        + '【资财与因果】\n'
+                        + '- 随身盘缠：' + money + '\n'
+                        + '- 芥子行囊：' + bag + '\n'
+                        + '- 前尘旧梦：' + desc + '\n'
+                        + '\n'
+                        + '【主线方向】\n'
+                        + '- ' + questLine + '\n'
+                        + '\n'
+                        + '请根据以上设定，为我描写这个角色在【九渊世界】苏醒的第一幕。（当前为开局初始化流程，请作为DM引擎，严格依据上述信息初始化MVU变量。对**每一个变量**进行深度推导、首次赋值与冲突检查，并以冷峻但有光的白描写出一段九渊开场白——去看一看这个有好有坏的人间，然后决定要站在哪一边。同时把主线方向细化为一条类型为主线的任务写入「当前任务」，来源填事件触发。）';
+
+                    try {
+                        let doc = window.parent ? window.parent.document : document;
+                        let tavernTextarea = doc.getElementById('send_textarea');
+                        let sendBtn = doc.getElementById('send_but');
+
+                        if (tavernTextarea && sendBtn) {
+                            tavernTextarea.value = prompt;
+                            tavernTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+
+                            setTimeout(() => {
+                                sendBtn.click();
+                            }, 100);
+
+                            const btn = I('b_go');
+                            btn.innerHTML = '天道已定，入世！';
+                            setTimeout(() => { btn.innerHTML = '确认，以此身入世'; }, 3000);
+                        } else if (navigator.clipboard) {
+                            navigator.clipboard.writeText(prompt).then(() => {
+                                const btn = I('b_go'); btn.innerHTML = '已复制到剪贴板';
+                                setTimeout(() => { btn.innerHTML = '确认，以此身入世'; }, 3000);
+                            });
+                        }
+                    } catch (e) { console.error(e); }
+                };
+
+            } catch (err) {
+                console.error("阵盘初始化失败:", err);
+            }
+        }, 100);
+    </script>
+</body>
+</html>
+```

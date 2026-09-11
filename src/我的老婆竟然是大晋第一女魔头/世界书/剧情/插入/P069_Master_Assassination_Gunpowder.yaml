@@ -1,0 +1,8 @@
+﻿---
+P069_Master_Assassination_Gunpowder: |-
+  <%_/* 插入 :line: "宗师刺杀" */
+  if ((matchChatMessages(['宗师刺杀', '尹容', '孙石', '火药'], { start: -4 })) && !hitDone('P069_Master_Assassination_Gunpowder')) {
+    markHit('插入', 'P069_Master_Assassination_Gunpowder', `<span style="display:none;">[插入剧情：P069_Master_Assassination_Gunpowder]</span>
+    可插入宗师切断情报、尹容驱逐、孙石潜入皇宫、火药设伏但成本极高。
+    推进目标：验证个人武力与技术捷径都无法无代价解决战争。`);
+  } _%>

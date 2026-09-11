@@ -1,0 +1,9 @@
+﻿---
+P009_Zaokongshan_Awakening: |-
+  <%_/* 插入 :line: "灶孔山线" */
+  if ((matchChatMessages(['灶孔山', '流民', '山神', '祭祀', '庐江'], { start: -4 })) && !hitDone('P009_Zaokongshan_Awakening')) {
+    markHit('插入', 'P009_Zaokongshan_Awakening', `<span style="display:none;">[插入剧情：P009_Zaokongshan_Awakening]</span>
+    可插入流民饥饿、祭祀骗局、官兵抢粮、儿童被卖、喜儿建议离开等压迫场景。
+    推进目标：让<user>面对“继续自保 / 插手底层 / 借机入局 / 逃避苦难”的路线选择。
+    不要直接替<user>升华，必须由玩家行动触发目标质变。`);
+  } _%>

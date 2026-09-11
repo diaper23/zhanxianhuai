@@ -1,0 +1,50 @@
+:root {
+  /* 仿毛玻璃底 —— 深暖棕，半透明，带暮色倾向 */
+  --glass: rgba(34, 24, 18, 0.55);
+  --glass-deep: rgba(22, 15, 11, 0.72);
+  --glass-light: rgba(52, 36, 26, 0.5);
+
+  /* 暖雾高光 —— 模拟玻璃透光（暖白） */
+  --haze: rgba(255, 238, 210, 0.06);
+  --haze-strong: rgba(255, 238, 210, 0.1);
+  --edge-light: rgba(255, 222, 180, 0.16);
+  --edge-dim: rgba(255, 222, 180, 0.05);
+
+  /* 文本 —— 暖米白灰阶 */
+  --text-primary: #F2E8D8;
+  --text-secondary: #C9B89A;
+  --text-faint: rgba(242, 232, 216, 0.4);
+
+  /* 强调 —— 琥珀柔光（暖金，低饱和） */
+  --aqua: #D6A064;
+  --aqua-bright: #EFC488;
+  --aqua-glow: rgba(214, 160, 100, 0.42);
+
+  /* 暖点 —— 暖橘，仅当前阶段/情绪/记忆点 */
+  --ember: #D87A52;
+  --ember-glow: rgba(216, 122, 82, 0.45);
+
+  /* 环境光斑 —— 暮色柔光晕，缓慢漂移 */
+  --aurora-a: rgba(214, 160, 100, 0.18);
+  --aurora-b: rgba(239, 196, 136, 0.13);
+  --aurora-c: rgba(216, 122, 82, 0.1);
+
+  /* 轨道/线条 —— 暖调半透明 */
+  --line: rgba(255, 222, 180, 0.1);
+  --line-soft: rgba(255, 222, 180, 0.05);
+
+  /* 字体 —— 楷体标题 / 宋体正文 / Georgia 数字 */
+  --font-title: 'STKaiti', 'KaiTi', '楷体', 'STSong', 'SimSun', '宋体', serif;
+  --font-text: 'STSong', 'SimSun', '宋体', 'Songti SC', serif;
+  --font-num: 'Georgia', 'Times New Roman', serif;
+
+  /* 补全专属面板中的缺失色彩变量并提亮 */
+  --text-bright: #FFF3E0;
+  --text-muted: #E0CFA8;
+  --text-dim: #B8A88A;
+  --bg-dark: rgba(22, 15, 11, 0.9);
+  --gold-bright: #FFD700;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}

@@ -1,0 +1,9 @@
+﻿---
+P007_Xie_Attack_Save_Xier: |-
+  <%_/* 插入 :line: "喜儿陷入谢家杀局" */
+  if ((matchChatMessages(['喜儿', '耗尽内力', '谢秋瞳', '图纸'], { start: -4 })) && !hitDone('P007_Xie_Attack_Save_Xier')) {
+    markHit('插入', 'P007_Xie_Attack_Save_Xier', `<span style="display:none;">[插入剧情：P007_Xie_Attack_Save_Xier]</span>
+    可插入谢秋瞳趁喜儿虚弱发难、冷翎瑶封脉、喜儿求死或<user>被迫表态。
+    推进目标：迫使<user>在救喜儿、保自身、向谢秋瞳妥协、交出技术筹码之间选择。
+    图纸、情报、承诺都可作为交易物，但需付出代价。`);
+  } _%>

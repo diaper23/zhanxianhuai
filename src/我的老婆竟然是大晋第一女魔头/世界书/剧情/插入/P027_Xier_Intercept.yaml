@@ -1,0 +1,8 @@
+﻿---
+P027_Xier_Intercept: |-
+  <%_/* 插入 :line: "喜儿截杀" */
+  if ((matchChatMessages(['喜儿截杀', '魔女', '绝笔信', '慕容鲜卑'], { start: -4 })) && !hitDone('P027_Xier_Intercept')) {
+    markHit('插入', 'P027_Xier_Intercept', `<span style="display:none;">[插入剧情：P027_Xier_Intercept]</span>
+    可插入喜儿奉命截杀、<user>苦肉/话术/真心选择、冷翎瑶追来、三方危机。
+    推进目标：让喜儿关系从任务敌对走向新边界，或彻底破裂。`);
+  } _%>

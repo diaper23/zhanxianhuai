@@ -1,0 +1,8 @@
+﻿---
+P037_Lure_Enemy_Reinforcement: |-
+  <%_/* 插入 :line: "谯郡终局" */
+  if ((matchChatMessages(['引狼入室', '吊桥', '北府兵', '援军'], { start: -4 })) && !hitDone('P037_Lure_Enemy_Reinforcement')) {
+    markHit('插入', 'P037_Lure_Enemy_Reinforcement', `<span style="display:none;">[插入剧情：P037_Lure_Enemy_Reinforcement]</span>
+    可插入关桀联络戴渊、假降诱赵军入城、吊桥斩断、谢秋瞳北府兵抵达。
+    推进目标：制造谯郡战役终极反转或失败代价。`);
+  } _%>

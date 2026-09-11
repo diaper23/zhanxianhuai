@@ -1,0 +1,8 @@
+﻿---
+P053_Gold_Escort_Fame_Peak: |-
+  <%_/* 插入 :line: "黄金押镖" */
+  if ((matchChatMessages(['押镖', '万两黄金', '王导嫁妆', '名望'], { start: -4 })) && !hitDone('P053_Gold_Escort_Fame_Peak')) {
+    markHit('插入', 'P053_Gold_Escort_Fame_Peak', `<span style="display:none;">[插入剧情：P053_Gold_Escort_Fame_Peak]</span>
+    可插入雇佣百名高手、王徽坚持同行、谢愚理学真相曝光、名望登顶。
+    推进目标：为离京/建军/被追杀准备资金与声望。`);
+  } _%>

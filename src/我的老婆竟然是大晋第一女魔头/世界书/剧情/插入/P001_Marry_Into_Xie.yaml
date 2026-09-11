@@ -1,0 +1,9 @@
+﻿---
+P001_Marry_Into_Xie: |-
+  <%_/* 插入 :line: "仍在唐家开局" */
+  if ((String(getvar('stat_data.世界.当前地点', { defaults: '' })).includes('唐家')) && !hitDone('P001_Marry_Into_Xie')) {
+    markHit('插入', 'P001_Marry_Into_Xie', `<span style="display:none;">[插入剧情：P001_Marry_Into_Xie]</span>
+    可插入唐德山临门激将、刺客围宅、谢家花轿压巷的危机。
+    推进目标：逼<user>在“入赘谢家求生 / 另寻生路 / 反向设局”之间做选择。
+    不得替<user>决定上轿；必须给出可行动空间。`);
+  } _%>

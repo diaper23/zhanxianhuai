@@ -1,0 +1,8 @@
+﻿---
+P042_Taizi_Policy_Assassination: |-
+  <%_/* 插入 :line: "东宫与暗杀" */
+  if ((matchChatMessages(['东宫', '平天策', '孙石', '暗杀'], { start: -4 })) && !hitDone('P042_Taizi_Policy_Assassination')) {
+    markHit('插入', 'P042_Taizi_Policy_Assassination', `<span style="display:none;">[插入剧情：P042_Taizi_Policy_Assassination]</span>
+    可插入献策折服太子、太子师徒名义、孙石暗杀中毒、怀悲护人。
+    推进目标：让名望上升同时引来致命江湖刺杀。`);
+  } _%>

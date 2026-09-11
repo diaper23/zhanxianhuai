@@ -1,0 +1,8 @@
+﻿---
+P020_Five_Day_Deadline: |-
+  <%_/* 插入 :line: "五天死线" */
+  if ((matchChatMessages(['五天', '何准', '死线', '反杀'], { start: -4 })) && !hitDone('P020_Five_Day_Deadline')) {
+    markHit('插入', 'P020_Five_Day_Deadline', `<span style="display:none;">[插入剧情：P020_Five_Day_Deadline]</span>
+    可插入郡尉限期、假何准、文家退守、戴平援兵、军阵血煞压制武者。
+    推进目标：给<user>一个必须用证据、兵力和民心同时破局的硬关卡。`);
+  } _%>

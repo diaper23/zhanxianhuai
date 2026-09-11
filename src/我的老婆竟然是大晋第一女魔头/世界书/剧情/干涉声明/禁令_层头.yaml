@@ -1,0 +1,11 @@
+---
+禁令_层头: |-
+  <%
+  const ids = getvar('stat_data.剧情要点.本轮命中.禁令', { defaults: [], noCache: true }) || [];
+  if (ids.length) {
+  %>
+  执行指令：【绝对红线】在你的思维链（CoT）构思与正文生成中，绝对禁止触碰以下禁令设定，AI 必须在构思阶段提前预判并绕开违反禁令的设定。
+  需执行禁令:
+  <% for (const id of ids) { %>- <%- id %>
+  <% } %>
+  <% } %>

@@ -1,0 +1,39 @@
+<%_
+var 当前剧本 = getvar('stat_data.系统.当前剧本', { defaults: '' });
+
+// 守卫：仅当当前剧本为纨绔世子时才加载本剧本，避免在其它剧本激活时被蓝灯串扰加载
+if (当前剧本 === '纨绔世子') {
+var script = '纨绔世子';
+var 阶段 = getvar('stat_data.纨绔世子.当前阶段', { defaults: '京城风云' });
+
+// 1. 阶段推进（最高优先级）
+print(await getwi(script + '_控制器_阶段'));
+
+// 2. 叙事上下文加载
+print(await getwi(script + '_控制器_叙事'));
+
+// 3. 朝局状态机
+print(await getwi(script + '_控制器_朝局'));
+
+// 4. NPC 加载
+print(await getwi(script + '_控制器_NPC'));
+
+// 5. 关系网络
+print(await getwi(script + '_控制器_关系'));
+
+// 6. 事件触发
+print(await getwi(script + '_控制器_事件'));
+
+// 7. 闪回触发
+print(await getwi(script + '_控制器_闪回'));
+
+// 8. 开局引导（仅前2楼）
+var floor = (typeof lastMessageId !== 'undefined' && lastMessageId != null)
+  ? lastMessageId
+  : TavernHelper.getLastMessageId();
+if (floor <= 1) {
+  print(await getwi(script + '_开局引导'));
+}
+
+} // 守卫结束
+_%>

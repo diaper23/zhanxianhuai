@@ -1,0 +1,26 @@
+<%_
+if (typeof scl === 'undefined') var scl = getvar('stat_data.主角_属性.学派', { defaults: '无' });
+_%>
+<%_ if (scl === '儒门') { _%>
+<%- await getwi('修行途径_儒门') %>
+<%_ } else if (scl === '道宗') { _%>
+<%- await getwi('修行途径_道宗') %>
+<%_ } else if (scl === '释家') { _%>
+<%- await getwi('修行途径_释家') %>
+<%_ } else if (scl === '法家') { _%>
+<%- await getwi('修行途径_法家') %>
+<%_ } else if (scl === '墨门') { _%>
+<%- await getwi('修行途径_墨门') %>
+<%_ } else if (scl === '兵家') { _%>
+<%- await getwi('修行途径_兵家') %>
+<%_ } else if (scl === '纵横家') { _%>
+<%- await getwi('修行途径_纵横家') %>
+<%_ } else if (scl === '气脉') { _%>
+<%- await getwi('修行途径_气脉') %>
+<%_ } else if (scl === '心炉') { _%>
+<%- await getwi('修行途径_心炉') %>
+<%_ } else if (scl === '冥契') { _%>
+<%- await getwi('修行途径_冥契') %>
+<%_ } else { _%>
+<%- await getwi('修行途径_散修') %>
+<%_ } _%>

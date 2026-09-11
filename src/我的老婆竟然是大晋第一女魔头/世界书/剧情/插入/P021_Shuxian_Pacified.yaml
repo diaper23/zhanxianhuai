@@ -1,0 +1,8 @@
+﻿---
+P021_Shuxian_Pacified: |-
+  <%_/* 插入 :line: "舒县治理结果" */
+  if ((matchChatMessages(['舒县大治', '七门堰', '谢秋瞳探望', '王徽送别'], { start: -4 })) && !hitDone('P021_Shuxian_Pacified')) {
+    markHit('插入', 'P021_Shuxian_Pacified', `<span style="display:none;">[插入剧情：P021_Shuxian_Pacified]</span>
+    可插入谢秋瞳/王家探望、强势干预与反弹、减租修堰、百姓拥戴或治理反噬。
+    推进目标：检验<user>基层路线是否真实有效。`);
+  } _%>

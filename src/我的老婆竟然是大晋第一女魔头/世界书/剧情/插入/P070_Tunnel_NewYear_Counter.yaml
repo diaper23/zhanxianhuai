@@ -1,0 +1,8 @@
+﻿---
+P070_Tunnel_NewYear_Counter: |-
+  <%_/* 插入 :line: "除夕反击前夜" */
+  if ((matchChatMessages(['声动击穴', '地道', '除夕', '反击'], { start: -4 })) && !hitDone('P070_Tunnel_NewYear_Counter')) {
+    markHit('插入', 'P070_Tunnel_NewYear_Counter', `<span style="display:none;">[插入剧情：P070_Tunnel_NewYear_Counter]</span>
+    可插入杨安以噪声掩护挖地道、彭勇听瓮失效、巷战准备、最高暗子/反击计划启动。
+    推进目标：把长期战争线推到除夕反击临界，给玩家决定如何破局的空间。`);
+  } _%>

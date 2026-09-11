@@ -1,0 +1,24 @@
+﻿---
+<%_
+/**
+ * 场景控制器
+ * 读 地点 字符串，getwi('场景_'+地点) 注入当前场景描述
+ * 若 场景 条目不存在则仅以留名提示
+ */
+const place = getvar('stat_data.剧情进度.地点', { defaults: '' });
+if (place) {
+  const title = '场景_' + String(place);
+  try {
+    const content = await getwi(title);
+    if (content) {
+      print('\n\n【场景】' + place + '\n');
+      print(content);
+      print('\n');
+    } else {
+      print('\n\n【场景】' + place + '（场景描述留白）\n');
+    }
+  } catch (e) {
+    print('\n\n【场景】' + place + '（场景描述留白）\n');
+  }
+}
+_%>

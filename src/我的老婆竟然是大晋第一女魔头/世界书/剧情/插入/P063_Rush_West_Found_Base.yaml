@@ -1,0 +1,8 @@
+﻿---
+P063_Rush_West_Found_Base: |-
+  <%_/* 插入 :line: "蜀地根基" */
+  if ((matchChatMessages(['入蜀', '成都', '成国', '消灭世家'], { start: -4 })) && !hitDone('P063_Rush_West_Found_Base')) {
+    markHit('插入', 'P063_Rush_West_Found_Base', `<span style="display:none;">[插入剧情：P063_Rush_West_Found_Base]</span>
+    可插入雇佣尹容星夜入蜀、谢安世家立场、潜入成都、接管蜀地或根据地改线。
+    推进目标：让<user>第一次真正面对建政与清洗世家的路线选择。`);
+  } _%>

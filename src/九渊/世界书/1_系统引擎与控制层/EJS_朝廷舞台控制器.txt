@@ -1,0 +1,38 @@
+@@preprocessing
+<%_
+var office = getvar('stat_data.身份职位', { defaults: null });
+var country = getvar('stat_data.系统.国家', { defaults: '' });
+var courtCountries = ['大朔', '南烬', '西戈'];
+var courtCountry = '';
+if (office && office.所属国 && courtCountries.indexOf(office.所属国) !== -1) {
+  courtCountry = office.所属国;
+} else if (courtCountries.indexOf(country) !== -1) {
+  courtCountry = country;
+}
+var hasOffice = office && office.职位 && office.职位 !== '白身' && office.品级 && office.品级 !== '无';
+%>
+<%_ if (courtCountry) { _%>
+<%_ if (hasOffice) { _%>
+@@generate_before
+【朝廷仕途·当值中】
+玩家身份：<%- office.所属国 %> · <%- office.所属衙门 %> · <%- office.职位 %>（<%- office.品级 %>）
+- 功绩：<%- office.功绩 || 0 %> | 月俸：<%- office.月俸 || 0 %> 灵石
+<%_ if (office.上峰) { _%>
+- 上峰：<%- office.上峰 %>
+<%_ } _%>
+<%_ if (office.政敌 && office.政敌.length > 0) { _%>
+- 政敌：<%- office.政敌.join('、') %>
+<%_ } _%>
+请按「朝廷差事·<%- courtCountry %>」的差事循环，结合当前局势给玩家安排可办的差事；办差结果更新功绩、月俸、职位与政敌。
+
+<%- await getwi('朝廷差事·' + courtCountry) %>
+<%_ } else { _%>
+<%_ if (Math.random() < 0.12) { _%>
+@@generate_before
+【朝廷入仕机会】
+玩家目前是白身，正身处<%- courtCountry %>。请在合适场景中自然抛出一次入仕机会（不必每回合都提，择机而行）：按「朝廷差事·<%- courtCountry %>」的入仕入口，结合玩家学派、声望与出身，给出一条最合适的入仕门路。若玩家接住，更新「身份职位」（所属国/衙门/职位/品级/上峰），并开始发放月俸。
+
+<%- await getwi('朝廷差事·' + courtCountry) %>
+<%_ } _%>
+<%_ } _%>
+<%_ } _%>

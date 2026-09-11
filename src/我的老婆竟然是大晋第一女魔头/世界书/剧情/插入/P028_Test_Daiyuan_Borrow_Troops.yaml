@@ -1,0 +1,8 @@
+﻿---
+P028_Test_Daiyuan_Borrow_Troops: |-
+  <%_/* 插入 :line: "谯郡初局" */
+  if ((matchChatMessages(['戴渊', '祖约', '史忠', '下乡秋收'], { start: -4 })) && !hitDone('P028_Test_Daiyuan_Borrow_Troops')) {
+    markHit('插入', 'P028_Test_Daiyuan_Borrow_Troops', `<span style="display:none;">[插入剧情：P028_Test_Daiyuan_Borrow_Troops]</span>
+    可插入戴平鸿门宴、试探戴渊、向祖约借兵、带史忠等旧部下乡唤醒百姓。
+    推进目标：让<user>在战场前线先争取民心和军心。`);
+  } _%>

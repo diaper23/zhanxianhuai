@@ -1,0 +1,9 @@
+﻿---
+P006_Jianchu_Sutra_Heist: |-
+  <%_/* 插入 :line: "建初寺线启动" */
+  if ((matchChatMessages(['建初寺', '七月十五', '经文', '藏经阁'], { start: -4 })) && !hitDone('P006_Jianchu_Sutra_Heist')) {
+    markHit('插入', 'P006_Jianchu_Sutra_Heist', `<span style="display:none;">[插入剧情：P006_Jianchu_Sutra_Heist]</span>
+    可插入建初寺集会、太子暗杀、王徽初遇、怀悲大师、藏经阁梵文经文等元素。
+    推进目标：让<user>以话术、佛偈、王家掩护或潜入手段接触《观音心经》线索。
+    允许失败、暴露、只拿到片段或转为更复杂交易。`);
+  } _%>

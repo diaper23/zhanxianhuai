@@ -1,0 +1,8 @@
+﻿---
+P026_Father_Death_Leave_Capital: |-
+  <%_/* 插入 :line: "离京父子线" */
+  if ((matchChatMessages(['唐德山', '父亲', '服毒', '离京'], { start: -4 })) && !hitDone('P026_Father_Death_Leave_Capital')) {
+    markHit('插入', 'P026_Father_Death_Leave_Capital', `<span style="display:none;">[插入剧情：P026_Father_Death_Leave_Capital]</span>
+    可插入唐德山阻止<user>赴死局、父子诀别、隐丧、谢秋瞳赠腰牌、王徽定情。
+    推进目标：让离京不只是调任，而是私人代价与政治选择叠加。`);
+  } _%>

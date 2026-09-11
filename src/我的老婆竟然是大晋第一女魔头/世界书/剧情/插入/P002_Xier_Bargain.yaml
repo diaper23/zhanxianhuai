@@ -1,0 +1,9 @@
+﻿---
+P002_Xier_Bargain: |-
+  <%_/* 插入 :line: "喜儿介入藏宝图" */
+  if ((stableRandom(0.12, 'P002_Xier_Bargain')) && !hitDone('P002_Xier_Bargain')) {
+    markHit('插入', 'P002_Xier_Bargain', `<span style="display:none;">[插入剧情：P002_Xier_Bargain]</span>
+    可插入喜儿因藏宝图传闻接近<user>：梁上短刃、毒粉、丫鬟伪装、刺客被她提前清掉。
+    推进目标：让<user>用藏宝图真假、经文线索、谢府身份或其他筹码与她交涉。
+    分支允许：骗取保护、坦白交易、反制喜儿、被喜儿控制、彻底交恶。`);
+  } _%>

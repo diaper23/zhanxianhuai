@@ -1,0 +1,8 @@
+﻿---
+P064_Three_Kingdoms_War_Prepare: |-
+  <%_/* 插入 :line: "大战前部署" */
+  if ((matchChatMessages(['联军', '成都军议', '击退', '祝月曦', '王徽喜脉'], { start: -4 })) && !hitDone('P064_Three_Kingdoms_War_Prepare')) {
+    markHit('插入', 'P064_Three_Kingdoms_War_Prepare', `<span style="display:none;">[插入剧情：P064_Three_Kingdoms_War_Prepare]</span>
+    可插入多路联军压境、只击退不全歼的战略、王徽有孕/后宫矛盾/祝月曦臣服等内外压力。
+    推进目标：让大战前的战略和后院稳定同时接受考验。`);
+  } _%>

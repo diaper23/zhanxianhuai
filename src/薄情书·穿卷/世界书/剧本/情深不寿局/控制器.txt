@@ -1,0 +1,194 @@
+<%_
+var script = '情深不寿局';
+print(await getwi(script + '_女主人设'));
+print(await getwi(script + '_世界背景'));
+print(await getwi(script + '_NPC速览'));
+print(await getwi(script + '_行为指导'));
+
+// NPC详情按需加载
+var npcList = ['陆知辰', '沈霜月', '周慎', '老周'];
+for (var i = 0; i < npcList.length; i++) {
+  print(await getwi(script + '_NPC_' + npcList[i]));
+}
+
+// 开局引导：用酒馆真实楼层号判断
+var floor = (typeof lastMessageId !== 'undefined' && lastMessageId != null)
+  ? lastMessageId
+  : TavernHelper.getLastMessageId();
+if (floor <= 1) {
+  print(await getwi(script + '_开局引导'));
+}
+
+// ============================================================
+// 关键节点扣动型事件系统
+// 原理：每事件在「已完成」后解锁其「后续」事件。
+//      而不是按阶段随机抽。叙事按大纲依赖图有序推进。
+//      <user>可主动导向——离开局引导决定的支点（见一见/拉窗帘）
+//      决定第一个可触发事件。
+// 远程依赖：通过键 _bqs_已完成.<事件名> 用 local 作用域持久化
+// ============================================================
+
+var 悔恨值 = getvar('stat_data.女主.悔恨值', { defaults: 20 });
+var 执着度 = getvar('stat_data.女主.执着度', { defaults: 70 });
+var 尊严值 = getvar('stat_data.女主.尊严值', { defaults: 85 });
+var 认知 = getvar('stat_data.女主.认知阶段', { defaults: '未觉醒' });
+
+var 真相已知度 = getvar('stat_data.情深不寿局.真相已知度', { defaults: 0 });
+var 羁绊值 = getvar('stat_data.情深不寿局.羁绊值', { defaults: 60 });
+var 体面值 = getvar('stat_data.情深不寿局.体面值', { defaults: 90 });
+var 热搜余温 = getvar('stat_data.情深不寿局.舆情.热搜余温', { defaults: 100 });
+
+// 已完成事件集合（local 作用域）
+var 已完成 = getvar('_bqs_已完成', { scope: 'local', defaults: {} });
+var 已触发闪回 = getvar('_bqs_已触发闪回', { scope: 'local', defaults: [] });
+
+function 标记完成(name) {
+  已完成[name] = true;
+  setvar('_bqs_已完成', 已完成, { scope: 'local' });
+}
+
+// ---------- 大纲依赖图 ----------
+// 每个节点：next 解锁后续事件；requires 触发它需要的条件（结构化，便于安全求值）
+// requires: { stage?: 认知阶段字符串, guilt?: 悔恨下限, truth?: 真相已知度下限, dignity_lt?: 体面值上限, etc }
+// 任一未指明的视为不限制。stage 可用数组（任一满足）
+var 节点图 = {
+  年度报告曝光:      { next: ['咖啡馆的恭喜'] },
+  咖啡馆的恭喜:      { next: ['电梯的五楼', '母亲的那一句'], requires: { guilt: 8, truth: 5 } },
+  电梯的五楼:        { next: ['男厕所的胃药'] },
+  男厕所的胃药:      { next: ['医院门口的眼泪', '那组没拍完的照片'] },
+  母亲的那一句:      { next: ['医院门口的眼泪', '那组没拍完的照片'] },
+  医院门口的眼泪:    { next: ['那组没拍完的照片', '澄清稿的撤销'], requires: { guilt: 55, dignity_lt: 70 } },
+  那组没拍完的照片:  { next: ['那个转身', '风景底片的空位'] },
+  那个转身:          { next: ['风景底片的空位', '澄清稿的撤销'] },
+  风景底片的空位:    { next: ['澄清稿的撤销'], requires: { truth: 55 } },
+  澄清稿的撤销:      { next: ['机场的拦'], requires: { dignity_lt: 50 } },
+  机场的拦:          { next: ['她飞巴黎', '巴黎影后红毯'], requires: { stage: '自我审视' } },
+
+  // ===== 巴黎段（你大纲的后半）=====
+  她飞巴黎:          { next: ['巴黎影后红毯'] },
+  巴黎影后红毯:      { next: ['画廊的空位墙'] },
+  画廊的空位墙:      { next: ['画廊外的原片'] },
+  画廊外的原片:      { next: ['终·真相直陈'] },
+  终·真相直陈:      { next: [] },
+};
+
+var 认知阶段表 = { 未觉醒: 0, 动摇: 1, 醒悟: 2, 自我审视: 3 };
+function 阶段序(s) { return typeof 认知阶段表[s] === 'number' ? 认知阶段表[s] : 0; }
+function 阶段够(req, actual) {
+  if (!req) return true;
+  if (Array.isArray(req)) return req.indexOf(actual) !== -1;
+  return 阶段序(actual) >= 阶段序(req);
+}
+
+// gate 安全求值：使用结构化 requires
+function gate通过(req) {
+  if (!req) return true;
+  if (!阶段够(req.stage, 认知)) return false;
+  if (typeof req.guilt === 'number' && 悔恨值 < req.guilt) return false;
+  if (typeof req.truth === 'number' && 真相已知度 < req.truth) return false;
+  if (typeof req.dignity_lt === 'number' && 体面值 >= req.dignity_lt) return false;
+  if (typeof req.bond_lt === 'number' && 羁绊值 >= req.bond_lt) return false;
+  return true;
+}
+
+var 上次事件楼层 = getvar('_bqs_上次事件楼层', { scope: 'local', defaults: -999 });
+
+// ---------- 候选：找所有「前一节点已完成 + 自己未完成 + gate 通过」的事件 ----------
+var 候选 = [];
+var 完成名 = Object.keys(已完成);
+for (var i = 0; i < 完成名.length; i++) {
+  var 父 = 完成名[i];
+  var 后续 = 节点图[父] ? 节点图[父].next : [];
+  for (var j = 0; j < 后续.length; j++) {
+    var 后名 = 后续[j];
+    if (已完成[后名]) continue;
+    var 子句 = 节点图[后名] && 节点图[后名].requires ? 节点图[后名].requires : null;
+    if (gate通过(子句)) {
+      候选.push(后名);
+    }
+  }
+}
+
+if (完成名.length === 0 && floor <= 2) {
+  候选 = ['年度报告曝光'];
+}
+
+var 真候选 = [];
+for (var i = 0; i < 候选.length; i++) {
+  if (真候选.indexOf(候选[i]) === -1) 真候选.push(候选[i]);
+}
+
+var 节奏够 = (floor - 上次事件楼层) >= 4 || (floor <= 2 && 完成名.length === 0);
+
+if (真候选.length > 0 && 节奏够) {
+  var picked = 真候选[_.random(0, 真候选.length - 1)];
+  print(await getwi(script + '_事件_' + picked));
+  标记完成(picked);
+  setvar('_bqs_上次事件楼层', floor, { scope: 'local' });
+}
+
+// ============================================================
+// 认知阶段推进与回退（晚于事件触发，让事件溅到的变量生效）
+// ============================================================
+// 重读一次变量（事件yaml 可能改了 stat_data）
+悔恨值 = getvar('stat_data.女主.悔恨值', { defaults: 20 });
+尊严值 = getvar('stat_data.女主.尊严值', { defaults: 85 });
+体面值 = getvar('stat_data.情深不寿局.体面值', { defaults: 90 });
+真相已知度 = getvar('stat_data.情深不寿局.真相已知度', { defaults: 0 });
+
+var newCognition = 认知;
+if (认知 === '未觉醒' && 悔恨值 >= 35 && 真相已知度 >= 15) {
+  newCognition = '动摇';
+} else if (认知 === '动摇' && 悔恨值 >= 55 && 体面值 < 70) {
+  newCognition = '醒悟';
+} else if (认知 === '醒悟' && 悔恨值 >= 75 && 体面值 < 40) {
+  newCognition = '自我审视';
+}
+else if (认知 === '动摇' && 尊严值 >= 90 && 悔恨值 < 25) {
+  newCognition = '未觉醒';
+} else if (认知 === '醒悟' && 尊严值 >= 80 && 悔恨值 < 45) {
+  newCognition = '动摇';
+} else if (认知 === '自我审视' && 尊严值 >= 75 && 悔恨值 < 65) {
+  newCognition = '醒悟';
+}
+
+if (newCognition !== 认知) {
+  setvar('stat_data.女主.认知阶段', newCognition, { scope: 'message' });
+  setvar('stat_data.情深不寿局.当前阶段',
+    newCognition === '未觉醒' ? '热搜点燃' :
+    newCognition === '动摇' ? '重逢试探' :
+    newCognition === '醒悟' ? '记忆反噬' :
+    newCognition === '自我审视' ? '放手或回头' : '和解推拉'
+  , { scope: 'message' });
+
+  // ========== 闪回：认知阶段切换时触发 ==========
+  var flashbackPool = [
+    { name: '评委席上的那姑娘', stages: ['未觉醒', '动摇'] },
+    { name: '那首生日歌', stages: ['未觉醒', '动摇'] },
+    { name: '那句为他好', stages: ['动摇', '醒悟'] },
+    { name: '算命先生的判词', stages: ['动摇', '醒悟'] },
+    { name: '风景里的空位', stages: ['醒悟', '自我审视'] },
+  ];
+  var fbAvailable = flashbackPool.filter(function(fb) {
+    return fb.stages.indexOf(newCognition) !== -1 && 已触发闪回.indexOf(fb.name) === -1;
+  });
+  if (fbAvailable.length > 0) {
+    var fbPicked = fbAvailable[_.random(0, fbAvailable.length - 1)];
+    print(await getwi(script + '_闪回_' + fbPicked.name));
+    已触发闪回.push(fbPicked.name);
+    setvar('_bqs_已触发闪回', 已触发闪回, { scope: 'local' });
+  }
+
+  认知 = newCognition;
+}
+
+// ========== 热搜余温自然衰减 ==========
+if (热搜余温 > 0 && floor > 1) {
+  var 上次衰减楼层 = getvar('_bqs_上次衰减楼层', { scope: 'local', defaults: -999 });
+  if (floor - 上次衰减楼层 >= 4) {
+    热搜余温 = Math.max(0, 热搜余温 - 8);
+    setvar('stat_data.情深不寿局.舆情.热搜余温', 热搜余温, { scope: 'message' });
+    setvar('_bqs_上次衰减楼层', floor, { scope: 'local' });
+  }
+}
+_%>

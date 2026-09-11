@@ -1,0 +1,36 @@
+<%_
+var script = '纨绔世子';
+var 阶段 = getvar('stat_data.纨绔世子.当前阶段', { defaults: '京城风云' });
+var 剧情 = getvar('stat_data.纨绔世子.剧情记录', { defaults: {} });
+var 已触发闪回 = getvar('_wksz_已触发闪回', { scope: 'local', defaults: [] });
+
+var checkPlot = function(name) {
+  return 剧情[name] && 剧情[name].状态 === '已完成';
+};
+
+// ========== 闪回池：按阶段 + 前置事件完成条件触发 ==========
+// 里程碑改用剧情记录中的"已完成"事件判断，不再依赖不存在的 stat_data.纨绔世子.里程碑
+var flashbackPool = [
+  { name: '原主的荒唐', phase: '京城风云', cond: true },
+  { name: '父王的沉默', phase: '京城风云', cond: checkPlot('退婚圣旨') },
+  { name: '来京路上的刺杀', phase: '京城风云', cond: checkPlot('千叶刃线索') },
+  { name: '拉勾之约', phase: '暗流涌动', cond: checkPlot('武力夺妻') },
+  { name: '母亲的眼泪', phase: '暗流涌动', cond: checkPlot('前线出征') },
+  { name: '镇北军的旗帜', phase: '北境烽火', cond: checkPlot('正式起兵') },
+  { name: '北疆的第一场雪', phase: '北境烽火', cond: checkPlot('蛮族大战') },
+  { name: '登基前夜', phase: '九五至尊', cond: checkPlot('兵临上京') },
+];
+
+// 检查是否有新的闪回可触发
+var fbAvailable = flashbackPool.filter(function(fb) {
+  return fb.phase === 阶段 && fb.cond && 已触发闪回.indexOf(fb.name) === -1;
+});
+
+// 最多触发一个闪回（前置事件刚达成时）
+if (fbAvailable.length > 0) {
+  var fbPicked = fbAvailable[0];
+  print(await getwi(script + '_闪回_' + fbPicked.name));
+  已触发闪回.push(fbPicked.name);
+  setvar('_wksz_已触发闪回', 已触发闪回, { scope: 'local' });
+}
+_%>

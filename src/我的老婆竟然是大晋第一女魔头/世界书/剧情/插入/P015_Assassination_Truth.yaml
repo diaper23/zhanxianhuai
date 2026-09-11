@@ -1,0 +1,8 @@
+﻿---
+P015_Assassination_Truth: |-
+  <%_/* 插入 :line: "刺君局" */
+  if ((matchChatMessages(['刺君', '刺杀皇帝', '赵田', '太子'], { start: -4 })) && !hitDone('P015_Assassination_Truth')) {
+    markHit('插入', 'P015_Assassination_Truth', `<span style="display:none;">[插入剧情：P015_Assassination_Truth]</span>
+    可插入中秋刺君、谢秋瞳灭口、太子护卫被牵连、<user>逼问太子或与谢秋瞳复盘。
+    推进目标：揭示或重构前期血案和刺君局的真实利用关系。`);
+  } _%>

@@ -1,0 +1,45 @@
+@@preprocessing
+<%_
+if (typeof presentNPCs === 'undefined') var presentNPCs = getvar('stat_data.在场NPC', { defaults: [] });
+
+if (typeof npcContents === 'undefined') var npcContents = [];
+if (typeof npcNames === 'undefined') var npcNames = [];
+
+if (Array.isArray(presentNPCs) && presentNPCs.length > 0) {
+  for (var i = 0; i < presentNPCs.length; i++) {
+    var npcName = presentNPCs[i];
+    var wi = await getwi(npcName);
+    if (wi) {
+      npcContents.push(wi);
+      npcNames.push(npcName);
+    }
+  }
+}
+%>
+<%_ if (npcContents.length > 0) { _%>
+[系统提示：以下人物当前正在场景中：<%- npcNames.join('、') %>]
+<%- npcContents.join('\n\n') %>
+<%_ } _%>
+
+<%_
+var heroineNames = ['姜瑶', '百里遥', '妫宁', '桓歌', '慕清雪', '曲红绡', '阮棠', '温知夏', '沈千歌', '小黎'];
+var relMap = getvar('stat_data.女主关系', { defaults: {} });
+var presentHeroines = Array.isArray(presentNPCs) ? heroineNames.filter(function (n) { return presentNPCs.indexOf(n) !== -1; }) : [];
+var relPairs = [];
+for (var i = 0; i < presentHeroines.length; i++) {
+  for (var j = i + 1; j < presentHeroines.length; j++) {
+    var a = presentHeroines[i], b = presentHeroines[j];
+    var key = a < b ? a + '·' + b : b + '·' + a;
+    relPairs.push({ a: a, b: b, key: key, rel: relMap[key] || null });
+  }
+}
+%>
+<%_ if (relPairs.length > 0) { _%>
+【女主同场·关系场】
+以下女主同时在场，请按她们之间的关系状态处理对手戏与张力：
+<%_ relPairs.forEach(function (p) { _%>
+- <%- p.a %> × <%- p.b %>：<%- p.rel ? p.rel.关系 + '（导火索：' + p.rel.导火索 + '；最近互动：' + (p.rel.最近互动 || '无') + '）' : '陌路，关系未明' %>
+<%_ }); _%>
+
+AI扮演要求：按上述关系类型处理同场张力；玩家介入时触发连锁好感变化——同盟：一人好感高会带动另一人初始态度；敌对：帮一方会降另一方；修罗场：同时示好两人会双双打折。若本次互动实质改变了两人的关系，更新创建或更新「女主关系」的对应键（关系/导火索/最近互动）。
+<%_ } _%>

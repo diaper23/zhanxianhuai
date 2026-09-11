@@ -1,0 +1,15 @@
+@@preprocessing
+<%_
+var currentCountry = getvar('stat_data.系统.国家', { defaults: '' });
+
+if (currentCountry) {
+  var countryWi = await getwi('国家_' + currentCountry, null);
+  var positionWi = await getwi('职位体系_' + currentCountry, null);
+_%>
+<%_ if (countryWi) { _%>
+<%- countryWi %>
+<%_ } _%>
+<%_ if (positionWi) { _%>
+<%- positionWi %>
+<%_ } _%>
+<%_ } _%>

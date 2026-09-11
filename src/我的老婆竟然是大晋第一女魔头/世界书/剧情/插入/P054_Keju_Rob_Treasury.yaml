@@ -1,0 +1,8 @@
+﻿---
+P054_Keju_Rob_Treasury: |-
+  <%_/* 插入 :line: "科举与国库" */
+  if ((matchChatMessages(['科举', '国库', '太学宫', '抢劫'], { start: -4 })) && !hitDone('P054_Keju_Rob_Treasury')) {
+    markHit('插入', 'P054_Keju_Rob_Treasury', `<span style="display:none;">[插入剧情：P054_Keju_Rob_Treasury]</span>
+    可插入太学宫科举宣战、儒生学潮、攻破皇宫密阁、谢秋瞳城外暗送。
+    推进目标：让<user>彻底与晋廷和世家旧秩序决裂。`);
+  } _%>

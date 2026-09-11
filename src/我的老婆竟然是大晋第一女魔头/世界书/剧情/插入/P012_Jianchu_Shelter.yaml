@@ -1,0 +1,8 @@
+﻿---
+P012_Jianchu_Shelter: |-
+  <%_/* 插入 :line: "血案避祸" */
+  if ((matchChatMessages(['血案', '建初寺', '避祸', '怀悲'], { start: -4 })) && !hitDone('P012_Jianchu_Shelter')) {
+    markHit('插入', 'P012_Jianchu_Shelter', `<span style="display:none;">[插入剧情：P012_Jianchu_Shelter]</span>
+    可插入逃避搜查、王家背锅风险、怀悲大师庇护、用经文或佛偈换安全。
+    推进目标：给<user>一个短暂安全点，同时让他推演王家、谢家、太子、王敦等多方动机。`);
+  } _%>

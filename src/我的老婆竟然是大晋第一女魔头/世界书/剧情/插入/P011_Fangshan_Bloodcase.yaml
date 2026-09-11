@@ -1,0 +1,9 @@
+﻿---
+P011_Fangshan_Bloodcase: |-
+  <%_/* 插入 :line: "方山社交" */
+  if ((matchChatMessages(['方山', '王徽', '王劭', '踏秋', '象棋'], { start: -4 })) && !hitDone('P011_Fangshan_Bloodcase')) {
+    markHit('插入', 'P011_Fangshan_Bloodcase', `<span style="display:none;">[插入剧情：P011_Fangshan_Bloodcase]</span>
+    可插入王劭兵法/象棋试探、王徽独处机会、门阀少年圈冲突、突发一剑封喉血案。
+    推进目标：让门阀社交从情感/名声机会转为政治血案。
+    血案责任可按当前局势动态决定，不强制原幕后。`);
+  } _%>

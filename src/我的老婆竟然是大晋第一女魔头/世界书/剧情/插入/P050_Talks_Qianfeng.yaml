@@ -1,0 +1,8 @@
+﻿---
+P050_Talks_Qianfeng: |-
+  <%_/* 插入 :line: "策反钱凤" */
+  if ((matchChatMessages(['钱凤', '功高震主', '截断粮道', '王敦'], { start: -4 })) && !hitDone('P050_Talks_Qianfeng')) {
+    markHit('插入', 'P050_Talks_Qianfeng', `<span style="display:none;">[插入剧情：P050_Talks_Qianfeng]</span>
+    可插入王敦偏袒、钱凤不满、<user>私会点破死局、粮道投名状。
+    推进目标：让和谈从表面联姻变成内部策反。`);
+  } _%>

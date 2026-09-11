@@ -1,0 +1,84 @@
+---
+EJS剧情调度器: |-
+  @@preprocessing
+  <%
+  setvar('stat_data.剧情要点.本轮命中', {
+    暗示: [], 明示: [], 线索: [], 插入: [], 覆盖: [], 禁令: [],
+  }, { scope: 'message' });
+  setvar('stat_data.剧情要点.本轮文本', {}, { scope: 'message' });
+
+  if (typeof _plotInited === 'undefined') {
+    define('_plotInited', true);
+
+    define('stableRandom', function (p, seed) {
+      const s = String(seed == null ? '' : seed) + '#' + (this.lastUserMessageId || 0);
+      let h = 0;
+      for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+      return ((h >>> 0) % 1000) / 1000 < p;
+    });
+
+    define('plot', function (path) {
+      return this.getvar('stat_data.' + String(path), { defaults: '' });
+    });
+
+    define('hitDone', function (id) {
+      return this.getvar('stat_data.剧情要点.状态表.' + id + '.状态', { defaults: '未触发' }) === '已完成';
+    });
+
+    define('markHit', function (layer, id, body) {
+      const cur = this.getvar('stat_data.剧情要点.本轮命中.' + layer, { defaults: [], noCache: true }) || [];
+      if (cur.indexOf(id) === -1) {
+        cur.push(id);
+        this.patchVariables('stat_data.剧情要点.本轮命中', [{ op: 'replace', path: '/' + layer, value: cur }]);
+      }
+      const txtKey = id;
+      if (body != null) this.setvar('stat_data.剧情要点.本轮文本.' + txtKey, body, { scope: 'message' });
+      return true;
+    });
+  }
+
+  const LAYER_ENS = [
+    '禁令', '覆盖', '插入', '线索', '明示', '暗示',
+  ];
+  const 插入_IDS = [
+    'P001_Marry_Into_Xie','P002_Xier_Bargain','P003_Xie_Family_Foothold','P004_Taizi_Political_Game',
+    'P005_Xier_Truth_Crisis','P006_Jianchu_Sutra_Heist','P007_Xie_Attack_Save_Xier','P008_Martial_Start_Leave_Capital',
+    'P009_Zaokongshan_Awakening','P010_Return_Xie_Set_Target','P011_Fangshan_Bloodcase','P012_Jianchu_Shelter',
+    'P013_Prison_Conspiracy','P014_Prison_Ally_Midautumn','P015_Assassination_Truth','P016_Ideology_Break_Team',
+    'P017_Divorce_To_Shuxian','P018_Shuxian_Office_Deathtrap','P019_Overturn_Gentry','P020_Five_Day_Deadline',
+    'P021_Shuxian_Pacified','P022_Fame_Spreads','P023_Border_Crisis_Qiaojun','P024_History_Truth',
+    'P025_Life_Death_Alliance','P026_Father_Death_Leave_Capital','P027_Xier_Intercept','P028_Test_Daiyuan_Borrow_Troops',
+    'P029_Fake_Allegiance_Edict','P030_Jiankang_Change_Beifu','P031_Blood_Oath_Prison','P032_Riot_Seize_Qiaojun',
+    'P033_Army_Soul_Gate_Reversal','P034_Empty_Fort_Ranmin','P035_Poison_Water_Burn_Grain','P036_Fort_Battle_Ranmin_Alliance',
+    'P037_Lure_Enemy_Reinforcement','P038_Qiaojun_Victory_Split','P039_Xier_Snatches_Bride','P040_Reward_And_Hibernate',
+    'P041_Return_Capital_Seize_Xie','P042_Taizi_Policy_Assassination','P043_Dual_Cultivation_Detox','P044_Fund_Shenque',
+    'P045_Palace_Horror_Route_Change','P046_Taixue_Palace_Coup','P047_Regicide_Fugui_Mountain','P048_Shuxian_Talks_Strategy',
+    'P049_Shuxian_Public_Power','P050_Talks_Qianfeng','P051_Xie_Confession_Xuanqi','P052_SacredHeart_Visit_Zhuyuexi',
+    'P053_Gold_Escort_Fame_Peak','P054_Keju_Rob_Treasury','P055_New_Emperor_Crackdown','P056_Datong_Army_Founded',
+    'P057_Guerrilla_Destroy_Enemy','P058_Lantern_Night_Masters','P059_Jiankang_Battle_Betrayal','P060_Desperate_Proposal_Retreat',
+    'P061_Seize_Qiaojun_Again','P062_Doctor_Backyard_Fire','P063_Rush_West_Found_Base','P064_Three_Kingdoms_War_Prepare',
+    'P065_Stop_Qian_Backstab','P066_Hanzhong_Battle','P067_Danqu_Defense','P068_Wenshan_Raid',
+    'P069_Master_Assassination_Gunpowder','P070_Tunnel_NewYear_Counter',
+  ];
+  const ADS_ID_MAP = {
+    '禁令': ['_user_身份_穿越者身份禁忌','人设条目_禁止写剧情锁死','开局时间点_禁止未来正史灌入','时空传播_禁止瞬移登场','武道_战场煞气约束'],
+    '覆盖': ['首夜_死亡临界','身份风险_严重暴露','喜儿_刺杀临界'],
+    '线索': ['藏宝图_真假线索','建初寺_经文线索','舒县_基层苦难线索','身份风险_现代话术痕迹'],
+    '明示': ['入赘首夜_危机贴近','喜儿_接触临界','旧疾_谢秋瞳失控边缘'],
+    '暗示': ['喜儿_暗处观察','谢秋瞳_旧疾微痕','太子_东宫耳目','王徽_门阀明珠远影'],
+  };
+  ADS_ID_MAP['插入'] = 插入_IDS;
+
+  let touched = 0;
+  for (const l of LAYER_ENS) {
+    const ids = ADS_ID_MAP[l];
+    for (const id of ids) {
+      try { await getwi(`${l}/${id}`); touched++; }
+      catch(e) { console.warn('[剧情调度器] getwi 失败 ' + l + '/' + id + ': ' + e); }
+    }
+  }
+
+  const _summary = {};
+  for (const l of LAYER_ENS) _summary[l] = getvar('stat_data.剧情要点.本轮命中.' + l, { defaults: [], noCache: true }) || [];
+  console.info('[剧情调度器] 触发条目数=' + touched + ' 本轮命中=', JSON.stringify(_summary));
+  %>

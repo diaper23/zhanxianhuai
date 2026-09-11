@@ -1,0 +1,8 @@
+﻿---
+P025_Life_Death_Alliance: |-
+  <%_/* 插入 :line: "盟约临界" */
+  if ((matchChatMessages(['生死盟约', '王侯将相', '王导下注', '谢秋瞳旧疾'], { start: -4 })) && !hitDone('P025_Life_Death_Alliance')) {
+    markHit('插入', 'P025_Life_Death_Alliance', `<span style="display:none;">[插入剧情：P025_Life_Death_Alliance]</span>
+    可插入谢秋瞳旧疾暴露、<user>宏愿震动她、王导让王徽随行或暗示除太子。
+    推进目标：把私人关系、寿命秘密和政治下注绑在一起。`);
+  } _%>

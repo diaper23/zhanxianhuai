@@ -1,0 +1,8 @@
+﻿---
+P018_Shuxian_Office_Deathtrap: |-
+  <%_/* 插入 :line: "舒县官署" */
+  if ((matchChatMessages(['舒县', '县寺', '周遂', '文冲', '齐云'], { start: -4 })) && !hitDone('P018_Shuxian_Office_Deathtrap')) {
+    markHit('插入', 'P018_Shuxian_Office_Deathtrap', `<span style="display:none;">[插入剧情：P018_Shuxian_Office_Deathtrap]</span>
+    可插入<user>疯批夺官署、县令县尉连环被杀、齐云上位、地方豪强暗流。
+    推进目标：制造舒县“谁都不干净”的基层死局。`);
+  } _%>

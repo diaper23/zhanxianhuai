@@ -1,0 +1,8 @@
+﻿---
+P019_Overturn_Gentry: |-
+  <%_/* 插入 :line: "舒县掀桌临界" */
+  if ((matchChatMessages(['周家', '虐童', '山匪', '减租', '求援'], { start: -4 })) && !hitDone('P019_Overturn_Gentry')) {
+    markHit('插入', 'P019_Overturn_Gentry', `<span style="display:none;">[插入剧情：P019_Overturn_Gentry]</span>
+    可插入世家逼租、周祥虐童、山匪洗劫、减租谈判失败、<user>连夜写密信求援。
+    推进目标：迫使<user>选择妥协、顶锅、求援或武力掀桌。`);
+  } _%>

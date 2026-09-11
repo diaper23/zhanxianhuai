@@ -1,0 +1,8 @@
+﻿---
+P032_Riot_Seize_Qiaojun: |-
+  <%_/* 插入 :line: "暴动夺权" */
+  if ((matchChatMessages(['暴动', '劫狱', '夺权', '王敦造反'], { start: -4 })) && !hitDone('P032_Riot_Seize_Qiaojun')) {
+    markHit('插入', 'P032_Riot_Seize_Qiaojun', `<span style="display:none;">[插入剧情：P032_Riot_Seize_Qiaojun]</span>
+    可插入强收北征税、史忠斩税吏、百姓劫狱、王徽金牌、建康王敦造反。
+    推进目标：让<user>夺取谯郡军政主动权，或因民变失控付出代价。`);
+  } _%>

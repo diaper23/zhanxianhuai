@@ -1,0 +1,8 @@
+﻿---
+P046_Taixue_Palace_Coup: |-
+  <%_/* 插入 :line: "太学宫政变" */
+  if ((matchChatMessages(['太学宫', '宣战', '宫廷政变', '司马羕'], { start: -4 })) && !hitDone('P046_Taixue_Palace_Coup')) {
+    markHit('插入', 'P046_Taixue_Palace_Coup', `<span style="display:none;">[插入剧情：P046_Taixue_Palace_Coup]</span>
+    可插入公开揭露暴君罪行、禁军叛乱、说服司马羕、太子突围京口。
+    推进目标：把思想宣战变成真实宫廷兵变。`);
+  } _%>

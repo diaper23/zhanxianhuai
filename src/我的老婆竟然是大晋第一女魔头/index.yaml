@@ -1,0 +1,833 @@
+﻿# yaml-language-server: $schema=https://testingcf.jsdelivr.net/gh/StageDog/tavern_sync/dist/schema/character.zh.json
+头像: 头像
+版本: 2.0.0
+作者: ''
+备注: '我的老婆竟然是大晋第一女魔头·架空东晋权谋武侠'
+
+第一条消息:
+  - 文件: 第一条消息/0
+
+角色描述: ''
+
+锚点:
+  - &分隔符
+    启用: false
+    激活策略:
+      类型: 向量化
+    插入位置:
+      类型: 角色定义之前
+      顺序: 14720
+    激活概率: 100
+    内容: ''
+
+  - &蓝灯_定义前_1
+    启用: true
+    激活策略:
+      类型: 蓝灯
+    插入位置:
+      类型: 角色定义之前
+      顺序: 1
+    激活概率: 100
+    递归:
+      不可被其他条目激活: true
+      不可激活其他条目: true
+
+  - &蓝灯_定义前_2
+    启用: true
+    激活策略:
+      类型: 蓝灯
+    插入位置:
+      类型: 角色定义之前
+      顺序: 2
+    激活概率: 100
+    递归:
+      不可被其他条目激活: true
+      不可激活其他条目: true
+
+  - &蓝灯_定义后_50
+    启用: true
+    激活策略:
+      类型: 蓝灯
+    插入位置:
+      类型: 角色定义之后
+      顺序: 50
+    激活概率: 100
+    递归:
+      不可被其他条目激活: true
+      不可激活其他条目: true
+
+  - &蓝灯_定义后_99
+    启用: true
+    激活策略:
+      类型: 蓝灯
+    插入位置:
+      类型: 角色定义之后
+      顺序: 99
+    激活概率: 100
+    递归:
+      不可被其他条目激活: true
+      不可激活其他条目: true
+
+  - &蓝灯_控制器
+    启用: true
+    激活策略:
+      类型: 蓝灯
+    插入位置:
+      类型: 角色定义之后
+      顺序: 100
+    激活概率: 100
+    递归:
+      不可被其他条目激活: true
+      不可激活其他条目: true
+
+  - &蓝灯_变量
+    启用: true
+    激活策略:
+      类型: 蓝灯
+    插入位置:
+      类型: 指定深度
+      角色: 系统
+      深度: 0
+      顺序: 200
+    激活概率: 100
+    递归:
+      不可被其他条目激活: true
+      不可激活其他条目: true
+
+  - &禁用条目
+    启用: false
+    激活策略:
+      类型: 蓝灯
+    插入位置:
+      类型: 角色定义之后
+      顺序: 99
+    激活概率: 100
+    递归:
+      不可被其他条目激活: true
+      不可激活其他条目: true
+
+世界书名称: 与角色卡名称相同
+条目:
+  # ==================== 世界观 ====================
+  - 文件夹: 世界观
+    条目:
+      - 名称: ===世界观开始===
+        <<: *分隔符
+
+      - 名称: 世界总纲
+        <<: *蓝灯_定义前_1
+        文件: 世界书/世界观/世界总纲
+
+      - 名称: 角色速览
+        <<: *蓝灯_定义前_2
+        文件: 世界书/世界观/角色速览
+
+      - 名称: ===世界观结束===
+        <<: *分隔符
+
+  # ==================== 规则与数据 ====================
+  - 文件夹: 规则与数据
+    条目:
+      - 名称: ===规则与数据开始===
+        <<: *分隔符
+
+      - 名称: 规则·剧情要点
+        <<: *禁用条目
+        文件: 世界书/剧情/规则·剧情要点
+
+      - 名称: 数据·人物
+        <<: *禁用条目
+        文件: 世界书/剧情/数据·人物
+
+      - 名称: 插入/P001_Marry_Into_Xie
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P001_Marry_Into_Xie
+
+      - 名称: 插入/P002_Xier_Bargain
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P002_Xier_Bargain
+
+      - 名称: 插入/P003_Xie_Family_Foothold
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P003_Xie_Family_Foothold
+
+      - 名称: 插入/P004_Taizi_Political_Game
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P004_Taizi_Political_Game
+
+      - 名称: 插入/P005_Xier_Truth_Crisis
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P005_Xier_Truth_Crisis
+
+      - 名称: 插入/P006_Jianchu_Sutra_Heist
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P006_Jianchu_Sutra_Heist
+
+      - 名称: 插入/P007_Xie_Attack_Save_Xier
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P007_Xie_Attack_Save_Xier
+
+      - 名称: 插入/P008_Martial_Start_Leave_Capital
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P008_Martial_Start_Leave_Capital
+
+      - 名称: 插入/P009_Zaokongshan_Awakening
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P009_Zaokongshan_Awakening
+
+      - 名称: 插入/P010_Return_Xie_Set_Target
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P010_Return_Xie_Set_Target
+
+      - 名称: 插入/P011_Fangshan_Bloodcase
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P011_Fangshan_Bloodcase
+
+      - 名称: 插入/P012_Jianchu_Shelter
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P012_Jianchu_Shelter
+
+      - 名称: 插入/P013_Prison_Conspiracy
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P013_Prison_Conspiracy
+
+      - 名称: 插入/P014_Prison_Ally_Midautumn
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P014_Prison_Ally_Midautumn
+
+      - 名称: 插入/P015_Assassination_Truth
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P015_Assassination_Truth
+
+      - 名称: 插入/P016_Ideology_Break_Team
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P016_Ideology_Break_Team
+
+      - 名称: 插入/P017_Divorce_To_Shuxian
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P017_Divorce_To_Shuxian
+
+      - 名称: 插入/P018_Shuxian_Office_Deathtrap
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P018_Shuxian_Office_Deathtrap
+
+      - 名称: 插入/P019_Overturn_Gentry
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P019_Overturn_Gentry
+
+      - 名称: 插入/P020_Five_Day_Deadline
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P020_Five_Day_Deadline
+
+      - 名称: 插入/P021_Shuxian_Pacified
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P021_Shuxian_Pacified
+
+      - 名称: 插入/P022_Fame_Spreads
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P022_Fame_Spreads
+
+      - 名称: 插入/P023_Border_Crisis_Qiaojun
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P023_Border_Crisis_Qiaojun
+
+      - 名称: 插入/P024_History_Truth
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P024_History_Truth
+
+      - 名称: 插入/P025_Life_Death_Alliance
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P025_Life_Death_Alliance
+
+      - 名称: 插入/P026_Father_Death_Leave_Capital
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P026_Father_Death_Leave_Capital
+
+      - 名称: 插入/P027_Xier_Intercept
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P027_Xier_Intercept
+
+      - 名称: 插入/P028_Test_Daiyuan_Borrow_Troops
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P028_Test_Daiyuan_Borrow_Troops
+
+      - 名称: 插入/P029_Fake_Allegiance_Edict
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P029_Fake_Allegiance_Edict
+
+      - 名称: 插入/P030_Jiankang_Change_Beifu
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P030_Jiankang_Change_Beifu
+
+      - 名称: 插入/P031_Blood_Oath_Prison
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P031_Blood_Oath_Prison
+
+      - 名称: 插入/P032_Riot_Seize_Qiaojun
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P032_Riot_Seize_Qiaojun
+
+      - 名称: 插入/P033_Army_Soul_Gate_Reversal
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P033_Army_Soul_Gate_Reversal
+
+      - 名称: 插入/P034_Empty_Fort_Ranmin
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P034_Empty_Fort_Ranmin
+
+      - 名称: 插入/P035_Poison_Water_Burn_Grain
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P035_Poison_Water_Burn_Grain
+
+      - 名称: 插入/P036_Fort_Battle_Ranmin_Alliance
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P036_Fort_Battle_Ranmin_Alliance
+
+      - 名称: 插入/P037_Lure_Enemy_Reinforcement
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P037_Lure_Enemy_Reinforcement
+
+      - 名称: 插入/P038_Qiaojun_Victory_Split
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P038_Qiaojun_Victory_Split
+
+      - 名称: 插入/P039_Xier_Snatches_Bride
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P039_Xier_Snatches_Bride
+
+      - 名称: 插入/P040_Reward_And_Hibernate
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P040_Reward_And_Hibernate
+
+      - 名称: 插入/P041_Return_Capital_Seize_Xie
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P041_Return_Capital_Seize_Xie
+
+      - 名称: 插入/P042_Taizi_Policy_Assassination
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P042_Taizi_Policy_Assassination
+
+      - 名称: 插入/P043_Dual_Cultivation_Detox
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P043_Dual_Cultivation_Detox
+
+      - 名称: 插入/P044_Fund_Shenque
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P044_Fund_Shenque
+
+      - 名称: 插入/P045_Palace_Horror_Route_Change
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P045_Palace_Horror_Route_Change
+
+      - 名称: 插入/P046_Taixue_Palace_Coup
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P046_Taixue_Palace_Coup
+
+      - 名称: 插入/P047_Regicide_Fugui_Mountain
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P047_Regicide_Fugui_Mountain
+
+      - 名称: 插入/P048_Shuxian_Talks_Strategy
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P048_Shuxian_Talks_Strategy
+
+      - 名称: 插入/P049_Shuxian_Public_Power
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P049_Shuxian_Public_Power
+
+      - 名称: 插入/P050_Talks_Qianfeng
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P050_Talks_Qianfeng
+
+      - 名称: 插入/P051_Xie_Confession_Xuanqi
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P051_Xie_Confession_Xuanqi
+
+      - 名称: 插入/P052_SacredHeart_Visit_Zhuyuexi
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P052_SacredHeart_Visit_Zhuyuexi
+
+      - 名称: 插入/P053_Gold_Escort_Fame_Peak
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P053_Gold_Escort_Fame_Peak
+
+      - 名称: 插入/P054_Keju_Rob_Treasury
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P054_Keju_Rob_Treasury
+
+      - 名称: 插入/P055_New_Emperor_Crackdown
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P055_New_Emperor_Crackdown
+
+      - 名称: 插入/P056_Datong_Army_Founded
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P056_Datong_Army_Founded
+
+      - 名称: 插入/P057_Guerrilla_Destroy_Enemy
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P057_Guerrilla_Destroy_Enemy
+
+      - 名称: 插入/P058_Lantern_Night_Masters
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P058_Lantern_Night_Masters
+
+      - 名称: 插入/P059_Jiankang_Battle_Betrayal
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P059_Jiankang_Battle_Betrayal
+
+      - 名称: 插入/P060_Desperate_Proposal_Retreat
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P060_Desperate_Proposal_Retreat
+
+      - 名称: 插入/P061_Seize_Qiaojun_Again
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P061_Seize_Qiaojun_Again
+
+      - 名称: 插入/P062_Doctor_Backyard_Fire
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P062_Doctor_Backyard_Fire
+
+      - 名称: 插入/P063_Rush_West_Found_Base
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P063_Rush_West_Found_Base
+
+      - 名称: 插入/P064_Three_Kingdoms_War_Prepare
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P064_Three_Kingdoms_War_Prepare
+
+      - 名称: 插入/P065_Stop_Qian_Backstab
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P065_Stop_Qian_Backstab
+
+      - 名称: 插入/P066_Hanzhong_Battle
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P066_Hanzhong_Battle
+
+      - 名称: 插入/P067_Danqu_Defense
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P067_Danqu_Defense
+
+      - 名称: 插入/P068_Wenshan_Raid
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P068_Wenshan_Raid
+
+      - 名称: 插入/P069_Master_Assassination_Gunpowder
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P069_Master_Assassination_Gunpowder
+
+      - 名称: 插入/P070_Tunnel_NewYear_Counter
+        <<: *禁用条目
+        文件: 世界书/剧情/插入/P070_Tunnel_NewYear_Counter
+
+      - 名称: 覆盖/首夜_死亡临界
+        <<: *禁用条目
+        文件: 世界书/剧情/覆盖/首夜_死亡临界
+
+      - 名称: 覆盖/喜儿_刺杀临界
+        <<: *禁用条目
+        文件: 世界书/剧情/覆盖/喜儿_刺杀临界
+
+      - 名称: 覆盖/身份风险_严重暴露
+        <<: *禁用条目
+        文件: 世界书/剧情/覆盖/身份风险_严重暴露
+
+      - 名称: 禁令/_user_身份_穿越者身份禁忌
+        <<: *禁用条目
+        文件: 世界书/剧情/禁令/_user_身份_穿越者身份禁忌
+
+      - 名称: 禁令/人设条目_禁止写剧情锁死
+        <<: *禁用条目
+        文件: 世界书/剧情/禁令/人设条目_禁止写剧情锁死
+
+      - 名称: 禁令/开局时间点_禁止未来正史灌入
+        <<: *禁用条目
+        文件: 世界书/剧情/禁令/开局时间点_禁止未来正史灌入
+
+      - 名称: 禁令/时空传播_禁止瞬移登场
+        <<: *禁用条目
+        文件: 世界书/剧情/禁令/时空传播_禁止瞬移登场
+
+      - 名称: 禁令/武道_战场煞气约束
+        <<: *禁用条目
+        文件: 世界书/剧情/禁令/武道_战场煞气约束
+
+      - 名称: 线索/藏宝图_真假线索
+        <<: *禁用条目
+        文件: 世界书/剧情/线索/藏宝图_真假线索
+
+      - 名称: 线索/建初寺_经文线索
+        <<: *禁用条目
+        文件: 世界书/剧情/线索/建初寺_经文线索
+
+      - 名称: 线索/舒县_基层苦难线索
+        <<: *禁用条目
+        文件: 世界书/剧情/线索/舒县_基层苦难线索
+
+      - 名称: 线索/身份风险_现代话术痕迹
+        <<: *禁用条目
+        文件: 世界书/剧情/线索/身份风险_现代话术痕迹
+
+      - 名称: 明示/入赘首夜_危机贴近
+        <<: *禁用条目
+        文件: 世界书/剧情/明示/入赘首夜_危机贴近
+
+      - 名称: 明示/喜儿_接触临界
+        <<: *禁用条目
+        文件: 世界书/剧情/明示/喜儿_接触临界
+
+      - 名称: 明示/旧疾_谢秋瞳失控边缘
+        <<: *禁用条目
+        文件: 世界书/剧情/明示/旧疾_谢秋瞳失控边缘
+
+      - 名称: 暗示/喜儿_暗处观察
+        <<: *禁用条目
+        文件: 世界书/剧情/暗示/喜儿_暗处观察
+
+      - 名称: 暗示/谢秋瞳_旧疾微痕
+        <<: *禁用条目
+        文件: 世界书/剧情/暗示/谢秋瞳_旧疾微痕
+
+      - 名称: 暗示/太子_东宫耳目
+        <<: *禁用条目
+        文件: 世界书/剧情/暗示/太子_东宫耳目
+
+      - 名称: 暗示/王徽_门阀明珠远影
+        <<: *禁用条目
+        文件: 世界书/剧情/暗示/王徽_门阀明珠远影
+
+      - 名称: 干涉声明/禁令_层头
+        <<: *禁用条目
+        文件: 世界书/剧情/干涉声明/禁令_层头
+
+      - 名称: 干涉声明/覆盖_层头
+        <<: *禁用条目
+        文件: 世界书/剧情/干涉声明/覆盖_层头
+
+      - 名称: 干涉声明/插入_层头
+        <<: *禁用条目
+        文件: 世界书/剧情/干涉声明/插入_层头
+
+      - 名称: 干涉声明/线索_层头
+        <<: *禁用条目
+        文件: 世界书/剧情/干涉声明/线索_层头
+
+      - 名称: 干涉声明/明示_层头
+        <<: *禁用条目
+        文件: 世界书/剧情/干涉声明/明示_层头
+
+      - 名称: 干涉声明/暗示_层头
+        <<: *禁用条目
+        文件: 世界书/剧情/干涉声明/暗示_层头
+
+      - 名称: ===规则与数据结束===
+        <<: *分隔符
+
+  # ==================== 变量 ====================
+  - 文件夹: 变量
+    条目:
+      - 名称: ===变量开始===
+        <<: *分隔符
+
+      - 名称: '[initvar]变量初始化勿开'
+        <<: *禁用条目
+        文件: 世界书/变量/initvar
+
+      - 名称: 变量列表
+        <<: *蓝灯_变量
+        文件: 世界书/变量/变量列表
+
+      - 名称: '[mvu_update]变量更新规则'
+        <<: *蓝灯_变量
+        文件: 世界书/变量/变量更新规则
+
+      - 名称: '[mvu_update]变量输出格式'
+        <<: *蓝灯_变量
+        文件: 世界书/变量/变量输出格式
+
+      - 名称: ===变量结束===
+        <<: *分隔符
+
+  # ==================== 核心角色 ====================
+  - 文件夹: 核心角色
+    条目:
+      - 名称: ===核心角色开始===
+        <<: *分隔符
+
+      - 名称: 谢秋瞳
+        <<: *禁用条目
+        文件: 世界书/角色/谢秋瞳
+
+      - 名称: 喜儿
+        <<: *禁用条目
+        文件: 世界书/角色/喜儿
+
+      - 名称: 王徽
+        <<: *禁用条目
+        文件: 世界书/角色/王徽
+
+      - 名称: 谢秋瞳_阶段_陌生试探
+        <<: *禁用条目
+        文件: 世界书/角色/动态/谢秋瞳_阶段_陌生试探
+
+      - 名称: 谢秋瞳_阶段_有限合作
+        <<: *禁用条目
+        文件: 世界书/角色/动态/谢秋瞳_阶段_有限合作
+
+      - 名称: 谢秋瞳_阶段_情感动摇
+        <<: *禁用条目
+        文件: 世界书/角色/动态/谢秋瞳_阶段_情感动摇
+
+      - 名称: 谢秋瞳_阶段_深层信任
+        <<: *禁用条目
+        文件: 世界书/角色/动态/谢秋瞳_阶段_深层信任
+
+      - 名称: 谢秋瞳_阶段_决裂敌对
+        <<: *禁用条目
+        文件: 世界书/角色/动态/谢秋瞳_阶段_决裂敌对
+
+      - 名称: 喜儿_阶段_暗处观察
+        <<: *禁用条目
+        文件: 世界书/角色/动态/喜儿_阶段_暗处观察
+
+      - 名称: 喜儿_阶段_目标接触
+        <<: *禁用条目
+        文件: 世界书/角色/动态/喜儿_阶段_目标接触
+
+      - 名称: 喜儿_阶段_交易保护
+        <<: *禁用条目
+        文件: 世界书/角色/动态/喜儿_阶段_交易保护
+
+      - 名称: 喜儿_阶段_情感动摇
+        <<: *禁用条目
+        文件: 世界书/角色/动态/喜儿_阶段_情感动摇
+
+      - 名称: 喜儿_阶段_归属确认
+        <<: *禁用条目
+        文件: 世界书/角色/动态/喜儿_阶段_归属确认
+
+      - 名称: 喜儿_阶段_背叛危机
+        <<: *禁用条目
+        文件: 世界书/角色/动态/喜儿_阶段_背叛危机
+
+      - 名称: 王徽_阶段_未相识
+        <<: *禁用条目
+        文件: 世界书/角色/动态/王徽_阶段_未相识
+
+      - 名称: 王徽_阶段_好奇
+        <<: *禁用条目
+        文件: 世界书/角色/动态/王徽_阶段_好奇
+
+      - 名称: 王徽_阶段_欣赏
+        <<: *禁用条目
+        文件: 世界书/角色/动态/王徽_阶段_欣赏
+
+      - 名称: 王徽_阶段_倾心
+        <<: *禁用条目
+        文件: 世界书/角色/动态/王徽_阶段_倾心
+
+      - 名称: 王徽_阶段_同行
+        <<: *禁用条目
+        文件: 世界书/角色/动态/王徽_阶段_同行
+
+      - 名称: 王徽_阶段_失望
+        <<: *禁用条目
+        文件: 世界书/角色/动态/王徽_阶段_失望
+
+      - 名称: '[EJS]角色调度'
+        <<: *蓝灯_控制器
+        文件: 世界书/角色/EJS角色调度
+
+      - 名称: NPC_司马绍
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_司马绍
+
+      - 名称: NPC_王导
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_王导
+
+      - 名称: NPC_谢裒
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_谢裒
+
+      - 名称: NPC_王劭
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_王劭
+
+      - 名称: NPC_祝月曦
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_祝月曦
+
+      - 名称: NPC_冷翎瑶
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_冷翎瑶
+
+      - 名称: NPC_冉闵
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_冉闵
+
+      - 名称: NPC_戴渊
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_戴渊
+
+      - 名称: NPC_史忠
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_史忠
+
+      - 名称: NPC_梵星眸
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_梵星眸
+
+      - 名称: NPC_王猛
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_王猛
+
+      - 名称: NPC_刘裕
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_刘裕
+
+      - 名称: NPC_桓温
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_桓温
+
+      - 名称: NPC_苻坚
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_苻坚
+
+      - 名称: NPC_慕容恪
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_慕容恪
+
+      - 名称: NPC_慕容垂
+        <<: *禁用条目
+        文件: 世界书/角色/NPC/NPC_慕容垂
+
+      - 名称: ===核心角色结束===
+        <<: *分隔符
+
+  # ==================== 场景与势力 ====================
+  - 文件夹: 场景势力
+    条目:
+      - 名称: ===场景势力开始===
+        <<: *分隔符
+
+      - 名称: 势力格局
+        <<: *蓝灯_定义后_50
+        文件: 世界书/场景/势力格局
+
+      - 名称: 地点
+        <<: *蓝灯_定义后_50
+        文件: 世界书/场景/地点
+
+      - 名称: 时间线
+        <<: *蓝灯_定义后_50
+        文件: 世界书/场景/时间线
+
+      - 名称: ===场景势力结束===
+        <<: *分隔符
+
+  # ==================== 伏笔 ====================
+  - 文件夹: 伏笔
+    条目:
+      - 名称: ===伏笔开始===
+        <<: *分隔符
+
+      - 名称: '[EJS]伏笔追踪'
+        <<: *蓝灯_控制器
+        文件: 世界书/伏笔/伏笔追踪
+
+      - 名称: ===伏笔结束===
+        <<: *分隔符
+
+  # ==================== EJS 控制器 ====================
+  - 名称: '[EJS]剧情调度器'
+    <<: *蓝灯_控制器
+    文件: 世界书/剧情/EJS剧情调度器
+
+  - 名称: '[EJS]剧情控制器'
+    <<: *蓝灯_控制器
+    文件: 世界书/剧情/EJS剧情控制器
+
+扩展字段:
+  正则:
+    - 正则名称: '[不发送]去除变量更新'
+      id: f1e2d3c4-0001-4000-8000-000000000001
+      启用: true
+      查找表达式: /<update(?:variable)?>(?:(?!.*<\/update(?:variable)?>).*$|.*<\/update(?:variable)?>)/gsi
+      内容: ''
+      来源:
+        用户输入: true
+        AI输出: true
+      作用于:
+        仅格式显示: false
+        仅格式提示词: true
+      最大深度: 3
+
+    - 正则名称: '[折叠]变量更新中'
+      id: f1e2d3c4-0002-4000-8000-000000000002
+      启用: true
+      查找表达式: /<update(?:variable)?>(?!.*<\/update(?:variable)?>)\s*(.*)\s*$/gsi
+      内容: |-
+
+        <details>
+        <summary>变量更新中{{random::.::..::...}}</summary>
+        $1
+        </details>
+      来源:
+        用户输入: true
+        AI输出: true
+      作用于:
+        仅格式显示: true
+        仅格式提示词: false
+
+    - 正则名称: '[折叠]完整变量更新'
+      id: f1e2d3c4-0003-4000-8000-000000000003
+      启用: true
+      查找表达式: /<update(?:variable)?>\s*(.*)\s*<\/update(?:variable)?>/gsi
+      内容: |-
+
+        <details>
+        <summary>变量更新情况</summary>
+        $1
+        </details>
+      来源:
+        用户输入: true
+        AI输出: true
+      作用于:
+        仅格式显示: true
+        仅格式提示词: false
+
+    - 正则名称: '[界面]状态栏'
+      id: f1e2d3c4-0004-4000-8000-000000000004
+      启用: true
+      查找表达式: <StatusPlaceHolderImpl/>
+      内容: |-
+        ```
+        <head><script type="module">import{waitUntil as e}from'https://testingcf.jsdelivr.net/npm/async-wait-until/+esm';import{createPinia as a,defineStore as t}from'https://testingcf.jsdelivr.net/npm/pinia/+esm';const l=Vue;function s(e){return!!(0,l.getCurrentScope)()&&((0,l.onScopeDispose)(e),!0)}const n='undefined'!=typeof window&&'undefined'!=typeof document;'undefined'!=typeof WorkerGlobalScope&&(globalThis,WorkerGlobalScope),Object.prototype.toString;function r(e,a){return function(...t){return new Promise((l,s)=>{Promise.resolve(e(()=>a.apply(this,t),{fn:a,thisArg:this,args:t})).then(l).catch(s)})}}const c=e=>e();function o(e){const a=Object.create(null);return t=>a[t]||(a[t]=e(t))}const i=/\B([A-Z])/g,d=(o(e=>e.replace(i,'-$1').toLowerCase()),/-(\w)/g);o(e=>e.replace(d,(_,e)=>e?e.toUpperCase():''));function u(e,a=1e3,t={}){const{immediate:r=!0,immediateCallback:c=!1}=t;let o=null;const i=(0,l.shallowRef)(!1);function d(){o&&(clearInterval(o),o=null)}function u(){i.value=!1,d()}function m(){const t=(0,l.toValue)(a);t<=0||(i.value=!0,c&&e(),d(),i.value&&(o=setInterval(e,t)))}if(r&&n&&m(),(0,l.isRef)(a)||'function'==typeof a){s((0,l.watch)(a,()=>{i.value&&n&&m()}))}return s(u),{isActive:(0,l.shallowReadonly)(i),pause:u,resume:m}}function m(e,a,t={}){const{eventFilter:s=c,...n}=t,o=r(s,a);let i,d,u;if('sync'===n.flush){let a=!1;d=()=>{},i=e=>{a=!0,e(),a=!1},u=(0,l.watch)(e,(...e)=>{a||o(...e)},n)}else{const a=[];let t=0,s=0;d=()=>{t=s},a.push((0,l.watch)(e,()=>{s++},{...n,flush:'sync'})),i=e=>{const a=s;e(),t+=s-a},a.push((0,l.watch)(e,(...e)=>{const a=t>0&&t===s;t=0,s=0,a||o(...e)},n)),u=()=>{a.forEach(e=>e())}}return{stop:u,ignoreUpdates:i,ignorePrevAsyncUpdates:d}}const p=z,f=p.z.object({世界:p.z.object({当前时间:p.z.string().prefault('待初始化'),当前地点:p.z.string().prefault('待初始化'),近期事务:p.z.record(p.z.string().describe('事务名'),p.z.string().describe('事务描述')).prefault({})}).prefault({}),在场角色:p.z.array(p.z.enum(['谢秋瞳','喜儿','王徽','用户'])).prefault(['谢秋瞳']),剧情要点:p.z.record(p.z.string().describe('剧情key'),p.z.object({剧情名:p.z.string().prefault(''),状态:p.z.enum(['未触发','进行中','已完成']).prefault('未触发'),进程:p.z.array(p.z.string()).prefault([]),结果:p.z.string().prefault(''),触发时间:p.z.string().prefault(''),完成时间:p.z.string().prefault('')}).prefault({})).prefault({}),谢秋瞳:p.z.object({态度:p.z.coerce.number().prefault(0).transform(e=>_.clamp(e,-100,100)),隐瞒程度:p.z.coerce.number().prefault(100).transform(e=>_.clamp(e,0,100)),身体状态:p.z.string().prefault('待初始化'),当前打算:p.z.string().prefault('待初始化')}).prefault({}).transform(e=>{const a=e.态度,t=a<-60?'敌对利用':a<-20?'冷淡算计':a<20?'有限合作':a<50?'深层盟友':'以命相托';return{...e,关系阶段:t}}),喜儿:p.z.object({好感:p.z.coerce.number().prefault(0).transform(e=>_.clamp(e,-50,100)),当前任务:p.z.string().prefault('待初始化'),所在地:p.z.string().prefault('待初始化'),当前态度:p.z.string().prefault('待初始化')}).prefault({}),王徽:p.z.object({好感:p.z.coerce.number().prefault(0).transform(e=>_.clamp(e,0,100)),当前处境:p.z.string().prefault('待初始化'),所在地:p.z.string().prefault('待初始化'),当前状态:p.z.string().prefault('待初始化')}).prefault({}),用户:p.z.object({当前官职:p.z.string().prefault('白身'),武功境界:p.z.string().prefault('无'),所在地:p.z.string().prefault('待初始化'),当前行动:p.z.string().prefault('待初始化'),名望:p.z.coerce.number().prefault(0).transform(e=>_.clamp(e,0,100))}).prefault({}),势力动向:p.z.record(p.z.enum(['谢家','王家','太子','皇帝','圣心宫','极乐宫','后赵石虎','慕容鲜卑','北府兵','戴渊']),p.z.string().describe('势力状态描述'))}),b=(g=f,'message'!==(v={type:'message',message_id:getCurrentMessageId()}).type||void 0!==v.message_id&&'latest'!==v.message_id||(v.message_id=-1),t(`mvu_data.${_(v).entries().sortBy(e=>e[0]).map(e=>e[1]).join('.')}`,errorCatched(()=>{const e=(0,l.ref)(g.parse(_.get(getVariables(v),'stat_data',{}),{reportInput:!0}));h&&h(e),u(()=>{const t=_.get(getVariables(v),'stat_data',{}),l=g.safeParse(t);l.error||_.isEqual(e.value,l.data)||(a(()=>{e.value=l.data}),_.isEqual(t,l.data)||updateVariablesWith(e=>_.set(e,'stat_data',l.data),v))},2e3);const{ignoreUpdates:a}=m(e,t=>{const l=g.safeParse(t);l.error||(_.isEqual(t,l.data)||a(()=>{e.value=l.data}),updateVariablesWith(e=>_.set(e,'stat_data',l.data),v))},{deep:!0});return{data:e}})));var g,v,h;const V={key:0,class:'stat-bar'},k={class:'top-brief'},N={class:'brief-item'},E={class:'val'},y={class:'brief-item'},w={class:'val'},B={class:'brief-item'},C={class:'val'},S={class:'brief-item'},j={class:'val gold-glow'},x={class:'nav-tabs'},I={class:'tab-content-wrap'},D={class:'heroines-list',key:'heroines'},A={class:'world-view',key:'world'},L={key:0,class:'dossier-card'},M={class:'dc-list'},T={class:'dc-text'},P={class:'dc-highlight'},G={key:1,class:'dossier-card'},O={key:2,class:'dossier-card',style:{'margin-top':'16px'}},R={class:'faction-grid'},U={class:'fac-name'},q={class:'fac-status'},F={class:'plots-view',key:'plots'},W={key:0,class:'dossier-card'},H={class:'dc-list'},Z={class:'plot-header'},J={class:'dc-highlight'},K={key:0,class:'plot-latest'},Q={key:1,class:'empty-state'},X=['src'],Y=(0,l.defineComponent)({props:{name:String,cls:String,avatar:String,affection:Number,affectionRange:String,affectionName:String,subA:String,subALabel:String,subB:String,subBLabel:String,mood:String,moodLabel:String,barColor:String},emits:['viewImage'],setup(e,{emit:a}){const t=e.affectionRange?.split('~')||['0','100'],s=Number(t[0]),n=Number(t[1]),r=(0,l.computed)(()=>Math.max(0,Math.min(100,((e.affection??0)-s)/(n-s)*100))),c=(0,l.computed)(()=>{const a=r.value;return a>=70?{cls:'tag-good',text:'谢秋瞳'===e.name?'信赖':'喜儿'===e.name?'依恋':'倾心'}:a>=40?{cls:'tag-mid',text:'谢秋瞳'===e.name?'合作':'在意'}:{cls:'tag-bad',text:'谢秋瞳'===e.name?'敌对':'喜儿'===e.name?'警惕':'观望'}});return()=>(0,l.h)('div',{class:['heroine-card',e.cls]},[(0,l.h)('div',{class:'hc-main'},[e.avatar?(0,l.h)('div',{class:'hc-avatar-wrap',onClick:()=>a('viewImage',e.avatar),title:'点击查看立绘'},[(0,l.h)('img',{class:'hc-avatar',src:e.avatar,alt:e.name}),(0,l.h)('div',{class:'hc-avatar-mask'},'🔍')]):(0,l.h)('div',{class:'hc-avatar-placeholder'}),(0,l.h)('div',{class:'hc-info'},[(0,l.h)('div',{class:'hc-title-row'},[(0,l.h)('span',{class:'hc-name'},e.name),(0,l.h)('span',{class:'hc-tag '+c.value.cls},c.value.text)]),(0,l.h)('div',{class:'hc-bar-row'},[(0,l.h)('span',{class:'hc-bar-lbl'},e.affectionName),(0,l.h)('div',{class:'hc-bar-bg'},[(0,l.h)('div',{class:'hc-bar-fill',style:{width:r.value+'%',background:e.barColor}})]),(0,l.h)('span',{class:'hc-bar-val'},String(e.affection??'—'))]),(0,l.h)('div',{class:'hc-grid'},[(0,l.h)('div',{class:'hc-fld'},[(0,l.h)('span',{class:'hc-fld-lbl'},e.subALabel),(0,l.h)('span',{class:'hc-fld-val'},e.subA||'—')]),(0,l.h)('div',{class:'hc-fld'},[(0,l.h)('span',{class:'hc-fld-lbl'},e.subBLabel),(0,l.h)('span',{class:'hc-fld-val'},e.subB||'—')])])])]),(0,l.h)('div',{class:'hc-mood'},[(0,l.h)('span',{class:'hc-mood-val'},e.mood||'—')])])}}),ee={components:{HeroineCard:Y}},ae=(0,l.defineComponent)({...ee,__name:'App',setup(e){const a=b(),t=(0,l.ref)('heroines'),s=(0,l.ref)(null),n=e=>{s.value=e},r=()=>{s.value=null},c=(0,l.computed)(()=>{const e=a.data.世界.近期事务;return e&&'object'==typeof e&&Object.keys(e).length>0}),o=(0,l.computed)(()=>{const e=a.data.剧情要点;return e&&'object'==typeof e?Object.entries(e).filter(([,e])=>'进行中'===e.状态).map(([e,a])=>({key:e,name:a.剧情名,latest:a.进程?.length?a.进程[a.进程.length-1]:''})):[]}),i=(0,l.computed)(()=>{const e=a.data.势力动向;return e&&'object'==typeof e&&Object.keys(e).length>0});return(e,d)=>(0,l.unref)(a).data?((0,l.openBlock)(),(0,l.createElementBlock)('div',V,[(0,l.createCommentVNode)(' 顶部极简情报 '),(0,l.createElementVNode)('div',k,[(0,l.createElementVNode)('div',N,[d[4]||(d[4]=(0,l.createElementVNode)('span',null,'岁次',-1)),(0,l.createElementVNode)('span',E,(0,l.toDisplayString)((0,l.unref)(a).data.世界.当前时间||'—'),1)]),(0,l.createElementVNode)('div',y,[d[5]||(d[5]=(0,l.createElementVNode)('span',null,'分野',-1)),(0,l.createElementVNode)('span',w,(0,l.toDisplayString)((0,l.unref)(a).data.世界.当前地点||'—'),1)]),(0,l.createElementVNode)('div',B,[d[6]||(d[6]=(0,l.createElementVNode)('span',null,'官阶',-1)),(0,l.createElementVNode)('span',C,(0,l.toDisplayString)((0,l.unref)(a).data.用户.当前官职||'—'),1)]),(0,l.createElementVNode)('div',S,[d[7]||(d[7]=(0,l.createElementVNode)('span',null,'名望',-1)),(0,l.createElementVNode)('span',j,(0,l.toDisplayString)((0,l.unref)(a).data.用户.名望??'—'),1)])]),(0,l.createCommentVNode)(' 导航切页 '),(0,l.createElementVNode)('div',x,[(0,l.createElementVNode)('div',{class:(0,l.normalizeClass)(['tab-btn',{active:'heroines'===t.value}]),onClick:d[0]||(d[0]=e=>t.value='heroines')},'红颜录',2),(0,l.createElementVNode)('div',{class:(0,l.normalizeClass)(['tab-btn',{active:'world'===t.value}]),onClick:d[1]||(d[1]=e=>t.value='world')},'天下局',2),(0,l.createElementVNode)('div',{class:(0,l.normalizeClass)(['tab-btn',{active:'plots'===t.value}]),onClick:d[2]||(d[2]=e=>t.value='plots')},'演命盘',2)]),(0,l.createCommentVNode)(' 视图内容 '),(0,l.createElementVNode)('div',I,[(0,l.createVNode)(l.Transition,{name:'fade-slide',mode:'out-in'},{default:(0,l.withCtx)(()=>['heroines'===t.value?((0,l.openBlock)(),(0,l.createElementBlock)('div',D,[(0,l.createVNode)((0,l.unref)(Y),{name:'谢秋瞳',cls:'xqt',avatar:'https://zora404.ccwu.cc/file/1782989418980_IMG_20260702_184723.png',affection:(0,l.unref)(a).data.谢秋瞳.态度,'affection-range':'-100~100','affection-name':'态度','sub-a':(0,l.unref)(a).data.谢秋瞳.关系阶段,'sub-a-label':'关系','sub-b':(0,l.unref)(a).data.谢秋瞳.身体状态,'sub-b-label':'贵体',mood:(0,l.unref)(a).data.谢秋瞳.当前打算,'mood-label':'谋算','bar-color':'linear-gradient(90deg, rgba(225,29,72,0.3), #e11d48)',onViewImage:n},null,8,['affection','sub-a','sub-b','mood']),(0,l.createVNode)((0,l.unref)(Y),{name:'喜儿',cls:'xer',avatar:'https://zora404.ccwu.cc/file/1782989442434_喜儿.png',affection:(0,l.unref)(a).data.喜儿.好感,'affection-range':'-50~100','affection-name':'好感','sub-a':(0,l.unref)(a).data.喜儿.所在地,'sub-a-label':'踪迹','sub-b':(0,l.unref)(a).data.喜儿.当前任务,'sub-b-label':'任务',mood:(0,l.unref)(a).data.喜儿.当前态度,'mood-label':'心绪','bar-color':'linear-gradient(90deg, rgba(192,38,211,0.3), #c026d3)',onViewImage:n},null,8,['affection','sub-a','sub-b','mood']),(0,l.createVNode)((0,l.unref)(Y),{name:'王徽',cls:'wh',avatar:'https://zora404.ccwu.cc/file/1782995780080_IMG_20260702_203434.png',affection:(0,l.unref)(a).data.王徽.好感,'affection-range':'0~100','affection-name':'好感','sub-a':(0,l.unref)(a).data.王徽.所在地,'sub-a-label':'踪迹','sub-b':(0,l.unref)(a).data.王徽.当前处境,'sub-b-label':'处境',mood:(0,l.unref)(a).data.王徽.当前状态,'mood-label':'心绪','bar-color':'linear-gradient(90deg, rgba(13,148,136,0.3), #0d9488)',onViewImage:n},null,8,['affection','sub-a','sub-b','mood'])])):'world'===t.value?((0,l.openBlock)(),(0,l.createElementBlock)('div',A,[c.value?((0,l.openBlock)(),(0,l.createElementBlock)('div',L,[d[8]||(d[8]=(0,l.createElementVNode)('div',{class:'dc-title'},[(0,l.createElementVNode)('span',{class:'title-deco'}),(0,l.createTextVNode)('近期事务'),(0,l.createElementVNode)('span',{class:'title-deco'})],-1)),(0,l.createElementVNode)('div',M,[((0,l.openBlock)(!0),(0,l.createElementBlock)(l.Fragment,null,(0,l.renderList)((0,l.unref)(a).data.世界.近期事务,(e,a)=>((0,l.openBlock)(),(0,l.createElementBlock)('div',{key:a,class:'dc-item'},[(0,l.createElementVNode)('span',T,[(0,l.createElementVNode)('span',P,'「'+(0,l.toDisplayString)(a)+'」',1),(0,l.createTextVNode)((0,l.toDisplayString)(e),1)])]))),128))])])):((0,l.openBlock)(),(0,l.createElementBlock)('div',G,[...d[9]||(d[9]=[(0,l.createElementVNode)('div',{class:'empty-state'},'天下承平，暂无大事。',-1)])])),i.value?((0,l.openBlock)(),(0,l.createElementBlock)('div',O,[d[10]||(d[10]=(0,l.createElementVNode)('div',{class:'dc-title'},[(0,l.createElementVNode)('span',{class:'title-deco'}),(0,l.createTextVNode)('天下暗潮'),(0,l.createElementVNode)('span',{class:'title-deco'})],-1)),(0,l.createElementVNode)('div',R,[((0,l.openBlock)(!0),(0,l.createElementBlock)(l.Fragment,null,(0,l.renderList)((0,l.unref)(a).data.势力动向,(e,a)=>((0,l.openBlock)(),(0,l.createElementBlock)('div',{key:a,class:'faction-box'},[(0,l.createElementVNode)('div',U,(0,l.toDisplayString)(a),1),(0,l.createElementVNode)('div',q,(0,l.toDisplayString)(e),1)]))),128))])])):(0,l.createCommentVNode)('v-if',!0)])):'plots'===t.value?((0,l.openBlock)(),(0,l.createElementBlock)('div',F,[o.value.length?((0,l.openBlock)(),(0,l.createElementBlock)('div',W,[d[12]||(d[12]=(0,l.createElementVNode)('div',{class:'dc-title'},[(0,l.createElementVNode)('span',{class:'title-deco'}),(0,l.createTextVNode)('剧情推演'),(0,l.createElementVNode)('span',{class:'title-deco'})],-1)),(0,l.createElementVNode)('div',H,[((0,l.openBlock)(!0),(0,l.createElementBlock)(l.Fragment,null,(0,l.renderList)(o.value,e=>((0,l.openBlock)(),(0,l.createElementBlock)('div',{key:e.key,class:'dc-item plot-item'},[(0,l.createElementVNode)('div',Z,[d[11]||(d[11]=(0,l.createElementVNode)('span',{class:'dc-dot active-dot'},null,-1)),(0,l.createElementVNode)('span',J,(0,l.toDisplayString)(e.name),1)]),e.latest?((0,l.openBlock)(),(0,l.createElementBlock)('div',K,(0,l.toDisplayString)(e.latest),1)):(0,l.createCommentVNode)('v-if',!0)]))),128))])])):((0,l.openBlock)(),(0,l.createElementBlock)('div',Q,'命盘沉寂，暂无波澜。'))])):(0,l.createCommentVNode)('v-if',!0)]),_:1})]),(0,l.createCommentVNode)(' 大图查看器 '),(0,l.createVNode)(l.Transition,{name:'fade'},{default:(0,l.withCtx)(()=>[s.value?((0,l.openBlock)(),(0,l.createElementBlock)('div',{key:0,class:'lightbox',onClick:r},[d[13]||(d[13]=(0,l.createElementVNode)('div',{class:'lb-close'},'×',-1)),(0,l.createElementVNode)('img',{src:s.value,class:'lb-img',onClick:d[3]||(d[3]=(0,l.withModifiers)(()=>{},['stop']))},null,8,X)])):(0,l.createCommentVNode)('v-if',!0)]),_:1})])):(0,l.createCommentVNode)('v-if',!0)}});$(async()=>{await waitGlobalInitialized('Mvu'),await e(()=>_.has(getVariables({type:'message'}),'stat_data')),(0,l.createApp)(ae).use(a()).mount('#app')});
+        //# sourceMappingURL=index.js.map</script><style>@import url(https://testingcf.jsdelivr.net/gh/StageDog/tavern_resource/dist/css/google-fonts.css);
+        :root{--font-title:'STKaiti','KaiTi','楷体','STSong','宋体',serif;--font-num:'Georgia','Times New Roman',serif;--bg-base:#0a0a0c;--bg-panel:rgba(22,18,20,0.85);--bg-card:rgba(30,24,26,0.6);--bg-box:rgba(15,12,14,0.6);--border-light:rgba(212,175,55,0.25);--border-dim:rgba(212,175,55,0.1);--border-dark:rgba(255,255,255,0.05);--text-main:#EAE0D5;--text-sub:#A89F91;--text-faint:#736b5e;--gold:#D4AF37;--c-xqt:#f43f5e;--c-xer:#d946ef;--c-wh:#14b8a6}body{margin:0;padding:0;background:transparent;overflow:hidden}.stat-bar{max-width:360px;margin:12px auto;position:relative;border-radius:12px;background:var(--bg-panel);box-shadow:0 10px 40px rgba(0,0,0,0.6),inset 0 1px 0 var(--border-light),inset 0 -1px 0 var(--border-dim),inset 0 0 0 1px var(--border-dim);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--text-main);font-family:var(--font-title);line-height:1.5;padding:14px;overflow:hidden}.stat-bar::before{content:"";position:absolute;top:0;left:0;width:200%;height:100%;background:linear-gradient(115deg,transparent 20%,rgba(212,175,55,0.03) 45%,rgba(212,175,55,0.08) 50%,rgba(212,175,55,0.03) 55%,transparent 80%);transform:translateX(-100%);animation:sweep 7s ease-in-out infinite;pointer-events:none;z-index:0}@keyframes sweep{0%{transform:translateX(-100%)}40%,100%{transform:translateX(50%)}}.stat-bar>div{position:relative;z-index:1}.top-brief{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;background:var(--bg-box);padding:10px 12px;border-radius:8px;border:1px solid var(--border-dark);margin-bottom:12px}.brief-item{display:flex;justify-content:space-between;align-items:baseline}.brief-item span:first-child{font-size:11px;color:var(--text-sub)}.brief-item .val{font-size:12px;font-weight:bold;color:var(--text-main)}.gold-glow{color:var(--gold);text-shadow:0 0 5px rgba(212,175,55,0.4);font-family:var(--font-num)}.nav-tabs{display:flex;gap:4px;margin-bottom:12px;border-bottom:1px solid var(--border-dim);padding-bottom:4px}.tab-btn{flex:1;text-align:center;padding:6px 0;font-size:13px;color:var(--text-sub);cursor:pointer;border-radius:4px;transition:all 0.2s;letter-spacing:1px}.tab-btn:hover{background:rgba(255,255,255,0.05);color:var(--text-main)}.tab-btn.active{background:var(--border-dim);color:var(--gold);font-weight:bold;box-shadow:inset 0 -2px 0 var(--gold)}.heroines-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}.heroine-card{background:var(--bg-card);border:1px solid var(--border-dim);border-radius:8px;padding:10px;transition:all 0.3s ease;box-shadow:inset 0 1px 0 rgba(255,255,255,0.03)}.heroine-card:hover{background:rgba(40,28,34,0.8);border-color:var(--border-light);box-shadow:0 4px 12px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.05)}.hc-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}.hc-avatar-wrap{position:relative;width:42px;height:42px;border-radius:50%;flex-shrink:0;cursor:pointer;border:1px solid var(--border-light);box-shadow:0 0 10px rgba(0,0,0,0.6);overflow:hidden}.hc-avatar{width:100%;height:100%;object-fit:cover;transition:transform 0.4s ease}.hc-avatar-mask{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;font-size:16px;opacity:0;transition:opacity 0.3s ease}.hc-avatar-wrap:hover .hc-avatar{transform:scale(1.1)}.hc-avatar-wrap:hover .hc-avatar-mask{opacity:1}.hc-avatar-placeholder{width:42px;height:42px;border-radius:50%;background:var(--bg-box);flex-shrink:0}.hc-info{flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px}.hc-title-row{display:flex;justify-content:space-between;align-items:center}.hc-name{font-size:15px;font-weight:bold;letter-spacing:2px}.heroine-card.xqt .hc-name{color:var(--c-xqt);text-shadow:0 0 6px rgba(244,63,94,0.3)}.heroine-card.xer .hc-name{color:var(--c-xer);text-shadow:0 0 6px rgba(217,70,239,0.3)}.heroine-card.wh .hc-name{color:var(--c-wh);text-shadow:0 0 6px rgba(20,184,166,0.3)}.hc-tag{font-size:10px;padding:1px 6px;border-radius:4px;border:1px solid}.tag-bad{background:rgba(159,18,57,0.15);color:#fda4af;border-color:rgba(159,18,57,0.4)}.tag-mid{background:rgba(30,64,175,0.15);color:#93c5fd;border-color:rgba(30,64,175,0.4)}.tag-good{background:rgba(21,128,61,0.15);color:#86efac;border-color:rgba(21,128,61,0.4)}.hc-bar-row{display:flex;align-items:center;gap:8px}.hc-bar-lbl{font-size:11px;color:var(--text-sub)}.hc-bar-bg{flex:1;height:4px;background:rgba(0,0,0,0.6);border-radius:2px;box-shadow:inset 0 1px 2px rgba(0,0,0,0.8);position:relative}.hc-bar-fill{height:100%;border-radius:2px;transition:width 0.8s cubic-bezier(0.16,1,0.3,1);position:relative;box-shadow:0 0 5px inherit}.hc-bar-fill::after{content:"";position:absolute;right:0;top:50%;width:3px;height:8px;background:#fff;border-radius:1.5px;transform:translate(50%,-50%);box-shadow:0 0 4px inherit}.hc-bar-val{font-family:var(--font-num);font-size:12px;color:var(--gold);min-width:24px;text-align:right;text-shadow:0 0 3px var(--gold)}.hc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}.hc-fld{display:flex;flex-direction:column;gap:2px}.hc-fld-lbl{font-size:10.5px;color:var(--text-faint)}.hc-fld-val{font-size:12px;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hc-mood{background:var(--bg-box);border-radius:4px;padding:6px 8px;border-left:2px solid var(--border-light);display:flex;flex-direction:column;gap:2px}.hc-mood-lbl{font-size:10.5px;color:var(--text-faint)}.hc-mood-val{font-size:11.5px;color:#d1cbc3;text-align:justify;line-height:1.4}.dossier-card{margin-bottom:12px}.dossier-card:last-child{margin-bottom:0}.dc-title{font-size:12.5px;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:6px}.dc-title::before,.dc-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border-dim),transparent)}.dc-list{display:flex;flex-direction:column;gap:6px}.dc-item{display:flex;align-items:flex-start;gap:8px}.dc-dot{width:4px;height:4px;border-radius:50%;background:var(--text-faint);margin-top:6px;flex-shrink:0}.active-dot{background:var(--gold);box-shadow:0 0 4px var(--gold)}.dc-text{font-size:11.5px;color:var(--text-sub);line-height:1.4}.dc-highlight{color:var(--text-main);font-weight:500}.dc-sub{font-size:10.5px;color:var(--text-faint)}.faction-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.faction-box{background:var(--bg-card);padding:4px 8px;border-radius:4px;border:1px solid var(--border-dark)}.fac-name{font-size:11px;color:var(--text-main);margin-bottom:2px}.fac-status{font-size:10.5px;color:var(--text-sub);line-height:1.3}.lightbox{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;cursor:zoom-out}.lb-img{max-width:90%;max-height:90%;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.8);border:1px solid rgba(255,255,255,0.1);cursor:default}.lb-close{position:absolute;top:15px;right:20px;color:#fff;font-size:32px;opacity:0.6;font-family:sans-serif;cursor:pointer;transition:opacity 0.3s}.lb-close:hover{opacity:1}.fade-enter-active,.fade-leave-active{transition:opacity 0.3s ease}.fade-enter-from,.fade-leave-to{opacity:0}.fade-enter-active .lb-img{animation:popIn 0.3s cubic-bezier(0.16,1,0.3,1)}@keyframes popIn{from{transform:scale(0.95);opacity:0}to{transform:scale(1);opacity:1}}
+
+
+        /*# sourceMappingURL=main.css.map*/</style></head><body><div id="app"></div></body>
+        ```
+      来源:
+        用户输入: false
+        AI输出: true
+      作用于:
+        仅格式显示: true
+        仅格式提示词: false
+
+  酒馆助手:
+    脚本库:
+      - 名称: mvu
+        id: f1e2d3c4-1001-4000-8000-000000000001
+        启用: true
+        类型: 脚本
+        内容: |-
+          import 'https://testingcf.jsdelivr.net/gh/MagicalAstrogy/MagVarUpdate/artifact/bundle.js';
+
+      - 名称: 变量结构
+        id: f1e2d3c4-1002-4000-8000-000000000002
+        启用: true
+        类型: 脚本
+        内容: |-
+          import 'https://testingcf.jsdelivr.net/gh/StageDog/tavern_helper_template/dist/我的老婆竟然是大晋第一女魔头/脚本/变量结构/index.js';

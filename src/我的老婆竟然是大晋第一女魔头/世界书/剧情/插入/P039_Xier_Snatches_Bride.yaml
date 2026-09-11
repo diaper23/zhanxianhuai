@@ -1,0 +1,8 @@
+﻿---
+P039_Xier_Snatches_Bride: |-
+  <%_/* 插入 :line: "感情修罗场" */
+  if ((matchChatMessages(['喜儿抢亲', '王徽', '成亲', '修罗场'], { start: -4 })) && !hitDone('P039_Xier_Snatches_Bride')) {
+    markHit('插入', 'P039_Xier_Snatches_Bride', `<span style="display:none;">[插入剧情：P039_Xier_Snatches_Bride]</span>
+    可插入喜儿带伤抢人、王徽高情商周旋、梵星眸恶作剧试探。
+    推进目标：处理喜儿、王徽、<user>之间的关系边界，可成婚也可改线。`);
+  } _%>

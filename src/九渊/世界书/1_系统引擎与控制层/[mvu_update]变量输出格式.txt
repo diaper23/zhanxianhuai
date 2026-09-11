@@ -1,0 +1,29 @@
+---
+<update_variable_rules>
+rule:
+  - you must output the update analysis and the actual update commands at once in the end of the next reply
+  - 'the update commands work like the JSON Patch (RFC 6902) standard, must be a valid JSON array containing operation objects, but supports the following operations instead: replace (replace the value of existing paths), delta (update the value of existing number paths by a delta value), insert (insert new items into an object or array; using "-" as array index means appending to the end), remove, move'
+  - 'the path must be relative to the stat_data object, i.e. it must NOT include the "stat_data" prefix'
+  - 'don''t update field names starts with "_" as they are readonly'
+format: |-
+  <UpdateVariable>
+  <Analysis>$(IN ENGLISH, no more than 80 words)
+  - ${calculate time passed: ...}
+  - ${decide whether dramatic updates are allowed as it's in a special case or the time passed is more than usual: yes/no}
+  - ${analyze every variable based on its corresponding check, according only to current reply instead of previous plots: ...}
+  - ${if the value is a number, write down the calculation: old_value + delta = new_value}
+  </Analysis>
+  <JSONPatch>
+  [
+    { "op": "replace", "path": "/系统/当前时间", "value": "渊历 5050年 端月 初二 辰时" },
+    { "op": "delta", "path": "/主角_属性/修行进度", "value": 12 },
+    { "op": "delta", "path": "/主角_属性/经济/灵石", "value": -30 },
+    { "op": "insert", "path": "/主角_属性/背包/回灵丹", "value": { "数量": 3, "描述": "低阶回灵丹，可恢复少量灵力" } },
+    { "op": "replace", "path": "/主角_属性/身体与精神状态/外伤", "value": "左臂擦伤" },
+    { "op": "insert", "path": "/在场NPC/-", "value": "孟娘子" },
+    { "op": "remove", "path": "/主角_属性/背包/干粮" },
+    { "op": "move", "from": "/主角_属性/背包/竹简残卷", "to": "/主角_属性/背包/无名吐纳法残卷" }
+  ]
+  </JSONPatch>
+  </UpdateVariable>
+</update_variable_rules>

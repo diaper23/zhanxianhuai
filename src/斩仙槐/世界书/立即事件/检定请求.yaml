@@ -1,0 +1,322 @@
+---
+检定请求: |-
+  @@generate_after
+  <%_
+  (function () {
+    /**
+     * 骰子引擎 · 显式掷骰（取代旧"关键词嗅探+隐藏span"模式）
+     *
+     * 触发三式 ─ 全部显式，不再嗅探玩家措辞：
+     *   ① 主持 请求：上一轮 主持 回应里写 `<待检定 技能 目标 奖惩 "理由" />`，本轮自动掷骰
+     *   ② 玩家请求：玩家消息里写 `/投 技能 目标 [奖惩]`（目标可省，自动取该技能当前等级）
+     *   ③ Luck/强投：玩家在看到失败后写 `/幸运 [数量]` 或 `/强投`，对最近一次失败的检定翻盘/重投
+     *
+     * 输出：把掷骰结果格式化成 `【检定｜...】` 文本注入提示词给 主持 演绎
+     *   主持 负责在叙事中嵌入标注 + 写 心神/气血 的 <UpdateVariable> delta（MVU 仍是唯一写入路径，避免双写）
+     *   骰子结果同步入 stat_data._rollLog 供前端状态栏 / 检定录簿展示
+     */
+
+    // ── 工具：标准  d100，支持奖惩骰（只重投十位，取最优/最劣十位）──
+    function rollD100(bonus) {
+      const n = Math.abs(bonus || 0);
+      const tens = [];
+      for (let i = 0; i <= n; i++) tens.push(Math.floor(Math.random() * 10));
+      let tensVal = (bonus >= 0) ? Math.min.apply(null, tens) : Math.max.apply(null, tens);
+      const unit = Math.floor(Math.random() * 10);
+      let roll = tensVal * 10 + unit;
+      if (roll === 0) roll = 100;
+      return roll;
+    }
+
+    // ── 档位判定（与  检定规则条目口径一致）──
+    function judge(roll, target) {
+      const t = target || 50;
+      if (roll <= 5 && roll <= Math.floor(t / 5) + 5) return '大成功';
+      if (roll >= 96) return '大失败';
+      if (roll <= Math.floor(t / 5)) return '极难成功';
+      if (roll <= Math.floor(t / 2)) return '困难成功';
+      if (roll <= t) return '普通成功';
+      return '失败';
+    }
+    const isFail = (g) => g === '失败' || g === '大失败';
+
+    // ── 掷辅助骰（损失量、伤害、失魂表）──
+    const rollDice = (s) => {
+      // 解析 "1d3" "1d6" "1d10+1d4" 等简单表达式
+      const h = {};
+      const m = String(s || '').match(/^(\d*)d(\d+)(?:\s*([+-])\s*(\d+))?$/);
+      if (!m) return { 总: 0, 详细: s };
+      const cnt = m[1] ? parseInt(m[1], 10) : 1;
+      const faces = parseInt(m[2], 10);
+      const mod = m[3] === '-' ? -(m[4] ? +m[4] : 0) : (m[4] ? +m[4] : 0);
+      let total = mod, parts = [];
+      for (let i = 0; i < cnt; i++) { const r = 1 + Math.floor(Math.random() * faces); total += r; parts.push(r); }
+      return { 总: total, 详细: parts.join('+') + (mod ? (mod > 0 ? '+' + mod : mod) : '') };
+    };
+
+    // ── 取主角某技能当前等级（供 /投 技能 时省略目标自动取数）──
+    function skillTarget(name) {
+      const sk = getvar('stat_data.主角.技能', { defaults: {}, noCache: true }) || {};
+      const keys = Object.keys(sk);
+      const k = keys.find(x => x === name || x.indexOf(name) >= 0);
+      return k ? (sk[k].等级 || 50) : 50;
+    }
+
+    // ── 从上一轮 主持 回应里解析 <待检定 ... /> 标记 ──
+    function parse主持Pending() {
+      const out = [];
+      const txt = (typeof lastCharMessage !== 'undefined') ? String(lastCharMessage) : '';
+      const re = /<待检定\s+([^/>]*?)\s*\/>/g;
+      let mm;
+      while ((mm = re.exec(txt))) {
+        const args = mm[1].trim().split(/\s+/);
+        const a0 = args[0] || '';
+        // 支持 `<待检定 潜行 55 -1 "夜潜槐树墙底" />` 与无引号
+        let reason = '';
+        if (args[args.length - 1] && /[""].*[""]$/.test(args[args.length - 1])) reason = args[args.length - 1].replace(/^[""]|[""]$/g, '');
+        const skill = args[0];
+        const target = args[1] ? parseInt(args[1], 10) : skillTarget(skill);
+        const bonus = args[2] ? parseInt(args[2], 10) : 0;
+        out.push({ skill, target: isFinite(target) ? target : skillTarget(skill), bonus: isFinite(bonus) ? bonus : 0, reason, 来源: '主持请求' });
+      }
+      return out;
+    }
+
+    // ── 从本轮玩家消息解析 /投 /幸运 /强投 ──
+    function parseUserRequests() {
+      const out = [];
+      const txt = (typeof lastUserMessage !== 'undefined') ? String(lastUserMessage) : '';
+
+      // /投 技能 [目标] [奖惩]    或   /投 心神 [目标] "1/1d3"
+      let m;
+      const re1 = /\/投\s+(\S+)(?:\s+(\d+))?(?:\s+([+-]?\d+))?(?:\s+[""]([^""]*)[""])?/g;
+      while ((m = re1.exec(txt))) {
+        const skill = m[1];
+        const target = m[2] ? parseInt(m[2], 10) : skillTarget(skill);
+        const bonus = m[3] ? parseInt(m[3], 10) : 0;
+        const extra = m[4] || '';
+        out.push({ skill, target: isFinite(target) ? target : skillTarget(skill), bonus: isFinite(bonus) ? bonus : 0, reason: extra, 来源: '玩家请求', extra });
+      }
+
+      // /幸运 [数量]
+      const luck = /\/幸运(?:\s+(\d+))?/.exec(txt);
+      if (luck) out.push({ type: 'luck', amount: luck[1] ? parseInt(luck[1], 10) : null });
+
+      // /强投
+      if (/\/强投/.test(txt)) out.push({ type: 'push' });
+
+      return out;
+    }
+
+    // ── 生成一条 _rollLog 记录 ──
+    function pushRoll(rec) {
+      const log = getvar('stat_data._rollLog', { defaults: [], noCache: true }) || [];
+      log.push(rec);
+      if (log.length > 30) log.splice(0, log.length - 30);
+      patchVariables('stat_data._rollLog', [{ op: 'replace', path: '', value: log }]);
+    }
+
+    // ════════════════════ 主流程 ════════════════════
+    const pendings = parse主持Pending();
+    const userReqs = parseUserRequests();
+    const renders = [];
+
+    // 1) 解析 Luck / Pushed（须取最近一次失败）
+    const lastRolls = (getvar('stat_data._rollLog', { defaults: [], noCache: true }) || []).slice(-3);
+    const lastFail = lastRolls.slice().reverse().find(r => isFail(r.结果));
+    const hasLuckReq = userReqs.find(r => r.type === 'luck');
+    const hasPushReq = userReqs.find(r => r.type === 'push');
+
+    const 检定检定行 = (rec, grade, roll) => {
+      const sep = '｜';
+      let line = '【检定' + sep + rec.skill + ' ' + rec.target + sep + '投出 ' + roll + sep + grade + '】';
+      if (rec.bonus > 0) line += '（奖励骰×' + rec.bonus + '）';
+      else if (rec.bonus < 0) line += '（惩罚骰×' + (-rec.bonus) + '）';
+      return line;
+    };
+
+    // 2) Luck 翻盘
+    if (hasLuckReq && lastFail) {
+      const need = lastFail.投出 - lastFail.目标;
+      const have = getvar('stat_data.主角.幸运', { defaults: 0, noCache: true }) || 0;
+      const allowed = hasLuckReq.amount != null ? hasLuckReq.amount : need;
+      const spent = Math.min(allowed, Math.max(0, need), have);
+      if (need > 0 && have >= spent && spent > 0) {
+        const newRoll = lastFail.目标 - 0; // 翻盘至恰好成功
+        const grade = judge(newRoll, lastFail.目标);
+        const rec = {
+          技能: lastFail.技能, 目标: lastFail.目标, 投出: newRoll, 结果: grade,
+          奖惩: lastFail.奖惩, 损失量: lastFail.损失量 || '',
+          理由: '幸运翻盘（花费幸运 ' + spent + '）', 来源: '幸运翻盘',
+          楼层: typeof lastUserMessageId !== 'undefined' ? lastUserMessageId : 0, ts: Date.now ? Date.now() : 0,
+        };
+        pushRoll(rec);
+        // 扣幸运由 主持 在 <UpdateVariable> 写（避免双写）；此处仅提示
+        renders.push('· 幸运翻盘：' + 检定检定行(rec, grade, newRoll));
+        renders.push('  ─ 翻盘成功，请扣除主角幸运值 ' + spent + '（在 <UpdateVariable> delta -' + spent + ' 幸运）。');
+      } else {
+        renders.push('· 幸运翻盘：失败（需幸运 ' + need + '，当前拥有 ' + have + '，' + (have < spent ? '不足' : '已超量/不可用') + '）。本次不翻盘。');
+      }
+    }
+
+    // 3) 强投（带 1 惩罚骰重投最近失败）
+    if (hasPushReq && lastFail) {
+      const roll = rollD100(-1);
+      const grade = judge(roll, lastFail.目标);
+      const rec = {
+        技能: lastFail.技能, 目标: lastFail.目标, 投出: roll, 结果: grade,
+        奖惩: -1, 损失量: lastFail.损失量 || '',
+        理由: '强投（重投，惩罚骰×1）', 来源: '强投',
+        楼层: typeof lastUserMessageId !== 'undefined' ? lastUserMessageId : 0, ts: Date.now ? Date.now() : 0,
+      };
+      pushRoll(rec);
+      renders.push('· 强投：' + 检定检定行(rec, grade, roll));
+      renders.push('  ─ 二番失败后果加倍严重：由你演绎"代价/误导/迟滞"中更重的一档。');
+    }
+
+    // 4) 普通 / 投 标注（主持 请求 + 玩家 /投），合并处理
+    const allChecks = pendings.concat(userReqs.filter(r => r.skill && !r.type));
+
+    // ── 失魂发作症表（与 心神管理 一致）──
+    const 疯表 = {
+      1: '假性昏迷/失神', 2: '强迫性小动作', 3: '谵妄·眼见不存在之物', 4: '妄想·被害或被选中',
+      5: '阵发性恐惧·特定物象', 6: '失语或反复喃喃', 7: '攻击性爆发', 8: '嗜睡/瘫软冷淡',
+      9: '强迫性禁忌行为', 10: '暴走逃窜',
+    };
+
+    let idx = 0;
+    for (const c of allChecks) {
+      idx++;
+      const roll = rollD100(c.bonus);
+      const grade = judge(roll, c.target);
+      let 损失量 = '';
+      let extraNote = '';
+
+      // 心神 检定：附带损失量与失魂发作判定
+      if (/心神|神志/.test(c.skill)) {
+        const sanNow = getvar('stat_data.主角.心神.当前', { defaults: 50, noCache: true }) || 50;
+        let rng = c.reason || c.extra || '1/1d3';
+        const parts = String(rng).split('/').map(s => s.trim());
+        const succLoss = parts[0] || '1';
+        const failLoss = parts[1] || '1d3';
+        let lossExpr;
+        if (grade === '大成功') { lossExpr = '0'; extraNote = '不损 心神；可获"窥破一角"瞬时线索。'; }
+        else if (grade === '大失败') { lossExpr = failLoss + '×2'; extraNote = '加大损失；且触发失魂发作（已并出 <待失魂 1d10+1d4 /> 见下）。'; }
+        else if (isFail(grade)) { lossExpr = failLoss; }
+        else { lossExpr = succLoss; extraNote = '成功：按失败损失量（较小值）扣。'; }
+        const d = rollDice(lossExpr.replace(/[^0-9d+-]/g, ''));
+        损失量 = lossExpr + '（=' + d.总 + '）';
+        const after = sanNow - d.总;
+        extraNote += ' 心神 当前 ' + sanNow + ' → 概算 ' + after + '。';
+        if (d.总 >= 5 || grade === '大失败') extraNote += ' 单次损失 ≥5，触发失魂发作；请在本回复内掷 1d10+1d4 演其症（或由引擎的 <待失魂/> 一次性掷出，见下）。';
+      }
+
+      // 战斗命中/伤害：玩家写 /投 格斗(摔) 60 时只判命中；伤害另由 <待伤害/> 标记结算
+      if (/格斗|闪避|弓弩/.test(c.skill)) {
+        extraNote = '战斗命中判定。命中后请用 `<待伤害 武器=中型 护甲=1 目标=... />` 让引擎结算伤害，于 <UpdateVariable> 写 气血 delta。';
+      }
+
+      const rec = {
+        技能: c.skill, 目标: c.target, 投出: roll, 结果: grade,
+        奖惩: c.bonus, 损失量, 理由: c.reason || c.来源, 来源: c.来源,
+        楼层: typeof lastUserMessageId !== 'undefined' ? lastUserMessageId : 0, ts: Date.now ? Date.now() : 0,
+      };
+      pushRoll(rec);
+
+      renders.push('· 检定' + idx + ' ' + 检定检定行(c, grade, roll) + (c.reason ? '  理由：' + c.reason : ''));
+      if (损失量) renders.push('  ─ 心神 损失量：' + 损失量);
+      if (extraNote) renders.push('  ─ ' + extraNote);
+      if (isFail(grade)) renders.push('  ─ 失败三态（代价/误导/迟滞）择一演绎；玩家可用 /幸运 或 /强投 翻盘。');
+    }
+
+    // 5) 伤害结算：解析 主持 上轮 `<待伤害 武器=中型 护甲=1 目标=X />` 标记
+    //   武器分类：徒手/小型/中型/大型/短弩/劲弩 → 基础骰 1d3/1d4/1d6/1d8/1d8/2d6
+    //   先取上轮命中检定结果（最近一条 格斗/闪避/弓弩 且 成功）才结算；失败/大失败则标"未命中"
+    const hurtMarkers = [];
+    {
+      const txt = (typeof lastCharMessage !== 'undefined') ? String(lastCharMessage) : '';
+      const re = /<待伤害\s+([^/>]*?)\s*\/>/g;
+      let mm;
+      while ((mm = re.exec(txt))) {
+        const args = mm[1].trim().split(/\s+/);
+        const map = {};
+        for (const a of args) {
+          const eq = a.indexOf('=');
+          if (eq > 0) map[a.slice(0, eq)] = a.slice(eq + 1).replace(/^"|"$/g, '');
+        }
+        hurtMarkers.push(map);
+      }
+    }
+    const 武器骰 = { 徒手: '1d3', 小型: '1d4', 中型: '1d6', 大型: '1d8', 短弩: '1d8', 劲弩: '2d6' };
+
+    for (const m of hurtMarkers) {
+      // 找最近命中检定
+      const recent = (getvar('stat_data._rollLog', { defaults: [], noCache: true }) || []).slice(-5).reverse();
+      const hit = recent.find(r => /格斗|闪避|弓弩/.test(r.技能));
+      if (!hit) {
+        renders.push('· 伤害结算：上一轮无命中检定可据，请先掷一次命中的 `<待检定 格斗(摔) 60 ... />` 或 `/投 格斗(摔)`。');
+        continue;
+      }
+      const 命中 = !isFail(hit.结果);
+      if (!命中) {
+        renders.push('· 伤害结算：命中检定 ' + 检定检定行(hit, hit.结果, hit.投出) + ' 未能命中，未造成伤害。');
+        continue;
+      }
+      // 算 db：力量+体型合计
+      const STR = getvar('stat_data.主角.力量', { defaults: 50, noCache: true }) || 50;
+      const SIZ = getvar('stat_data.主角.体型', { defaults: 50, noCache: true }) || 50;
+      const sum = STR + SIZ;
+      let db = 0, dbExpr = '0';
+      if (sum <= 64) { db = -2; dbExpr = '-2'; }
+      else if (sum <= 84) { db = -1; dbExpr = '-1'; }
+      else if (sum <= 124) { db = 0; dbExpr = '0'; }
+      else if (sum <= 164) {
+        const d = rollDice('1d4'); db = d.总; dbExpr = '1d4(=' + d.总 + ')';
+      } else if (sum <= 204) {
+        const d = rollDice('1d6'); db = d.总; dbExpr = '1d6(=' + d.总 + ')';
+      } else {
+        const d = rollDice('2d6'); db = d.总; dbExpr = '2d6(=' + d.总 + ')';
+      }
+      const wExpr = 武器骰[m.武器 || '中型'] || '1d6';
+      const wd = rollDice(wExpr);
+      let dmg = wd.总 + db;
+      const armor = parseInt(m.护甲 || '0', 10) || 0;
+      const afterArmor = Math.max(0, dmg - armor);
+      renders.push('· 伤害结算（' + (m.目标 || '敌方') + '）：命中 → ' + wExpr + '(=' + wd.总 + ') + db(' + dbExpr + ') = ' + dmg + '，去护甲 ' + armor + ' → 实伤 ' + afterArmor + ' 气血。');
+      renders.push('  ─ 该 气血 delta 由你写进本轮 <UpdateVariable>（敌方 气血 引擎不持；若为主角/同伴 气血 则亦可写）。');
+      if (hit.结果 === '大成功') renders.push('  ─ 大成功命中：伤害取最大档且可附带缴械/击倒/部位致残——你择其一演绎。');
+    }
+
+    // 6) 失魂发作自动掷：解析 主持 这轮 `<待失魂 [持续=1d10+1d4] />` 标记
+    const madMarkers = [];
+    {
+      const txt = (typeof lastCharMessage !== 'undefined') ? String(lastCharMessage) : '';
+      const re = /<待失魂\s+([^/>]*?)\s*\/>/g;
+      let mm;
+      while ((mm = re.exec(txt))) {
+        const args = mm[1].trim().split(/\s+/);
+        const map = {};
+        for (const a of args) { const eq = a.indexOf('='); if (eq > 0) map[a.slice(0, eq)] = a.slice(eq + 1); }
+        madMarkers.push(map);
+      }
+    }
+    for (const m of madMarkers) {
+      const sym = 1 + Math.floor(Math.random() * 10);
+      const durTotal = rollDice(m.持续 || '1d10+1d4');
+      const 表现 = 疯表[sym] || '（无表）';
+      renders.push('· 失魂发作：掷 1d10 = ' + sym + ' → 症状【' + 表现 + '】；' +
+                   (m.持续 || '1d10+1d4') + ' 持续回合 = ' + durTotal.总 + ' 回合由 主持 真演该症状。');
+      renders.push('  ─ 表现期满，主角恢复心神但该段记忆模糊；可演为"发生什么了…"');
+    }
+
+    if (renders.length === 0) return; // 静默：无显式检定需求则不注入任何噪声
+    print('\n【骰子引擎·本轮掷骰结果】以下须在叙事中引用。');
+    print(renders.join('\n'));
+    print('嵌入与演绎规则：');
+    print('  · 直接在叙述里嵌上面【检定｜...】标注（让玩家在楼层里看到骰子卡）；');
+    print('  · 失败按三态演绎；心神/气血 数值变更写进本轮 <UpdateVariable>；');
+    print('  · 战斗命中后写 `<待伤害 武器=中型 护甲=1 目标=X />` 引擎掷伤害+db 减护甲；');
+    print('  · 失魂发作写 `<待失魂 持续=1d10+1d4 />` 引擎掷 1d10 症状+持续回合供演绎；');
+    print('  · 不得改动已掷出的投出值；如玩家要重投，让他本轮打 /幸运 或 /强投。');
+  })();
+  _%>

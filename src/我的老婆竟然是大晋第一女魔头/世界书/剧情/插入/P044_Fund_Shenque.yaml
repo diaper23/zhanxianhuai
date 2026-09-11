@@ -1,0 +1,8 @@
+﻿---
+P044_Fund_Shenque: |-
+  <%_/* 插入 :line: "情报组织" */
+  if ((matchChatMessages(['五百金', '神雀', '衣崇文', '温峤'], { start: -4 })) && !hitDone('P044_Fund_Shenque')) {
+    markHit('插入', 'P044_Fund_Shenque', `<span style="display:none;">[插入剧情：P044_Fund_Shenque]</span>
+    可插入王导暗赠金、戴渊封口费、衣崇文组建神雀、温峤卧底王敦。
+    推进目标：建立<user>自己的情报与资金底盘。`);
+  } _%>

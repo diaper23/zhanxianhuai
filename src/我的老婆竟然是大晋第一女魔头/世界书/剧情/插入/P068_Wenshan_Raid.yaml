@@ -1,0 +1,8 @@
+﻿---
+P068_Wenshan_Raid: |-
+  <%_/* 插入 :line: "汶山奇袭" */
+  if ((matchChatMessages(['汶山', '甸氐道', '龚杰', '于波', '蚕崖关'], { start: -4 })) && !hitDone('P068_Wenshan_Raid')) {
+    markHit('插入', 'P068_Wenshan_Raid', `<span style="display:none;">[插入剧情：P068_Wenshan_Raid]</span>
+    可插入王猛走绝路、民夫惨死、龚杰叛变、于波假降斩叛徒、梵星眸守蚕崖关。
+    推进目标：展示王猛奇谋的代价和唐国防线重构。`);
+  } _%>

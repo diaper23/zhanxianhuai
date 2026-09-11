@@ -1,0 +1,8 @@
+﻿---
+P058_Lantern_Night_Masters: |-
+  <%_/* 插入 :line: "上元宗师" */
+  if ((matchChatMessages(['上元', '宗师', '王半阳', '夜袭'], { start: -4 })) && !hitDone('P058_Lantern_Night_Masters')) {
+    markHit('插入', 'P058_Lantern_Night_Masters', `<span style="display:none;">[插入剧情：P058_Lantern_Night_Masters]</span>
+    可插入五大宗师夜袭、言语瓦解、王半阳现身震慑、<user>拒绝救援。
+    推进目标：让高阶武力与信仰建军同时进入压力测试。`);
+  } _%>

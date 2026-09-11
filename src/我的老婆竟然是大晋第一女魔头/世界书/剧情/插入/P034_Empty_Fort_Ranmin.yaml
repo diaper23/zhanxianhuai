@@ -1,0 +1,8 @@
+﻿---
+P034_Empty_Fort_Ranmin: |-
+  <%_/* 插入 :line: "冉闵登场" */
+  if ((matchChatMessages(['空堡', '毒水', '冉闵'], { start: -4 })) && !hitDone('P034_Empty_Fort_Ranmin')) {
+    markHit('插入', 'P034_Empty_Fort_Ranmin', `<span style="display:none;">[插入剧情：P034_Empty_Fort_Ranmin]</span>
+    可插入空堡毒井、赵军预备队、冉闵识破或反诱<user>。
+    推进目标：让<user>遇到真正能识破其计谋的战场对手。`);
+  } _%>

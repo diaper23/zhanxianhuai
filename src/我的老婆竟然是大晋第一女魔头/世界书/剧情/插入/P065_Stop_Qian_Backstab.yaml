@@ -1,0 +1,8 @@
+﻿---
+P065_Stop_Qian_Backstab: |-
+  <%_/* 插入 :line: "盟友背刺风险" */
+  if ((matchChatMessages(['背刺', '谢秋瞳出兵', '刘牢之', '冉闵牵制'], { start: -4 })) && !hitDone('P065_Stop_Qian_Backstab')) {
+    markHit('插入', 'P065_Stop_Qian_Backstab', `<span style="display:none;">[插入剧情：P065_Stop_Qian_Backstab]</span>
+    可插入谢秋瞳理性背刺、青州杜实造势、威逼冉闵、点破内鬼。
+    推进目标：让最亲密盟友也可能因国家利益成为敌人。`);
+  } _%>

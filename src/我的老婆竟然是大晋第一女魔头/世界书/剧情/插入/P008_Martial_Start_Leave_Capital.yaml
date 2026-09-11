@@ -1,0 +1,9 @@
+﻿---
+P008_Martial_Start_Leave_Capital: |-
+  <%_/* 插入 :line: "武道与离京任务" */
+  if ((matchChatMessages(['软禁', '武功', '易筋伐髓', '庐江'], { start: -4 }) || stableRandom(0.06, 'P008_Martial_Start_Leave_Capital')) && !hitDone('P008_Martial_Start_Leave_Capital')) {
+    markHit('插入', 'P008_Martial_Start_Leave_Capital', `<span style="display:none;">[插入剧情：P008_Martial_Start_Leave_Capital]</span>
+    可插入软禁期习武、喜儿传功、易筋伐髓痛苦、谢秋瞳安排庐江任务。
+    推进目标：开启武道变量，并把<user>从建康权谋推向底层现实。
+    允许<user>拒绝任务，但应产生谢秋瞳态度或安全后果。`);
+  } _%>

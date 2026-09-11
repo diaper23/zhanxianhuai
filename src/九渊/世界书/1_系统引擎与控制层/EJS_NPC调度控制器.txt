@@ -1,0 +1,45 @@
+@@preprocessing
+<%_
+var npcRegion = getvar('stat_data.系统.国家', { defaults: '' });
+var npcTown = getvar('stat_data.系统.城镇', { defaults: '' });
+var activeEvents = getvar('stat_data.活跃事件', { defaults: {} });
+
+var eventTypes = [];
+if (activeEvents && typeof activeEvents === 'object') {
+  for (var k in activeEvents) {
+    var ev = activeEvents[k];
+    if (ev && ev.类型 && eventTypes.indexOf(ev.类型) === -1) eventTypes.push(ev.类型);
+  }
+}
+
+var rawIndex = await getwi('NPC登场索引');
+var npcIndex = [];
+if (rawIndex) {
+  try { npcIndex = JSON.parse(rawIndex); } catch (e) { npcIndex = []; }
+}
+
+var scored = [];
+for (var i = 0; i < npcIndex.length; i++) {
+  var npc = npcIndex[i];
+  var score = 0;
+  if (npc.常驻区域 === npcRegion) score += 2;
+  if (npc.据点 && npcTown && npc.据点.indexOf(npcTown) !== -1) score += 3;
+  if (npc.可参与事件 && eventTypes.length > 0) {
+    for (var j = 0; j < npc.可参与事件.length; j++) {
+      if (eventTypes.indexOf(npc.可参与事件[j]) !== -1) { score += 2; break; }
+    }
+  }
+  if (score > 0) scored.push({ npc: npc, score: score });
+}
+scored.sort(function (a, b) { return b.score - a.score; });
+var selected = scored.slice(0, 2);
+%>
+<%_ if (selected.length > 0) { _%>
+@@generate_before
+【NPC调度·此刻该出现的人】
+以下人物与玩家当前位置或当前局势相关，请让他们自然出场，带着事来，不要生硬介绍身份：
+<%_ selected.forEach(function (s) { _%>
+- <%- s.npc.姓名 %>（<%- s.npc.所属势力 %> · <%- s.npc.阶层 %>，常驻<%- s.npc.据点 %>）——可参与：<%- s.npc.可参与事件.join('、') %>
+<%_ }); _%>
+出场方式参考：当官的来办公、传令、问话；江湖的来避雨、交易、报信；对头来堵路、抢功、构陷；朋友来报恩、示警、投奔。若玩家已与其熟识，按既有关系继续；若陌生，按阶层与场合自然接触。
+<%_ } _%>

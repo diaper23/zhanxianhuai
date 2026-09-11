@@ -1,0 +1,9 @@
+﻿---
+P010_Return_Xie_Set_Target: |-
+  <%_/* 插入 :line: "回府定标" */
+  if ((matchChatMessages(['回谢府', '舒县', '县丞', '中秋'], { start: -4 })) && !hitDone('P010_Return_Xie_Set_Target')) {
+    markHit('插入', 'P010_Return_Xie_Set_Target', `<span style="display:none;">[插入剧情：P010_Return_Xie_Set_Target]</span>
+    可插入谢秋瞳交底拒婚太子的真实政治压力、聂庆出场、舒县县丞目标、象棋筹资计划。
+    推进目标：帮助<user>把抽象求生转为具体下一步目标。
+    目标可偏离原线，如继续江湖、投东宫、留谢家或地方出仕。`);
+  } _%>

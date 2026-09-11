@@ -1,0 +1,8 @@
+﻿---
+入赘首夜_危机贴近: |-
+  <%_/* 明示 :line: "已进入谢府" */
+  if ((String(getvar('stat_data.世界.当前地点', { defaults: '' })).includes('谢')) && !hitDone('E001_Wedding_Night_Survived')) {
+    markHit('明示', '入赘首夜_危机贴近', `<span style="display:none;">[明示剧情：入赘首夜_危机贴近]</span>
+    贴脸强调首夜危机：谢府仆从不提“姑爷”只称“第六位”，喜烛像灵烛，门外护卫脚步过于整齐，谢秋瞳迟迟不掀盖头或不让<user>靠近。
+    让<user>意识到活过今晚不是默认结果。`);
+  } _%>

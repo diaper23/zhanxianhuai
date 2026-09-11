@@ -1,0 +1,351 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "世界": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前时间": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "当前地点": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "近期事务": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "事务名"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "description": "事务描述"
+          }
+        }
+      }
+    },
+    "在场角色": {
+      "default": [
+        "谢秋瞳"
+      ],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "剧情要点": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "状态表": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "剧情ID"
+          },
+          "additionalProperties": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "剧情名": {
+                "default": "",
+                "type": "string"
+              },
+              "状态": {
+                "default": "未触发",
+                "type": "string",
+                "enum": [
+                  "未触发",
+                  "进行中",
+                  "已完成"
+                ]
+              },
+              "进程": {
+                "default": [],
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "结果": {
+                "default": "",
+                "type": "string"
+              },
+              "触发时间": {
+                "default": "",
+                "type": "string"
+              },
+              "完成时间": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "本轮命中": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "暗示": {
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "明示": {
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "线索": {
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "插入": {
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "覆盖": {
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "禁令": {
+              "default": [],
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "本轮文本": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "命中剧情ID"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "谢秋瞳": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "态度": {
+          "default": 0,
+          "type": "number"
+        },
+        "信任度": {
+          "default": 0,
+          "type": "number"
+        },
+        "控制欲": {
+          "default": 90,
+          "type": "number"
+        },
+        "情感牵连": {
+          "default": 0,
+          "type": "number"
+        },
+        "动态阶段": {
+          "default": "陌生试探",
+          "type": "string",
+          "enum": [
+            "陌生试探",
+            "有限合作",
+            "情感动摇",
+            "深层信任",
+            "决裂敌对"
+          ]
+        },
+        "隐瞒程度": {
+          "default": 100,
+          "type": "number"
+        },
+        "身体状态": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "当前打算": {
+          "default": "待初始化",
+          "type": "string"
+        }
+      }
+    },
+    "喜儿": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "好感": {
+          "default": 0,
+          "type": "number"
+        },
+        "信任度": {
+          "default": 0,
+          "type": "number"
+        },
+        "依恋度": {
+          "default": 0,
+          "type": "number"
+        },
+        "师门牵引": {
+          "default": 95,
+          "type": "number"
+        },
+        "危机感": {
+          "default": 70,
+          "type": "number"
+        },
+        "动态阶段": {
+          "default": "暗处观察",
+          "type": "string",
+          "enum": [
+            "暗处观察",
+            "目标接触",
+            "交易保护",
+            "情感动摇",
+            "归属确认",
+            "背叛危机"
+          ]
+        },
+        "当前任务": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "所在地": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "当前态度": {
+          "default": "待初始化",
+          "type": "string"
+        }
+      }
+    },
+    "王徽": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "好感": {
+          "default": 0,
+          "type": "number"
+        },
+        "信任度": {
+          "default": 0,
+          "type": "number"
+        },
+        "自主意志": {
+          "default": 35,
+          "type": "number"
+        },
+        "家族压力": {
+          "default": 75,
+          "type": "number"
+        },
+        "情感倾向": {
+          "default": 0,
+          "type": "number"
+        },
+        "动态阶段": {
+          "default": "未相识",
+          "type": "string",
+          "enum": [
+            "未相识",
+            "好奇",
+            "欣赏",
+            "倾心",
+            "同行",
+            "失望"
+          ]
+        },
+        "当前处境": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "所在地": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "当前状态": {
+          "default": "待初始化",
+          "type": "string"
+        }
+      }
+    },
+    "用户": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前官职": {
+          "default": "白身",
+          "type": "string"
+        },
+        "武功境界": {
+          "default": "无",
+          "type": "string"
+        },
+        "所在地": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "当前行动": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "名望": {
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "势力动向": {
+      "default": {},
+      "$ref": "#/$defs/__schema0"
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "enum": [
+          "谢家",
+          "王家",
+          "太子",
+          "皇帝",
+          "圣心宫",
+          "极乐宫",
+          "后赵石虎",
+          "慕容鲜卑",
+          "北府兵",
+          "戴渊"
+        ]
+      },
+      "additionalProperties": {
+        "type": "string",
+        "description": "势力状态描述"
+      }
+    }
+  }
+}

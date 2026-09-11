@@ -1,0 +1,8 @@
+﻿---
+P051_Xie_Confession_Xuanqi: |-
+  <%_/* 插入 :line: "谢秋瞳情感临界" */
+  if ((matchChatMessages(['谢秋瞳表白', '圣心玄气', '刘寄奴', '旧疾爆发'], { start: -4 })) && !hitDone('P051_Xie_Confession_Xuanqi')) {
+    markHit('插入', 'P051_Xie_Confession_Xuanqi', `<span style="display:none;">[插入剧情：P051_Xie_Confession_Xuanqi]</span>
+    可插入谢秋瞳赠刘寄奴、旧疾爆发、半道玄气传递、情感与寿命代价。
+    推进目标：让谢秋瞳的关系从交易推向真正代价，也可因玩家选择偏离。`);
+  } _%>

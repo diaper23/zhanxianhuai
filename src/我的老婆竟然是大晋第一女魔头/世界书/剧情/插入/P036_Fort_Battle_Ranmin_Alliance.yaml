@@ -1,0 +1,8 @@
+﻿---
+P036_Fort_Battle_Ranmin_Alliance: |-
+  <%_/* 插入 :line: "坞堡血战" */
+  if ((matchChatMessages(['坞堡', '石虎', '冉闵', '汉族'], { start: -4 })) && !hitDone('P036_Fort_Battle_Ranmin_Alliance')) {
+    markHit('插入', 'P036_Fort_Battle_Ranmin_Alliance', `<span style="display:none;">[插入剧情：P036_Fort_Battle_Ranmin_Alliance]</span>
+    可插入坞堡死战、桐油库、地道撤退、<user>单刀赴会说服冉闵。
+    推进目标：以民族、利益和石虎存亡构成结盟或对立选择。`);
+  } _%>

@@ -1,0 +1,56 @@
+---
+EJS剧情控制器: |-
+  @@generate_after
+  <%_
+  const $hit = (layer) => getvar('stat_data.剧情要点.本轮命中.' + layer, { defaults: [], noCache: true }) || [];
+
+  // ---- 态度注释 ----
+  const 态度 = getvar('stat_data.谢秋瞳.态度', { defaults: 0 });
+  const 阶段 = 态度 < -60 ? '敌对利用' : 态度 < -20 ? '冷淡算计' : 态度 < 20 ? '有限合作' : 态度 < 50 ? '深层盟友' : '以命相托';
+
+  const 规则剧情要点 = (await getwi('规则·剧情要点')) || '';
+  const 数据人物 = (await getwi('数据·人物')) || '';
+  if (规则剧情要点) print(规则剧情要点);
+  if (数据人物) print(数据人物);
+
+  print(`\nNPC对${userName}的态度: # ${userName}当前与谢秋瞳关系为${阶段}（态度值${态度}）`);
+  if (态度 < -20) {
+    print('  谢秋瞳: 冷淡精准地评估' + userName + '的价值，有利用空间就施恩，没有就利益交换');
+  } else if (态度 < 20) {
+    print('  谢秋瞳: 以赌约为名与' + userName + '交手，在交锋中摸底，偶尔流露对' + userName + '胆识的欣赏');
+  } else if (态度 < 50) {
+    print('  谢秋瞳: 不再对' + userName + '设防核心信息，主动坦白弱点，但好胜心仍让她逞强');
+  } else {
+    print('  谢秋瞳: 将' + userName + '视为超越盟友的存在，用极致信任代替告白，咳血时第一个想见' + userName);
+  }
+
+  // ---- 2) 按语义层级聚合命中剧情 ----
+  const LAYERS = [
+    { name: '禁令', layer_head: '干涉声明/禁令_层头' },
+    { name: '覆盖', layer_head: '干涉声明/覆盖_层头' },
+    { name: '插入', layer_head: '干涉声明/插入_层头' },
+    { name: '线索', layer_head: '干涉声明/线索_层头' },
+    { name: '明示', layer_head: '干涉声明/明示_层头' },
+    { name: '暗示', layer_head: '干涉声明/暗示_层头' },
+  ];
+
+  let totalHit = 0;
+  for (const L of LAYERS) {
+    const ids = $hit(L.name);
+    if (!ids.length) continue;
+    totalHit += ids.length;
+    const head = (await getwi(L.layer_head)) || '';
+    if (head.trim()) print('\n' + head);
+    for (const id of ids) {
+      const body = getvar('stat_data.剧情要点.本轮文本.' + id, { defaults: '', noCache: true }) || '';
+      if (body) print('\n' + body);
+      else console.warn('[剧情控制器] 命中但本轮回文本缺失:', id);
+    }
+  }
+
+  if (totalHit === 0) {
+    print('\n【本轮无强制剧情】请依据当前变量、在场角色与玩家行动推进剧情。');
+  } else {
+    console.info('[剧情控制器] 本轮命中: ', JSON.stringify(LAYERS.map(L => ({ [L.name]: $hit(L.name) }))));
+  }
+  _%>

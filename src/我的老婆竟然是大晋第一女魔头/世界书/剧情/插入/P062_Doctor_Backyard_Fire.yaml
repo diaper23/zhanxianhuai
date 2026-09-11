@@ -1,0 +1,8 @@
+﻿---
+P062_Doctor_Backyard_Fire: |-
+  <%_/* 插入 :line: "治病与后方危机" */
+  if ((matchChatMessages(['神医', '谢秋瞳治病', '王猛', '广汉'], { start: -4 })) && !hitDone('P062_Doctor_Backyard_Fire')) {
+    markHit('插入', 'P062_Doctor_Backyard_Fire', `<span style="display:none;">[插入剧情：P062_Doctor_Backyard_Fire]</span>
+    可插入谢秋瞳剥离玄气病发、尹容带来王猛偷袭广汉情报、是否星夜回援的抉择。
+    推进目标：让治病、感情与根据地危机互相冲突。`);
+  } _%>

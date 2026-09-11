@@ -1,0 +1,9 @@
+﻿---
+P004_Taizi_Political_Game: |-
+  <%_/* 插入 :line: "东宫政治试探" */
+  if ((stableRandom(0.08, 'P004_Taizi_Political_Game')) && !hitDone('P004_Taizi_Political_Game')) {
+    markHit('插入', 'P004_Taizi_Political_Game', `<span style="display:none;">[插入剧情：P004_Taizi_Political_Game]</span>
+    可插入东宫耳目、小黄门传话、谢愚/大儒名声、理学话题或太子对新赘婿的试探。
+    推进目标：把<user>卷入“向太子投诚 / 借太子自保 / 被太子不信任 / 被谢秋瞳利用”的博弈。
+    太子反应必须符合信息量，不可无故知道<user>底牌。`);
+  } _%>

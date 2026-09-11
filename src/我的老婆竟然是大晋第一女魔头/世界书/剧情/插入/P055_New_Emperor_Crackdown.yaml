@@ -1,0 +1,8 @@
+﻿---
+P055_New_Emperor_Crackdown: |-
+  <%_/* 插入 :line: "新帝清算" */
+  if ((matchChatMessages(['登基', '学潮镇压', '剿杀', '北府军操练'], { start: -4 })) && !hitDone('P055_New_Emperor_Crackdown')) {
+    markHit('插入', 'P055_New_Emperor_Crackdown', `<span style="display:none;">[插入剧情：P055_New_Emperor_Crackdown]</span>
+    可插入新帝封赏、庾亮镇压学潮、追杀<user>、谢秋瞳查抄唐府见兵书。
+    推进目标：让<user>从政治异端变成必须逃亡的敌人。`);
+  } _%>

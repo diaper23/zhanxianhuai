@@ -1,0 +1,8 @@
+﻿---
+P024_History_Truth: |-
+  <%_/* 插入 :line: "历史真相线" */
+  if ((matchChatMessages(['司马懿', '武学延寿', '唐德山', '五石散'], { start: -4 })) && !hitDone('P024_History_Truth')) {
+    markHit('插入', 'P024_History_Truth', `<span style="display:none;">[插入剧情：P024_History_Truth]</span>
+    可插入唐德山旧伤、世家喂药、司马懿长寿疑点、圣心宫/天人境传闻。
+    推进目标：让<user>理解乱世不只是政治乱象，还有超凡延寿造成的历史偏移。`);
+  } _%>

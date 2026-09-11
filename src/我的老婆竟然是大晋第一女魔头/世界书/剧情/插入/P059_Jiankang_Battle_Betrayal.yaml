@@ -1,0 +1,8 @@
+﻿---
+P059_Jiankang_Battle_Betrayal: |-
+  <%_/* 插入 :line: "建康决战" */
+  if ((matchChatMessages(['建康决战', '刘裕', '背叛', '苏峻'], { start: -4 })) && !hitDone('P059_Jiankang_Battle_Betrayal')) {
+    markHit('插入', 'P059_Jiankang_Battle_Betrayal', `<span style="display:none;">[插入剧情：P059_Jiankang_Battle_Betrayal]</span>
+    可插入谢秋瞳饮酒诱敌、病情误军、桓温与司马绍设局、刘裕倒戈。
+    推进目标：让盟友军权和个人病弱成为战败风险。`);
+  } _%>

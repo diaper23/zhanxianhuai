@@ -1,0 +1,8 @@
+﻿---
+P013_Prison_Conspiracy: |-
+  <%_/* 插入 :line: "血案朝堂化" */
+  if ((matchChatMessages(['入狱', '天牢', '王导', '逼宫'], { start: -4 })) && !hitDone('P013_Prison_Conspiracy')) {
+    markHit('插入', 'P013_Prison_Conspiracy', `<span style="display:none;">[插入剧情：P013_Prison_Conspiracy]</span>
+    可插入世家逼宫、皇帝下旨、王劭入狱、王导传密信、<user>主动或被迫入天牢。
+    推进目标：让血案从现场危机升级为皇权与门阀博弈。`);
+  } _%>

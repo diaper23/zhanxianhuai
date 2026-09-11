@@ -1,0 +1,8 @@
+﻿---
+P048_Shuxian_Talks_Strategy: |-
+  <%_/* 插入 :line: "舒县和谈" */
+  if ((matchChatMessages(['舒县和谈', '王敦', '钱凤', '慕容'], { start: -4 })) && !hitDone('P048_Shuxian_Talks_Strategy')) {
+    markHit('插入', 'P048_Shuxian_Talks_Strategy', `<span style="display:none;">[插入剧情：P048_Shuxian_Talks_Strategy]</span>
+    可插入谢秋瞳诈降和谈、王敦阵营内讧、<user>以辽东战略换梵星眸护送。
+    推进目标：让各方以婚约、军权、粮道和战略互相欺骗。`);
+  } _%>

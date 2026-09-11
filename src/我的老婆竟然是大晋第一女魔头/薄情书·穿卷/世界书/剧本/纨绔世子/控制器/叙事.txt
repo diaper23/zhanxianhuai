@@ -1,0 +1,10 @@
+<%_
+var script = '纨绔世子';
+var 阶段 = getvar('stat_data.纨绔世子.当前阶段', { defaults: '京城风云' });
+
+// 加载当前阶段对应的世界背景
+print(await getwi(script + '_世界背景_' + 阶段));
+
+// 加载通用行为指导
+print(await getwi(script + '_行为指导'));
+_%>

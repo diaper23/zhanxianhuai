@@ -1,0 +1,8 @@
+﻿---
+P047_Regicide_Fugui_Mountain: |-
+  <%_/* 插入 :line: "弑君临界" */
+  if ((matchChatMessages(['富贵山', '弑君', '司马睿', '冷翎瑶'], { start: -4 })) && !hitDone('P047_Regicide_Fugui_Mountain')) {
+    markHit('插入', 'P047_Regicide_Fugui_Mountain', `<span style="display:none;">[插入剧情：P047_Regicide_Fugui_Mountain]</span>
+    可插入截杀逃亡皇帝、冷翎瑶折辱祝月曦、王导逼退司马羕、拉拢江南士族。
+    推进目标：让<user>背上不可回头的弑君因果，或选择改写此局。`);
+  } _%>

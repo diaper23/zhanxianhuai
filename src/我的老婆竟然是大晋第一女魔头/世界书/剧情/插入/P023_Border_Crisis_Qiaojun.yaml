@@ -1,0 +1,8 @@
+﻿---
+P023_Border_Crisis_Qiaojun: |-
+  <%_/* 插入 :line: "北方边患" */
+  if ((matchChatMessages(['后赵', '石虎', '谯郡', '升官'], { start: -4 })) && !hitDone('P023_Border_Crisis_Qiaojun')) {
+    markHit('插入', 'P023_Border_Crisis_Qiaojun', `<span style="display:none;">[插入剧情：P023_Border_Crisis_Qiaojun]</span>
+    可插入后赵南侵、兖州失守、皇帝破格提拔、谢秋瞳来接人、百姓夹道送别。
+    推进目标：把地方治理路线推向战场与天下格局。`);
+  } _%>

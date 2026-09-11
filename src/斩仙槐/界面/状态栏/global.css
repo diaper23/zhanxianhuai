@@ -1,0 +1,40 @@
+/* ═══════════════════════════════════════
+   斩仙槐 · 状态栏 — 皇城司密卷主题
+   ═══════════════════════════════════════ */
+
+:root {
+  --zx-card: rgba(26, 23, 20, 0.95);
+  --zx-border: #362f28;
+  --zx-border-light: #24201b;
+  --zx-gold: #cba876;
+  --zx-gold-dim: rgba(203, 168, 118, 0.3);
+  --zx-red: #9e2a2b;
+  --zx-red-glow: rgba(158, 42, 43, 0.4);
+  --zx-text: #d1c5b4;
+  --zx-text-sub: #a39581;
+  --zx-text-muted: #6e6455;
+  --zx-hp: #9e2a2b;
+  --zx-mp: #465c69;
+  --zx-san: #6b7a5a;
+  --font-title: 'STKaiti', 'KaiTi', '楷体', serif;
+  --font-text: 'STFangsong', 'FangSong', '仿宋', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: transparent;
+  color: var(--zx-text);
+  font-family: var(--font-text);
+  font-size: 11px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app { max-width: 440px; margin: 0 auto; padding: 8px; }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--zx-border); border-radius: 0; }
+/* ─ 骰子检定结果样式已迁移至正则替换HTML中的内嵌 <style> 块 ─ */
+/* ─ 状态栏 App.vue 通过 scoped 样式管理内部显示 ─ */

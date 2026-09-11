@@ -1,0 +1,8 @@
+﻿---
+P040_Reward_And_Hibernate: |-
+  <%_/* 插入 :line: "战后封赏" */
+  if ((matchChatMessages(['论功行赏', '虚职', '戴渊告密', '蛰伏'], { start: -4 })) && !hitDone('P040_Reward_And_Hibernate')) {
+    markHit('插入', 'P040_Reward_And_Hibernate', `<span style="display:none;">[插入剧情：P040_Reward_And_Hibernate]</span>
+    可插入太子打压、嬴县子爵或虚职、王导切割风险、收服史忠潜伏。
+    推进目标：让战功没有换来安全，反而开启潜龙布局。`);
+  } _%>

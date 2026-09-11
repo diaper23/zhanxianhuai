@@ -1,0 +1,8 @@
+﻿---
+P035_Poison_Water_Burn_Grain: |-
+  <%_/* 插入 :line: "粮道战" */
+  if ((matchChatMessages(['粮草', '火烧', '王劭', '冉闵抢功'], { start: -4 })) && !hitDone('P035_Poison_Water_Burn_Grain')) {
+    markHit('插入', 'P035_Poison_Water_Burn_Grain', `<span style="display:none;">[插入剧情：P035_Poison_Water_Burn_Grain]</span>
+    可插入冉闵佯装中毒、<user>察觉撤退、伤兵换装潜入赵营、王劭烧粮草。
+    推进目标：让后赵大军从正面压力转为断粮狂攻。`);
+  } _%>

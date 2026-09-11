@@ -1,0 +1,8 @@
+﻿---
+P052_SacredHeart_Visit_Zhuyuexi: |-
+  <%_/* 插入 :line: "圣心宫深线" */
+  if ((matchChatMessages(['圣心宫', '祝月曦', '冷翎瑶', '心病'], { start: -4 })) && !hitDone('P052_SacredHeart_Visit_Zhuyuexi')) {
+    markHit('插入', 'P052_SacredHeart_Visit_Zhuyuexi', `<span style="display:none;">[插入剧情：P052_SacredHeart_Visit_Zhuyuexi]</span>
+    可插入探望失忆冷翎瑶、拆穿祝月曦反噬、精神调训或反被天人压制。
+    推进目标：打开正道魁首的阴影与江湖高阶代价。`);
+  } _%>

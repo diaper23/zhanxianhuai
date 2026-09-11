@@ -1,0 +1,12 @@
+<%_
+var 当前剧本 = getvar('stat_data.系统.当前剧本', { defaults: '' });
+
+// 守卫：仅当当前剧本为纨绔世子时才输出本剧本的变量更新规则，避免在其它剧本激活时被蓝灯串扰
+if (当前剧本 === '纨绔世子') {
+// 在 D0 深度输出变量更新规则，指导 AI 进行沙盒推演
+// 变量更新规则条目名采用 [mvu_update] 前缀约定（与 index.yaml 条目名一致）
+print(await getwi('[mvu_update]更新规则_核心属性'));
+print(await getwi('[mvu_update]更新规则_人际网络'));
+print(await getwi('[mvu_update]更新规则_剧情记录'));
+} // 守卫结束
+_%>

@@ -1,0 +1,8 @@
+﻿---
+P060_Desperate_Proposal_Retreat: |-
+  <%_/* 插入 :line: "绝境突围" */
+  if ((matchChatMessages(['绝境求婚', '谯郡为聘', '追兵', '孙石'], { start: -4 })) && !hitDone('P060_Desperate_Proposal_Retreat')) {
+    markHit('插入', 'P060_Desperate_Proposal_Retreat', `<span style="display:none;">[插入剧情：P060_Desperate_Proposal_Retreat]</span>
+    可插入以谯郡为聘、谢秋瞳交权治病、鲖阳兵器疑云、天人孙石放水谈判。
+    推进目标：让情感承诺成为军事突围的一部分。`);
+  } _%>

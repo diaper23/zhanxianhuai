@@ -1,0 +1,8 @@
+﻿---
+P049_Shuxian_Public_Power: |-
+  <%_/* 插入 :line: "舒县余波" */
+  if ((matchChatMessages(['文家', '舒县百姓', '举火把', '分发财产'], { start: -4 })) && !hitDone('P049_Shuxian_Public_Power')) {
+    markHit('插入', 'P049_Shuxian_Public_Power', `<span style="display:none;">[插入剧情：P049_Shuxian_Public_Power]</span>
+    可插入文家重新压榨、<user>携百姓逼退文宠、没收财产分发。
+    推进目标：展示旧基本盘是否仍认<user>，也可能被地方豪强反噬。`);
+  } _%>

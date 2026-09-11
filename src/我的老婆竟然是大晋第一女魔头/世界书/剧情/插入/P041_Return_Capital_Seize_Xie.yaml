@@ -1,0 +1,8 @@
+﻿---
+P041_Return_Capital_Seize_Xie: |-
+  <%_/* 插入 :line: "回京布局" */
+  if ((matchChatMessages(['回建康', '谢秋瞳夺权', '潜龙', '王猛'], { start: -4 })) && !hitDone('P041_Return_Capital_Seize_Xie')) {
+    markHit('插入', 'P041_Return_Capital_Seize_Xie', `<span style="display:none;">[插入剧情：P041_Return_Capital_Seize_Xie]</span>
+    可插入谢秋瞳掌控谢家、父坟修缮、<user>筹钱召旧部、日记寻找王猛。
+    推进目标：从前线英雄转入暗中建权准备。`);
+  } _%>

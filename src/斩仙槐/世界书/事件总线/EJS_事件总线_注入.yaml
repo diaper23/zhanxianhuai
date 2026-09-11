@@ -1,0 +1,31 @@
+---
+'EJS_事件总线_注入': |-
+  @@generate_after
+  <%_
+  /**
+   * 事件总线 · 注入阶段（@generate_after）
+   * ─ 读取扫描阶段写入的 _本轮注入 缓冲
+   * ─ 按 order 排序，格式化输出给 LLM 的「本轮新开之门」内容块
+   * ─ 旧版每回合都把全部真相灌一遍；本版只注入"本轮首次新开门"的条目，可省
+   * ─ 0 命中时静默（不再打"本轮无强制剧情"补丁式噪声文本）
+   */
+
+  // 确保工具库在（防止条目单独 getwi 时）；generate_after 不重跑扫描
+  const buf = getvar('stat_data._本轮注入', { defaults: [], noCache: true }) || [];
+  if (!buf.length) return;
+
+  // 按 order 升序、ts 升序
+  buf.sort((a, b) => (a.order - b.order) || ((a.ts || 0) - (b.ts || 0)));
+
+  print('\n\n【本轮新增叙事节点】以下节点本回合首次触发。规则：');
+  print('  · 仅作为叙事素材，请自然融入玩家当前行动');
+  print('  · 不得替玩家做检定/决策/行动叙述；涉险时按  检定规则由你掷骰');
+  print('  · 文本中以 ⚠ / ⚠⚠ / ⚠⚠⚠ 标注的层级越深，越不得由你主动旁白直陈给玩家，须经 NPC 口风/检定/玩家追问显形');
+  print('');
+
+  for (const item of buf) {
+    print('────── ' + item.id + ' ──────');
+    print(item.body);
+    print('');
+  }
+  _%>

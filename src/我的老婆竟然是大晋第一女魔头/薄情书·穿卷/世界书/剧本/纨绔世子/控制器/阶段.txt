@@ -1,0 +1,41 @@
+<%_
+var 阶段 = getvar('stat_data.纨绔世子.当前阶段', { defaults: '京城风云' });
+var 剧情 = getvar('stat_data.纨绔世子.剧情记录', { defaults: {} });
+
+// 辅助函数：判断事件是否已完成
+var checkPlot = function(name) {
+  return 剧情[name] && 剧情[name].状态 === '已完成';
+};
+
+// ========== 阶段推进逻辑 ==========
+
+// 京城风云 → 暗流涌动
+if (阶段 === '京城风云') {
+  var req1 = ['六部轮转·兵部']; // 阶段 1 的最终事件
+  var met1 = req1.every(checkPlot);
+  if (met1) {
+    setvar('stat_data.纨绔世子.当前阶段', '暗流涌动', { scope: 'message' });
+    阶段 = '暗流涌动';
+  }
+}
+
+// 暗流涌动 → 北境烽火
+if (阶段 === '暗流涌动') {
+  var req2 = ['造反密谋']; // 阶段 2 的最终事件
+  var met2 = req2.every(checkPlot);
+  if (met2) {
+    setvar('stat_data.纨绔世子.当前阶段', '北境烽火', { scope: 'message' });
+    阶段 = '北境烽火';
+  }
+}
+
+// 北境烽火 → 九五至尊
+if (阶段 === '北境烽火') {
+  var req3 = ['兵临上京']; // 阶段 3 的最终事件
+  var met3 = req3.every(checkPlot);
+  if (met3) {
+    setvar('stat_data.纨绔世子.当前阶段', '九五至尊', { scope: 'message' });
+    阶段 = '九五至尊';
+  }
+}
+_%>

@@ -1,0 +1,104 @@
+<%_
+var script = '纨绔世子';
+// noCache: 本回合 _控制器_阶段 可能已完成阶段切换，需读到最新阶段
+var 阶段 = getvar('stat_data.纨绔世子.当前阶段', { defaults: '京城风云', noCache: true });
+var 朝堂权势 = getvar('stat_data.纨绔世子.势力.朝堂权势', { defaults: 3 });
+var 财力 = getvar('stat_data.纨绔世子.势力.财力', { defaults: 10 });
+var 剧情 = getvar('stat_data.纨绔世子.剧情记录', { defaults: {} });
+
+// 已触发记录改用 local 域，避免写入不存在的 schema 字段
+var 已触发 = getvar('_wksz_已触发事件', { scope: 'local', defaults: [] });
+var 上次事件楼层 = getvar('_wksz_上次事件楼层', { scope: 'local', defaults: -999 });
+var floor = (typeof lastMessageId !== 'undefined' && lastMessageId != null)
+  ? lastMessageId
+  : TavernHelper.getLastMessageId();
+
+// 辅助：判断事件是否已完成
+var checkPlot = function(name) {
+  return 剧情[name] && 剧情[name].状态 === '已完成';
+};
+
+// 保底触发间隔，防止剧情过密或过稀
+var 保底够 = (floor - 上次事件楼层) >= 6;
+
+if (保底够) {
+  var eventPool = [];
+
+  if (阶段 === '京城风云') {
+    eventPool = [
+      { name: '退婚圣旨', cond: floor <= 5 && !checkPlot('退婚圣旨') },
+      { name: '天一决', cond: checkPlot('退婚圣旨') && !checkPlot('天一决') },
+      { name: '八门会考', cond: checkPlot('天一决') && !checkPlot('八门会考') },
+      { name: '千叶刃线索', cond: checkPlot('八门会考') && !checkPlot('千叶刃线索') },
+      { name: '咏梅惊京', cond: checkPlot('八门会考') },
+      { name: '迎娶宣宁', cond: checkPlot('八门会考') },
+      { name: '薛建中案', cond: 朝堂权势 >= 8 },
+      { name: '月华霜丑闻', cond: 财力 >= 10 },
+      { name: '武库司案', cond: checkPlot('千叶刃线索') },
+      { name: '邓丘落网', cond: checkPlot('武库司案') },
+      { name: '六部轮转·户部', cond: checkPlot('邓丘落网') },
+      { name: '六部轮转·兵部', cond: checkPlot('六部轮转·户部') },
+    ];
+  } else if (阶段 === '暗流涌动') {
+    eventPool = [
+      { name: '干尸案', cond: !checkPlot('干尸案') },
+      { name: '宣宁失踪', cond: checkPlot('干尸案') && !checkPlot('宣宁失踪') },
+      { name: '永宁真相', cond: checkPlot('凯旋扳倒郑译') && !checkPlot('永宁真相') },
+      { name: '武力夺妻', cond: checkPlot('永宁真相') && !checkPlot('武力夺妻') },
+      { name: '前线出征', cond: checkPlot('武力夺妻') && !checkPlot('前线出征') },
+      { name: '平岭山游击', cond: checkPlot('前线出征') && !checkPlot('平岭山游击') },
+      { name: '火烧上聊城', cond: checkPlot('平岭山游击') && !checkPlot('火烧上聊城') },
+      { name: '永城坚守', cond: checkPlot('火烧上聊城') && !checkPlot('永城坚守') },
+      { name: '凯旋扳倒郑译', cond: checkPlot('永城坚守') && !checkPlot('凯旋扳倒郑译') },
+      { name: '接掌北军', cond: checkPlot('凯旋扳倒郑译') && !checkPlot('接掌北军') },
+      { name: '陆泰渊之死', cond: checkPlot('接掌北军') && !checkPlot('陆泰渊之死') },
+      { name: '造反密谋', cond: checkPlot('接掌北军') && checkPlot('陆泰渊之死') && !checkPlot('造反密谋') },
+    ];
+  } else if (阶段 === '北境烽火') {
+    eventPool = [
+      { name: '天一楼归顺', cond: checkPlot('造反密谋') && !checkPlot('天一楼归顺') },
+      { name: '陇州立威', cond: checkPlot('天一楼归顺') && !checkPlot('陇州立威') },
+      { name: '关子安真相', cond: checkPlot('陇州立威') && !checkPlot('关子安真相') },
+      { name: '蛮族大战', cond: checkPlot('关子安真相') && !checkPlot('蛮族大战') },
+      { name: '正式起兵', cond: checkPlot('蛮族大战') && !checkPlot('正式起兵') },
+      { name: '平章关之战', cond: checkPlot('正式起兵') && !checkPlot('平章关之战') },
+      { name: '新罗城之战', cond: checkPlot('平章关之战') && !checkPlot('新罗城之战') },
+      { name: '阳河决战', cond: checkPlot('新罗城之战') && !checkPlot('阳河决战') },
+      { name: '兵临上京', cond: checkPlot('阳河决战') && checkPlot('新罗城之战') && checkPlot('平章关之战') && !checkPlot('兵临上京') },
+    ];
+  } else if (阶段 === '九五至尊') {
+    eventPool = [
+      { name: '皇宫逼宫', cond: checkPlot('兵临上京') && !checkPlot('皇宫逼宫') },
+      { name: '隆景帝之死', cond: checkPlot('皇宫逼宫') && !checkPlot('隆景帝之死') },
+      { name: '发丧日清洗', cond: checkPlot('隆景帝之死') && !checkPlot('发丧日清洗') },
+      { name: '登基大典', cond: checkPlot('发丧日清洗') && !checkPlot('登基大典') },
+      { name: '凌烟阁封将', cond: checkPlot('登基大典') && !checkPlot('凌烟阁封将') },
+      { name: '火炮问世', cond: checkPlot('凌烟阁封将') && !checkPlot('火炮问世') },
+      { name: '新朝伊始', cond: checkPlot('火炮问世') && !checkPlot('新朝伊始') },
+    ];
+  }
+
+  // 过滤：条件满足 + 未触发
+  var available = eventPool.filter(function(ev) {
+    return ev.cond && 已触发.indexOf(ev.name) === -1;
+  });
+
+  if (available.length > 0) {
+    // 若有多个满足条件，随机抽取一个以增加跑团的未知感
+    var picked = available[_.random(0, available.length - 1)];
+
+    print(await getwi(script + '_事件_' + picked.name));
+
+    已触发.push(picked.name);
+    setvar('_wksz_已触发事件', 已触发, { scope: 'local' });
+    setvar('_wksz_上次事件楼层', floor, { scope: 'local' });
+
+    // 初始化该事件的剧情记录状态为"已触发"（完成与否由 AI 后续在 JSONPatch 中推进）
+    var newPlot = getvar('stat_data.纨绔世子.剧情记录', { defaults: {}, noCache: true });
+    if (!newPlot[picked.name]) {
+      newPlot[picked.name] = { 状态: '已触发', 结果: '' };
+      setvar('stat_data.纨绔世子.剧情记录', newPlot, { scope: 'message' });
+    }
+  }
+}
+_%>

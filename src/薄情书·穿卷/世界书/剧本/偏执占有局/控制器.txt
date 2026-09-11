@@ -1,0 +1,100 @@
+<%_
+var script = '偏执占有局';
+print(await getwi(script + '_女主人设'));
+print(await getwi(script + '_世界背景'));
+print(await getwi(script + '_NPC速览'));
+print(await getwi(script + '_行为指导'));
+
+// NPC详情按需加载
+var npcList = ['林远哲', '沈雁秋', '周雪依', '方旭'];
+for (var i = 0; i < npcList.length; i++) {
+  print(await getwi(script + '_NPC_' + npcList[i]));
+}
+
+// 开局引导
+var floor = (typeof lastMessageId !== 'undefined' && lastMessageId != null)
+  ? lastMessageId
+  : TavernHelper.getLastMessageId();
+if (floor <= 1) {
+  print(await getwi(script + '_开局引导'));
+}
+
+// ========== 认知阶段推进与回退 ==========
+var 悔恨值 = getvar('stat_data.女主.悔恨值', { defaults: 0 });
+var 尊严值 = getvar('stat_data.女主.尊严值', { defaults: 60 });
+var 执着度 = getvar('stat_data.女主.执着度', { defaults: 80 });
+var 认知 = getvar('stat_data.女主.认知阶段', { defaults: '未觉醒' });
+
+var newCognition = 认知;
+if (认知 === '未觉醒' && 悔恨值 >= 25 && 执着度 < 85) {
+  newCognition = '动摇';
+} else if (认知 === '动摇' && 悔恨值 >= 55 && 执着度 < 65) {
+  newCognition = '醒悟';
+} else if (认知 === '醒悟' && 悔恨值 >= 75 && 尊严值 >= 35) {
+  newCognition = '自我审视';
+} else if (认知 === '动摇' && 执着度 >= 85) {
+  newCognition = '未觉醒';
+} else if (认知 === '醒悟' && 执着度 >= 75 && 悔恨值 < 45) {
+  newCognition = '动摇';
+}
+
+if (newCognition !== 认知) {
+  setvar('stat_data.女主.认知阶段', newCognition, { scope: 'message' });
+
+  // ========== 闪回：认知阶段切换时触发 ==========
+  var 已触发闪回 = getvar('_bqs_已触发闪回', { scope: 'local', defaults: [] });
+  var flashbackPool = [
+    { name: '锁上的门', stages: ['未觉醒', '动摇'] },
+    { name: '碎掉的手机', stages: ['未觉醒', '动摇'] },
+    { name: '道歉的膝盖', stages: ['动摇', '醒悟'] },
+    { name: '消失的朋友', stages: ['动摇', '醒悟'] },
+    { name: '镜子里的人', stages: ['醒悟', '自我审视'] },
+  ];
+  var fbAvailable = flashbackPool.filter(function(fb) {
+    return fb.stages.indexOf(newCognition) !== -1 && 已触发闪回.indexOf(fb.name) === -1;
+  });
+  if (fbAvailable.length > 0) {
+    var fbPicked = fbAvailable[_.random(0, fbAvailable.length - 1)];
+    print(await getwi(script + '_闪回_' + fbPicked.name));
+    已触发闪回.push(fbPicked.name);
+    setvar('_bqs_已触发闪回', 已触发闪回, { scope: 'local' });
+  }
+
+  认知 = newCognition;
+}
+
+// ========== 事件选择（悔恨值势能驱动，floor 仅作软保底） ==========
+var 已触发事件 = getvar('_bqs_已触发事件', { scope: 'local', defaults: [] });
+var 上次事件悔恨 = getvar('_bqs_上次事件悔恨', { scope: 'local', defaults: -999 });
+var 上次事件楼层 = getvar('_bqs_上次事件楼层', { scope: 'local', defaults: -999 });
+var 势能够 = (悔恨值 - 上次事件悔恨) >= 12;
+var 保底够 = (floor - 上次事件楼层) >= 8;
+
+if (势能够 || 保底够) {
+  var eventPool = [
+    { name: '共享定位风波', stages: ['未觉醒', '动摇'] },
+    { name: '林远哲的消息', stages: ['未觉醒', '动摇'] },
+    { name: '深夜质问', stages: ['未觉醒', '动摇'] },
+    { name: '母亲来访', stages: ['动摇', '醒悟'] },
+    { name: '周雪依的控诉', stages: ['动摇', '醒悟'] },
+    { name: '花店与方旭', stages: ['动摇', '醒悟'] },
+    { name: '她的日记', stages: ['醒悟', '自我审视'] },
+    { name: '第一次放手', stages: ['醒悟', '自我审视'] },
+    { name: '空荡的公寓', stages: ['醒悟', '自我审视'] },
+    { name: '李医生的提问', stages: ['自我审视'] },
+  ];
+
+  var available = eventPool.filter(function(ev) {
+    return ev.stages.indexOf(认知) !== -1 && 已触发事件.indexOf(ev.name) === -1;
+  });
+
+  if (available.length > 0) {
+    var picked = available[_.random(0, available.length - 1)];
+    print(await getwi(script + '_事件_' + picked.name));
+    已触发事件.push(picked.name);
+    setvar('_bqs_已触发事件', 已触发事件, { scope: 'local' });
+    setvar('_bqs_上次事件悔恨', 悔恨值, { scope: 'local' });
+    setvar('_bqs_上次事件楼层', floor, { scope: 'local' });
+  }
+}
+_%>

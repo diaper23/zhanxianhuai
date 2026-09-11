@@ -1,0 +1,8 @@
+﻿---
+P017_Divorce_To_Shuxian: |-
+  <%_/* 插入 :line: "离谢赴任" */
+  if ((matchChatMessages(['休夫', '离府', '舒县', '赴任'], { start: -4 })) && !hitDone('P017_Divorce_To_Shuxian')) {
+    markHit('插入', 'P017_Divorce_To_Shuxian', `<span style="display:none;">[插入剧情：P017_Divorce_To_Shuxian]</span>
+    可插入谢秋瞳休夫、<user>离开谢府、王导索要条件、王徽拒婚或随行、赵田家属安排。
+    推进目标：把建康权谋推向地方治理副本。`);
+  } _%>

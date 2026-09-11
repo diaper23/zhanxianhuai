@@ -1,0 +1,8 @@
+﻿---
+P066_Hanzhong_Battle: |-
+  <%_/* 插入 :line: "汉中血战" */
+  if ((matchChatMessages(['汉中', '长生祠', '铁皮头车', '穴攻'], { start: -4 })) && !hitDone('P066_Hanzhong_Battle')) {
+    markHit('插入', 'P066_Hanzhong_Battle', `<span style="display:none;">[插入剧情：P066_Hanzhong_Battle]</span>
+    可插入长生祠铸魂、秦军铁皮头车穴攻、史忠以命换命、是否不惜代价守关。
+    推进目标：让信仰、军制和残酷攻城同时落地。`);
+  } _%>

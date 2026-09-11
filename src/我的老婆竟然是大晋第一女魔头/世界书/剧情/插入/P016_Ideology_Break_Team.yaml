@@ -1,0 +1,8 @@
+﻿---
+P016_Ideology_Break_Team: |-
+  <%_/* 插入 :line: "理念与班底" */
+  if ((matchChatMessages(['王道', '汉族', '赌约', '小荷', '赵田'], { start: -4 })) && !hitDone('P016_Ideology_Break_Team')) {
+    markHit('插入', 'P016_Ideology_Break_Team', `<span style="display:none;">[插入剧情：P016_Ideology_Break_Team]</span>
+    可插入<user>抛出王道/民族/基层理念，谢秋瞳用权术反驳，小荷卧底、赵田暗卫、舒县赌约。
+    推进目标：让<user>形成独立班底和路线边界。`);
+  } _%>

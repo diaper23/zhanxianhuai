@@ -1,0 +1,8 @@
+﻿---
+P061_Seize_Qiaojun_Again: |-
+  <%_/* 插入 :line: "重夺谯郡" */
+  if ((matchChatMessages(['鲖阳', '夺取谯郡', '俘虏安家', '春耕'], { start: -4 })) && !hitDone('P061_Seize_Qiaojun_Again')) {
+    markHit('插入', 'P061_Seize_Qiaojun_Again', `<span style="display:none;">[插入剧情：P061_Seize_Qiaojun_Again]</span>
+    可插入杜实两千精锐、骗取装备、趁戴平出城夺城、俘虏分地瓦解敌军。
+    推进目标：把战术夺城转为基层安置和淮北基本盘。`);
+  } _%>

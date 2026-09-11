@@ -1,0 +1,22 @@
+@@preprocessing
+<%_
+var raceRegion = getvar('stat_data.系统.国家', { defaults: '' });
+var raceRel = getvar('stat_data.种族关系', { defaults: {} });
+
+var conflictMap = {
+  '越棘': '人族垦荒与蚀瘴族的生存之战',
+  '北朔': '北朔扩张与雪鹿灵族的领地之争',
+  '西戈': '西戈开矿惊醒沙蜃族',
+  '东屿': '东屿深海族袭扰航线',
+  '渊下野': '灵暴区边缘的瘴魅与游傩出没'
+};
+
+var conflict = conflictMap[raceRegion] || null;
+%>
+<%_ if (conflict && Math.random() < 0.2) { _%>
+@@generate_before
+【种族冲突·现世之争】
+玩家身处<%- raceRegion %>，这里的种族冲突正在发生：<%- conflict %>。请把冲突自然地推进当前叙事：让玩家看到冲突双方的脸、苦衷与立场，给出2~3个可选择的立场（主战/主和/调停/亲妖/渔利）。相关种族的态度变化写入「种族关系」变量。
+
+<%- await getwi('种族战争总纲') %>
+<%_ } _%>

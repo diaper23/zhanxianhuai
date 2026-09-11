@@ -1,0 +1,8 @@
+﻿---
+P031_Blood_Oath_Prison: |-
+  <%_/* 插入 :line: "策反入狱" */
+  if ((matchChatMessages(['祖逖祠堂', '歃血', '戴渊识破', '入狱'], { start: -4 })) && !hitDone('P031_Blood_Oath_Prison')) {
+    markHit('插入', 'P031_Blood_Oath_Prison', `<span style="display:none;">[插入剧情：P031_Blood_Oath_Prison]</span>
+    可插入祖逖祠堂揭露戴渊勾结、旧部歃血、戴渊查出真相抓捕<user>。
+    推进目标：让逼世家入局的阳谋与<user>个人危机同时成立。`);
+  } _%>

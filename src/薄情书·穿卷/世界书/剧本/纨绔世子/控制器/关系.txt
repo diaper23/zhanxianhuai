@@ -1,0 +1,50 @@
+<%_
+var 人际网络 = getvar('stat_data.纨绔世子.人际网络', { defaults: {} });
+
+// ========== 关系阈值 → 立场自动更新 ==========
+var updated = false;
+var keys = Object.keys(人际网络);
+
+for (var i = 0; i < keys.length; i++) {
+  var npc = keys[i];
+  var r = 人际网络[npc];
+  if (!r) continue;
+
+  var 好感度 = r.好感度 != null ? r.好感度 : 0;
+  var 信任度 = r.信任度 != null ? r.信任度 : 50;
+  var old立场 = r.立场 || '中立';
+  var new立场 = old立场;
+
+  if (好感度 >= 60 && 信任度 >= 70) {
+    new立场 = '效忠';
+  } else if (好感度 >= 30 && 信任度 >= 50) {
+    new立场 = '支持';
+  } else if (好感度 > -20) {
+    new立场 = '中立';
+  } else if (好感度 > -50) {
+    new立场 = '警惕';
+  } else {
+    new立场 = '敌对';
+  }
+
+  if (new立场 !== old立场) {
+    setvar('stat_data.纨绔世子.人际网络.' + npc + '.立场', new立场, { scope: 'message' });
+    updated = true;
+  }
+}
+
+// ========== 输出当前关键关系摘要（供 AI 参考） ==========
+if (keys.length > 0) {
+  var summary = [];
+  for (var k = 0; k < keys.length; k++) {
+    var n = keys[k];
+    var rel = 人际网络[n];
+    if (rel) {
+      summary.push(n + '(' + (rel.立场 || '中立') + ',好感' + (rel.好感度 != null ? rel.好感度 : 0) + ')');
+    }
+  }
+  if (summary.length > 0) {
+    print('\n[当前关系网络] ' + summary.join(' | ') + '\n');
+  }
+}
+_%>

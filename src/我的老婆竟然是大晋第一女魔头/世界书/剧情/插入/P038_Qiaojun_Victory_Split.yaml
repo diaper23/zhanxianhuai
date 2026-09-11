@@ -1,0 +1,8 @@
+﻿---
+P038_Qiaojun_Victory_Split: |-
+  <%_/* 插入 :line: "战后路线" */
+  if ((matchChatMessages(['谯郡大捷', '路线决裂', '虚职', '思想颠覆'], { start: -4 })) && !hitDone('P038_Qiaojun_Victory_Split')) {
+    markHit('插入', 'P038_Qiaojun_Victory_Split', `<span style="display:none;">[插入剧情：P038_Qiaojun_Victory_Split]</span>
+    可插入论功前夜、谢秋瞳要实权、<user>坚持思想/民心路线、冷翎瑶留守保护。
+    推进目标：让胜利后的分歧比战场更危险。`);
+  } _%>

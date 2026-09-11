@@ -1,0 +1,8 @@
+﻿---
+P030_Jiankang_Change_Beifu: |-
+  <%_/* 插入 :line: "建康军权变化" */
+  if ((matchChatMessages(['周访遇刺', '王敦', '北府兵', '京口'], { start: -4 })) && !hitDone('P030_Jiankang_Change_Beifu')) {
+    markHit('插入', 'P030_Jiankang_Change_Beifu', `<span style="display:none;">[插入剧情：P030_Jiankang_Change_Beifu]</span>
+    可插入梁州刺史遇刺、谢秋瞳预判王敦、谢家向皇帝求权、京口练兵。
+    推进目标：让建康和谯郡两条线同时升压。`);
+  } _%>

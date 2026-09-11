@@ -1,0 +1,27 @@
+﻿---
+<%_
+/**
+ * NPC 控制器
+ * 读 在场角色 数组，遍历 getwi('NPC_'+name) 注入对应 NPC 详情
+ * 若 NPC 条目不存在则仅以留名提示玩家该位在场但设定留白
+ */
+const namerole = getvar('stat_data.剧情进度.在场角色', { defaults: [] });
+if (Array.isArray(namerole) && namerole.length > 0) {
+  print('\n\n【在场角色】\n');
+  for (const n of namerole) {
+    const title = 'NPC_' + String(n);
+    try {
+      const content = await getwi(title);
+      if (content) {
+        print('─── ' + n + ' ───\n');
+        print(content);
+        print('\n');
+      } else {
+        print('─ ' + n + '（在场，设定留白）\n');
+      }
+    } catch (e) {
+      print('─ ' + n + '（在场，设定留白）\n');
+    }
+  }
+}
+_%>

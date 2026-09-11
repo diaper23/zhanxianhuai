@@ -1,0 +1,6 @@
+<%_
+var script = getvar('stat_data.系统.当前剧本');
+if (script) {
+  print(await getwi(script + '_控制器'));
+}
+_%>

@@ -1,0 +1,59 @@
+@@preprocessing
+<%_
+if (typeof currentCountry === 'undefined') var currentCountry = getvar('stat_data.系统.国家', { defaults: '' });
+if (typeof currentPhase === 'undefined') var currentPhase = getvar('stat_data.系统.当前探索阶段', { defaults: '' });
+if (typeof cooldown === 'undefined') var cooldown = getvar('stat_data.系统.探索阶段冷却', { defaults: '' });
+if (typeof jingjie === 'undefined') var jingjie = getvar('stat_data.主角_属性.通用境界', { defaults: '凡胎境' });
+if (typeof lingshi === 'undefined') var lingshi = getvar('stat_data.主角_属性.经济.灵石', { defaults: 0 });
+
+// 启灵境及以上才能触发（排除凡胎境）
+var isAboveQiling = (jingjie !== '凡胎境');
+
+// 闲逛探索阶段
+var isExploring = (currentPhase === '闲逛/探索');
+
+// 30%概率触发
+var randomTrigger = Math.random();
+var eventTriggered = (randomTrigger < 0.3);
+
+// 存储事件内容
+if (typeof eventContent === 'undefined') var eventContent = null;
+_%>
+
+<%_ if (eventTriggered && isExploring && isAboveQiling) { _%>
+<%_ if (currentCountry.includes('梁川') && cooldown !== '梁川渊隙崩塌') { _%>
+<%_ eventContent = await getwi('事件_梁川渊隙崩塌'); _%>
+<%_ } else if (currentCountry.includes('大朔') && cooldown !== '大朔文庙泣血') { _%>
+<%_ eventContent = await getwi('事件_大朔文庙泣血'); _%>
+<%_ } else if (currentCountry.includes('西戈') && cooldown !== '西戈铭痕暴走') { _%>
+<%_ eventContent = await getwi('事件_西戈铭痕暴走'); _%>
+<%_ } else if (currentCountry.includes('渊下野') && cooldown !== '渊下野极夜灵暴') { _%>
+<%_ eventContent = await getwi('事件_渊下野极夜灵暴'); _%>
+<%_ } else if (currentCountry.includes('南烬') && cooldown !== '南烬血祭') { _%>
+<%_ eventContent = await getwi('事件_南烬血祭'); _%>
+<%_ } else if (currentCountry.includes('北朔') && cooldown !== '北朔霜劫') { _%>
+<%_ eventContent = await getwi('事件_北朔霜劫'); _%>
+<%_ } else if (currentCountry.includes('东屿') && cooldown !== '东屿海潮') { _%>
+<%_ eventContent = await getwi('事件_东屿海潮'); _%>
+<%_ } else if (currentCountry.includes('越棘') && cooldown !== '越棘瘴乱') { _%>
+<%_ eventContent = await getwi('事件_越棘瘴乱'); _%>
+<%_ } else if (currentCountry.includes('磐丘') && cooldown !== '磐丘地鸣') { _%>
+<%_ eventContent = await getwi('事件_磐丘地鸣'); _%>
+<%_ } else if (currentCountry.includes('商於') && cooldown !== '商於暗柜崩解') { _%>
+<%_ eventContent = await getwi('事件_商於暗柜崩解'); _%>
+<%_ } else if (currentCountry.includes('涪陵') && cooldown !== '涪陵沉鳞') { _%>
+<%_ eventContent = await getwi('事件_涪陵沉鳞'); _%>
+<%_ } else if (currentCountry.includes('郢丘') && cooldown !== '郢丘字劫') { _%>
+<%_ eventContent = await getwi('事件_郢丘字劫'); _%>
+<%_ } else if (currentCountry.includes('天衡宗') && cooldown !== '天衡宗断脉') { _%>
+<%_ eventContent = await getwi('事件_天衡宗断脉'); _%>
+<%_ } _%>
+<%_ } _%>
+
+<%_ if (eventContent) { _%>
+<%- eventContent %>
+<%_ } _%>
+
+<%_ if (isExploring && lingshi > 150 && cooldown !== '隐元阁暗拍') { _%>
+<%- await getwi('事件_隐元阁暗拍') %>
+<%_ } _%>

@@ -1,0 +1,28 @@
+<%_
+var script = '纨绔世子';
+var 阶段 = getvar('stat_data.纨绔世子.当前阶段', { defaults: '京城风云' });
+
+// 加载当前阶段的 NPC 速览
+print(await getwi(script + '_NPC速览_' + 阶段));
+
+// ========== 核心 NPC（全阶段加载，index 中存在） ==========
+var coreNPCs = ['隆景帝', '永宁公主', '关重山', '薛怀仁', '钱大富'];
+for (var i = 0; i < coreNPCs.length; i++) {
+  print(await getwi(script + '_NPC_' + coreNPCs[i]));
+}
+
+// ========== 阶段性 NPC（仅加载 index 中存在的条目） ==========
+// 注：原剧本中提及的杨娴/靳月/宣宁公主/薛瑶/郑译/朵颜/陆绮菱/姬蕊 等暂无独立 NPC 条目，
+// 其相关演绎由对应事件条目内的细节描述覆盖，此处仅加载已存在的 NPC。
+var phaseNPCs = {
+  '京城风云': ['邓丘', '莫萱'],
+  '暗流涌动': ['宇文雄', '郝仓', '叶无双'],
+  '北境烽火': ['费田', '太子萧政', '宇文雄', '郝仓'],
+  '九五至尊': ['费田', '叶无双', '薛怀仁', '太子萧政'],
+};
+
+var npcs = phaseNPCs[阶段] || [];
+for (var j = 0; j < npcs.length; j++) {
+  print(await getwi(script + '_NPC_' + npcs[j]));
+}
+_%>

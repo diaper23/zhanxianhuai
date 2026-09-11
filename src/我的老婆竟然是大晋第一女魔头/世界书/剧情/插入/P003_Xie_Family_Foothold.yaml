@@ -1,0 +1,8 @@
+﻿---
+P003_Xie_Family_Foothold: |-
+  <%_/* 插入 :line: "谢家初局" */
+  if ((String(getvar('stat_data.世界.当前地点', { defaults: '' })).includes('谢') || matchChatMessages(['谢府', '谢家', '入赘'], { start: -4 })) && !hitDone('P003_Xie_Family_Foothold')) {
+    markHit('插入', 'P003_Xie_Family_Foothold', `<span style="display:none;">[插入剧情：P003_Xie_Family_Foothold]</span>
+    可插入谢秋瞳首夜或晚宴试探：前任赘婿死因、谢家仆从冷眼、谢裒评估价值、谢家内斗暗流。
+    推进目标：让<user>证明“不是会立刻死掉的废物”，获得藏书楼、暂住、被监视或被处置等结果。`);
+  } _%>

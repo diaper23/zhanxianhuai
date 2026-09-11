@@ -1,0 +1,8 @@
+﻿---
+P056_Datong_Army_Founded: |-
+  <%_/* 插入 :line: "流亡建军" */
+  if ((matchChatMessages(['大同军', '郗鉴', '流亡', '百姓拥护'], { start: -4 })) && !hitDone('P056_Datong_Army_Founded')) {
+    markHit('插入', 'P056_Datong_Army_Founded', `<span style="display:none;">[插入剧情：P056_Datong_Army_Founded]</span>
+    可插入郗鉴万人剿杀、宗师追杀、百姓拥护、正式建军和三三制。
+    推进目标：把逃亡队伍转化为有信仰和组织的军队，或因失败沦为流寇。`);
+  } _%>

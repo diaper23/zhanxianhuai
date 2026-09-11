@@ -1,0 +1,11 @@
+@@preprocessing
+<%_
+var combat = getvar('stat_data.系统.当前战斗状态', { defaults: '非战斗' });
+var wi = null;
+if (combat === '战斗中') {
+  wi = await getwi('战斗准则', null);
+}
+_%>
+<%_ if (wi) { _%>
+<%- wi %>
+<%_ } _%>

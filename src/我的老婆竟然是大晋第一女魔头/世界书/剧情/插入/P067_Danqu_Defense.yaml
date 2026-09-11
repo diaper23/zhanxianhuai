@@ -1,0 +1,8 @@
+﻿---
+P067_Danqu_Defense: |-
+  <%_/* 插入 :line: "宕渠布防" */
+  if ((matchChatMessages(['汉中失守', '宕渠', '米仓道', '彭勇'], { start: -4 })) && !hitDone('P067_Danqu_Defense')) {
+    markHit('插入', 'P067_Danqu_Defense', `<span style="display:none;">[插入剧情：P067_Danqu_Defense]</span>
+    可插入汉中失守后残军、敌军转米仓道、彭勇八千守宕渠、成都侧翼压力。
+    推进目标：从一处失守转入下一条防线的紧急布置。`);
+  } _%>

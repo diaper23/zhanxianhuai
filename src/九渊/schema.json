@@ -1,0 +1,744 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "default": {},
+  "type": "object",
+  "properties": {
+    "系统": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前时间": {
+          "default": "渊历 5050年 端月 初一 辰时",
+          "type": "string"
+        },
+        "国家": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "城镇": {
+          "default": "待初始化",
+          "type": "string"
+        },
+        "当前渊候": {
+          "default": "息始",
+          "type": "string"
+        },
+        "是否为穷日": {
+          "default": false,
+          "type": "boolean"
+        },
+        "是否为双息日": {
+          "default": false,
+          "type": "boolean"
+        },
+        "灵气浓度": {
+          "default": 0.5,
+          "type": "number"
+        },
+        "封印松紧度": {
+          "default": 50,
+          "type": "number"
+        },
+        "当前探索阶段": {
+          "default": "闲逛/探索",
+          "type": "string"
+        },
+        "当前战斗状态": {
+          "default": "非战斗",
+          "type": "string"
+        },
+        "探索阶段冷却": {
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "主角_属性": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "境界": {
+          "default": "凡胎境",
+          "type": "string"
+        },
+        "通用境界": {
+          "default": "凡胎境",
+          "type": "string"
+        },
+        "小境界": {
+          "default": "初期",
+          "type": "string"
+        },
+        "修行进度": {
+          "default": 0,
+          "type": "number"
+        },
+        "灵力": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "当前": {
+              "default": 100,
+              "type": "number"
+            },
+            "上限": {
+              "default": 100,
+              "type": "number"
+            }
+          }
+        },
+        "学派特殊状态": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "特殊状态名"
+          },
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "灵根": {
+          "default": 5,
+          "type": "number"
+        },
+        "途径核心资源": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "名称": {
+              "default": "无",
+              "type": "string"
+            },
+            "当前值": {
+              "default": 0,
+              "type": "number"
+            },
+            "上限": {
+              "default": 100,
+              "type": "number"
+            },
+            "危险阈值": {
+              "default": 80,
+              "type": "number"
+            }
+          }
+        },
+        "契灵": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "契灵名": {
+              "default": "无",
+              "type": "string"
+            },
+            "所属渊层": {
+              "default": "无",
+              "type": "string"
+            },
+            "契约深度": {
+              "default": 0,
+              "type": "number"
+            },
+            "本月借力次数": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        },
+        "功法": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "功法名"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "类型": {
+                "default": "辅助",
+                "type": "string"
+              },
+              "描述": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "身体与精神状态": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "外伤": {
+              "default": "无",
+              "type": "string"
+            },
+            "内伤隐患": {
+              "default": "无",
+              "type": "string"
+            }
+          }
+        },
+        "学派": {
+          "default": "无",
+          "type": "string"
+        },
+        "经济": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "灵石": {
+              "default": 10,
+              "type": "number"
+            },
+            "银两": {
+              "default": 50,
+              "type": "number"
+            }
+          }
+        },
+        "装备": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "武器": {
+              "default": "普通的铁剑",
+              "type": "string"
+            },
+            "防具": {
+              "default": "无",
+              "type": "string"
+            },
+            "饰品": {
+              "default": "无",
+              "type": "string"
+            },
+            "核心造物": {
+              "default": "无",
+              "type": "string"
+            }
+          }
+        },
+        "背包": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "物品名"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "数量": {
+                "default": 1,
+                "type": "number"
+              },
+              "描述": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "好感度": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "enum": [
+          "姜瑶",
+          "百里遥",
+          "妫宁",
+          "桓歌",
+          "慕清雪",
+          "曲红绡",
+          "阮棠",
+          "温知夏",
+          "沈千歌",
+          "小黎"
+        ]
+      },
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "玩家声望": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "势力名"
+      },
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "当前任务": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "任务名"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "来源": {
+            "default": "事件触发",
+            "type": "string"
+          },
+          "类型": {
+            "default": "支线",
+            "type": "string"
+          },
+          "地点": {
+            "default": "",
+            "type": "string"
+          },
+          "简述": {
+            "default": "",
+            "type": "string"
+          },
+          "目标": {
+            "default": "",
+            "type": "string"
+          },
+          "奖励": {
+            "default": "",
+            "type": "string"
+          },
+          "时限": {
+            "default": "",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "已知情报": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "情报ID"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "来源": {
+            "default": "",
+            "type": "string"
+          },
+          "内容": {
+            "default": "",
+            "type": "string"
+          },
+          "可信度": {
+            "default": "传闻",
+            "type": "string"
+          },
+          "是否已使用": {
+            "default": false,
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "势力关系": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "势力A"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "propertyNames": {
+          "type": "string",
+          "description": "势力B"
+        },
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "态度": {
+              "default": 0,
+              "type": "number"
+            },
+            "状态": {
+              "default": "中立",
+              "type": "string"
+            },
+            "最近事件": {
+              "default": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "活跃事件": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "事件ID"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "类型": {
+            "default": "奇遇线索",
+            "type": "string"
+          },
+          "涉及势力": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "区域": {
+            "default": "",
+            "type": "string"
+          },
+          "当前阶段": {
+            "default": "酝酿",
+            "type": "string"
+          },
+          "玩家介入度": {
+            "default": "未涉及",
+            "type": "string"
+          },
+          "简述": {
+            "default": "",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "在场NPC": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "已邂逅": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "女主事件冷却": {
+      "default": 0,
+      "type": "number"
+    },
+    "女主关系": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "女主组合，按姓名排序用·连接"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "关系": {
+            "default": "陌路",
+            "type": "string"
+          },
+          "导火索": {
+            "default": "",
+            "type": "string"
+          },
+          "最近互动": {
+            "default": "",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "身份职位": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "所属国": {
+          "default": "",
+          "type": "string"
+        },
+        "所属衙门": {
+          "default": "无",
+          "type": "string"
+        },
+        "职位": {
+          "default": "白身",
+          "type": "string"
+        },
+        "品级": {
+          "default": "无",
+          "type": "string"
+        },
+        "功绩": {
+          "default": 0,
+          "type": "number"
+        },
+        "月俸": {
+          "default": 0,
+          "type": "number"
+        },
+        "上峰": {
+          "default": "",
+          "type": "string"
+        },
+        "同僚": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "政敌": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "先贤遗泽": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "遗泽名"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "状态": {
+            "default": "未发现",
+            "type": "string"
+          },
+          "简述": {
+            "default": "",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "种族关系": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "种族名"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "态度": {
+            "default": 0,
+            "type": "number"
+          },
+          "状态": {
+            "default": "中立",
+            "type": "string"
+          },
+          "最近事件": {
+            "default": "",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "大傩阴墟": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "状态": {
+          "default": 0,
+          "type": "number"
+        },
+        "死亡次数": {
+          "default": 0,
+          "type": "number"
+        },
+        "探索进度": {
+          "default": 0,
+          "type": "number"
+        }
+      }
+    },
+    "修仙界传闻": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "原始事件": {
+            "default": "",
+            "type": "string"
+          },
+          "演化版本": {
+            "default": "",
+            "type": "string"
+          },
+          "热度": {
+            "default": "小道消息",
+            "type": "string"
+          },
+          "已反应": {
+            "default": false,
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "随身洞府": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "开启状态": {
+          "default": false,
+          "type": "boolean"
+        },
+        "名称": {
+          "default": "未命名残破秘境",
+          "type": "string"
+        },
+        "等级": {
+          "default": 0,
+          "type": "number"
+        },
+        "灵气充裕度": {
+          "default": 10,
+          "type": "number"
+        },
+        "防御阵法": {
+          "default": 0,
+          "type": "number"
+        },
+        "上次结算时间": {
+          "default": "",
+          "type": "string"
+        },
+        "设施": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "设施名"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "等级": {
+                "default": 1,
+                "type": "number"
+              },
+              "状态": {
+                "default": "闲置",
+                "type": "string"
+              },
+              "产出": {
+                "default": "",
+                "type": "string"
+              },
+              "指派人员": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "驻留人员": {
+          "default": [],
+          "type": "array",
+          "items": {}
+        },
+        "当前告警": {
+          "default": "无",
+          "type": "string"
+        },
+        "入侵记录": {
+          "default": [],
+          "type": "array",
+          "items": {}
+        },
+        "洞府日志": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "隐元阁暗拍": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "状态": {
+          "default": 0,
+          "type": "number"
+        },
+        "举办地": {
+          "default": "",
+          "type": "string"
+        },
+        "压轴拍品": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "大客户名单": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "最终得主": {
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "寿元与夺舍": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "当前寿元": {
+          "default": 80,
+          "type": "number"
+        },
+        "寿元上限": {
+          "default": 80,
+          "type": "number"
+        },
+        "夺舍次数": {
+          "default": 0,
+          "type": "number"
+        },
+        "当前身躯": {
+          "default": "原身",
+          "type": "string"
+        },
+        "延寿记录": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

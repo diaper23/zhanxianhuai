@@ -1,0 +1,56 @@
+<%_
+var 阶段 = getvar('stat_data.纨绔世子.当前阶段', { defaults: '京城风云' });
+var 朝堂权势 = getvar('stat_data.纨绔世子.势力.朝堂权势', { defaults: 3 });
+var 军力 = getvar('stat_data.纨绔世子.势力.军力', { defaults: 5 });
+var 剧情 = getvar('stat_data.纨绔世子.剧情记录', { defaults: {} });
+var 朝局 = getvar('stat_data.纨绔世子.朝局', { defaults: {} });
+
+var checkPlot = function(name) {
+  return 剧情[name] && 剧情[name].状态 === '已完成';
+};
+
+// ========== 帝王态度状态机 ==========
+var 帝王态度 = 朝局.帝王态度 || '猜忌';
+var new帝王态度 = 帝王态度;
+
+if (阶段 === '京城风云') {
+  if (朝堂权势 >= 30 || checkPlot('邓丘落网')) {
+    new帝王态度 = '忌惮';
+  } else if (朝堂权势 >= 15) {
+    new帝王态度 = '猜忌';
+  }
+} else if (阶段 === '暗流涌动') {
+  if (checkPlot('凯旋扳倒郑译') || 军力 >= 40) {
+    new帝王态度 = '敌对';
+  } else {
+    new帝王态度 = '忌惮';
+  }
+} else if (阶段 === '北境烽火' || 阶段 === '九五至尊') {
+  new帝王态度 = '敌对';
+}
+
+if (new帝王态度 !== 帝王态度) {
+  setvar('stat_data.纨绔世子.朝局.帝王态度', new帝王态度, { scope: 'message' });
+}
+
+// ========== 雪党势力衰减 ==========
+var 雪党 = 朝局.雪党势力 != null ? 朝局.雪党势力 : 80;
+var new雪党 = 雪党;
+
+if (checkPlot('邓丘落网') && 雪党 > 60) {
+  new雪党 = 60;
+}
+if (checkPlot('凯旋扳倒郑译') && 雪党 > 40) {
+  new雪党 = 40;
+}
+if (checkPlot('接掌北军') && 雪党 > 20) {
+  new雪党 = 20;
+}
+if (阶段 === '九五至尊') {
+  new雪党 = 0;
+}
+
+if (new雪党 !== 雪党) {
+  setvar('stat_data.纨绔世子.朝局.雪党势力', new雪党, { scope: 'message' });
+}
+_%>

@@ -1,0 +1,69 @@
+---
+EJS角色调度: |-
+  <%_
+  const onScene = getvar('stat_data.在场角色', { defaults: ['谢秋瞳'] });
+  const loaded = new Set();
+  const dynamicRoles = {
+    '谢秋瞳': {
+      path: 'stat_data.谢秋瞳',
+      defaultStage: '陌生试探',
+      prefix: '谢秋瞳_阶段_',
+      fields: ['态度', '信任度', '控制欲', '情感牵连', '隐瞒程度', '身体状态', '当前打算'],
+    },
+    '喜儿': {
+      path: 'stat_data.喜儿',
+      defaultStage: '暗处观察',
+      prefix: '喜儿_阶段_',
+      fields: ['好感', '信任度', '依恋度', '师门牵引', '危机感', '当前任务', '所在地', '当前态度'],
+    },
+    '王徽': {
+      path: 'stat_data.王徽',
+      defaultStage: '未相识',
+      prefix: '王徽_阶段_',
+      fields: ['好感', '信任度', '自主意志', '家族压力', '情感倾向', '当前处境', '所在地', '当前状态'],
+    },
+  };
+
+  function summarizeState(name, data, fields, stage) {
+    const lines = fields
+      .filter(field => data[field] !== undefined && data[field] !== '')
+      .map(field => `  ${field}: ${data[field]}`);
+    return `\n【${name}当前动态人设】\n  动态阶段: ${stage}\n${lines.join('\n')}`;
+  }
+
+  async function loadCharacter(name, entryKey) {
+    const entry = await getwi(entryKey || name);
+    if (!entry) return false;
+    print(entry);
+    loaded.add(name);
+
+    const config = dynamicRoles[name];
+    if (!config) return true;
+
+    const data = getvar(config.path, { defaults: {} });
+    const stage = data.动态阶段 || config.defaultStage;
+    print(summarizeState(name, data, config.fields, stage));
+
+    const phaseEntry = await getwi(config.prefix + stage);
+    if (phaseEntry) {
+      print('\n' + phaseEntry);
+    } else {
+      print(`\n【${name}动态阶段缺失】未找到阶段条目: ${config.prefix}${stage}`);
+    }
+    return true;
+  }
+
+  // 始终加载当前在场角色
+  for (const name of onScene) {
+    await loadCharacter(name);
+  }
+  // 补充加载最近4楼中提及但不在场的角色
+  const watched = ['喜儿', '王徽', '司马绍', '王导', '谢裒', '王劭', '祝月曦', '冷翎瑶', '冉闵', '戴渊', '史忠', '梵星眸', '王猛', '刘裕', '桓温', '苻坚', '慕容恪', '慕容垂'];
+  for (const name of watched) {
+    if (loaded.has(name)) continue;
+    const npcKey = name.startsWith('NPC_') ? name : 'NPC_' + name;
+    if (matchChatMessages([new RegExp(name, 'i')], { start: -4 })) {
+      await loadCharacter(name, npcKey) || await loadCharacter(name);
+    }
+  }
+  _%>

@@ -1,0 +1,131 @@
+---
+'事件总线_工具库': |-
+  <%_
+  /**
+   * 事件总线 · 工具库
+   * ─ 全部助手函数集中 define 一次，由「事件总线」「事件_*」条目调用
+   * ─ 严格只读：本库只读 stat_data，不写；写入由 事件总线 把"命中"汇成 _本轮注入 后统一提交
+   * ─ 触发匹配容错：用 contains 而非 ===，避免旧版 loc()==='苍府' 死字符串比较把整条主线卡死
+   * ─ "门"模型：每个事件/秘密标一个稳定门牌号；第一次命中后 写门=true 永久锚定，避免重复注入同一剧透
+   */
+  if (typeof _busInited === 'undefined') {
+    define('_busInited', true);
+
+    // ── 读取 ──
+    define('loc',      () => String(this.getvar('stat_data.剧情进度.地点',     { defaults: '' })));
+    define('scene',    () => String(this.getvar('stat_data.剧情进度.当前场景', { defaults: '' })));
+    define('chapter',  () => String(this.getvar('stat_data.剧情进度.当前章节', { defaults: '第一章·诏起龙庭' })));
+    define('identity', () => String(this.getvar('stat_data.主角.身份',       { defaults: '' })));
+    // ── 硬时钟读取：时段（六格）与当前日 ──
+    define('time', () => String(this.getvar('stat_data.世界.时段',        { defaults: '清晨' })));
+    define('day',  () => Number(this.getvar('stat_data.剧情进度.当前日',   { defaults: 1 })) || 1);
+
+    define('present', (name) => {
+      const arr = this.getvar('stat_data.剧情进度.在场角色', { defaults: [], noCache: true }) || [];
+      return arr.some(x => String(x).includes(String(name)));
+    });
+
+    define('hasItem', (name) => {
+      const inv = this.getvar('stat_data.主角.物品栏', { defaults: {}, noCache: true }) || {};
+      return Object.prototype.hasOwnProperty.call(inv, String(name));
+    });
+
+    define('hasFour', () => {
+      const f = this.getvar('stat_data.剧情进度.仪式四物', { defaults: {}, noCache: true }) || {};
+      return f.向阳木心 && f.不灭灯油 && f.不落之尘 && f.清晨初露;
+    });
+
+    define('door', (id) => {
+      const m = this.getvar('stat_data.门', { defaults: {}, noCache: true }) || {};
+      return m[String(id)] === true;
+    });
+
+    define('knowSecret', (name) => {
+      const sk = this.getvar('stat_data.秘密知晓', { defaults: {}, noCache: true }) || {};
+      return sk[String(name)] === true;
+    });
+
+    // ── 关键判定：章节里程碑 ──
+    // 用"先后到达过哪个章节"判定而非"当前在第几章"，避免 主持 忘了切章节导致整章断流
+    define('reached', (chapterName) => {
+      const reached = this.getvar('stat_data.剧情进度.到达章节', { defaults: [], noCache: true }) || [];
+      return reached.some(c => String(c).includes(String(chapterName)));
+    });
+
+    define('atOrAfter', (chapterName) => {
+      const order = ['第一章·诏起龙庭','第二章·龙泽听潮']; // 本卡只建模一、二章
+      const cur = chapter();
+      const curIdx = order.findIndex(c => cur.includes(c));
+      const reqIdx = order.findIndex(c => c.includes(String(chapterName)));
+      if (curIdx < 0 || reqIdx < 0) return false;
+      return curIdx >= reqIdx;
+    });
+
+    // ── 玩家近期用语扫描（容错替代 markChatMessages-based 死关键字匹配）──
+    define('near', (keywords, lastN = 3) => {
+      const kws = Array.isArray(keywords) ? keywords : [keywords];
+      const arr = this.getChatMessages(-lastN) || [];
+      const text = arr.map(m => (m && (m.mes || m.message || '')) || '').join(' ');
+      return kws.some(kw => text.includes(String(kw)));
+    });
+
+    // ── 身份判定（容错：old 卡用 <user>/严七/云鹤来 前缀；新卡用含名识别）──
+    define('isHO', (num) => {
+      const id = identity();
+      if (num === 1) return /<user>/.test(id) || id.includes('苍家') || (id.includes('文官') && !id.includes('严'));
+      if (num === 2) return /严七/.test(id) || id.includes('严家') || id.includes('义子');
+      if (num === 3) return /云鹤来/.test(id) || id.includes('桐淮') || id.includes('大师爸') || id.includes('术士');
+      return false;
+    });
+
+    // ── 一次性随机（种子=楼层ID+key，保证重生成同一楼层同事件结果一致但 RP 不同则变）──
+    define('onceChance', (p, key) => {
+      const k = String(key) + '#' + (this.lastUserMessageId || 0);
+      let h = 0;
+      for (let i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) | 0;
+      return ((h >>> 0) % 1000) / 1000 < p;
+    });
+
+    // ── 钥匙匹配：任一组满足即命中。组内为"且"，组间为"或"。组成员可能是 gateObj 或函数────
+    // gateObj: { 地点:'东市', 在场:'云鹤来', 物品:'向阳木心', 已门:'铜钱坠认主', 里程碑:'第二章·龙泽听潮',
+    //            近:{词:[...],楼:3}, 身份:1 }
+    define('keysMatch', (keysets) => {
+      if (!Array.isArray(keysets) || keysets.length === 0) return false;
+      return keysets.some(set => {
+        if (!set) return false;
+        if (set.地点    && !loc().includes(set.地点))                 return false;
+        if (set.场景    && !scene().includes(set.场景))                 return false;
+        if (set.在场    && !present(set.在场))                          return false;
+        if (set.物品    && !hasItem(set.物品))                           return false;
+        if (set.四物齐全 !== undefined && hasFour() !== !!set.四物齐全) return false;
+        if (set.已门    && !door(set.已门))                              return false;
+        if (set.里程碑  && !atOrAfter(set.里程碑))                      return false;
+        if (set.已开秘密 && !knowSecret(set.已开秘密))                  return false;
+        if (set.身份!= null && !isHO(set.身份))                          return false;
+        if (set.近      && !near(set.近.词, set.近.楼 || 3))            return false;
+        if (set.概率 != null && !onceChance(set.概率, set.门牌号 || '')) return false;
+        return true;
+      });
+    });
+
+    // ── 写入：开门牌、开秘密知晓、推回近期事件 ──
+    define('openDoor', (id) => {
+      const m = this.getvar('stat_data.门', { defaults: {}, noCache: true }) || {};
+      if (!m[String(id)]) this.patchVariables('stat_data.门', [{ op: 'add', path: '/' + String(id), value: true }]);
+      return true;
+    });
+    define('markSecret', (name) => {
+      const sk = this.getvar('stat_data.秘密知晓', { defaults: {}, noCache: true }) || {};
+      if (!sk[String(name)]) this.patchVariables('stat_data.秘密知晓', [{ op: 'add', path: '/' + String(name), value: true }]);
+      return true;
+    });
+    define('reach', (chapterName) => {
+      const a = this.getvar('stat_data.剧情进度.到达章节', { defaults: [], noCache: true }) || [];
+      if (!a.some(c => String(c).includes(String(chapterName)))) {
+        a.push(String(chapterName));
+        this.patchVariables('stat_data.剧情进度', [{ op: 'replace', path: '/到达章节', value: a }]);
+      }
+      return true;
+    });
+  }
+  _%>

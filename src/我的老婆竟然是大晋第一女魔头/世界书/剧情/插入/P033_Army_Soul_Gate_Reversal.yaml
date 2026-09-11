@@ -1,0 +1,8 @@
+﻿---
+P033_Army_Soul_Gate_Reversal: |-
+  <%_/* 插入 :line: "城门倒戈" */
+  if ((matchChatMessages(['军魂', '城门', '戴渊倒戈', '赵军先锋'], { start: -4 })) && !hitDone('P033_Army_Soul_Gate_Reversal')) {
+    markHit('插入', 'P033_Army_Soul_Gate_Reversal', `<span style="display:none;">[插入剧情：P033_Army_Soul_Gate_Reversal]</span>
+    可插入史忠军魂觉醒、戴渊骗城门、冷翎瑶挡刺杀、<user>逼戴渊抗赵。
+    推进目标：把个人谋略落到城门、军阵和士气的硬场面。`);
+  } _%>

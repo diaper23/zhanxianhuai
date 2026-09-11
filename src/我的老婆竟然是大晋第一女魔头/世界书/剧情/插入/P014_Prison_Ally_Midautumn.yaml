@@ -1,0 +1,8 @@
+﻿---
+P014_Prison_Ally_Midautumn: |-
+  <%_/* 插入 :line: "天牢或中秋" */
+  if ((matchChatMessages(['天牢', '中秋', '北湖', '清谈'], { start: -4 })) && !hitDone('P014_Prison_Ally_Midautumn')) {
+    markHit('插入', 'P014_Prison_Ally_Midautumn', `<span style="display:none;">[插入剧情：P014_Prison_Ally_Midautumn]</span>
+    可插入天牢共患难、王劭北伐心愿、中秋大赦、北湖清谈、戴平象棋赌约。
+    推进目标：让<user>通过公开表现赢得名声、军方人情或皇帝注意，也可失败丢脸。`);
+  } _%>

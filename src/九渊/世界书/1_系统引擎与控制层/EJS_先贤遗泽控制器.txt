@@ -1,0 +1,26 @@
+@@preprocessing
+<%_
+var yzCountry = getvar('stat_data.系统.国家', { defaults: '' });
+var yzTown = getvar('stat_data.系统.城镇', { defaults: '' });
+var yzList = getvar('stat_data.先贤遗泽', { defaults: {} });
+
+var legacyMap = {
+  '大朔': '计渊氏·观渊台地宫',
+  '郢丘': '孔丘·春秋壁刻',
+  '西戈': '白起·止戈阵',
+  '东屿': '第一代心炉行者·永燃灯',
+  '天衡宗': '天衡宗前代剑阁·断脉遗剑',
+  '涪陵': '李耳·西行紫气',
+  '渊下野': '初代渊守人·前哨遗志'
+};
+
+var target = legacyMap[yzCountry] || null;
+var discovered = target ? (yzList[target] && yzList[target].状态 && yzList[target].状态 !== '未发现') : true;
+%>
+<%_ if (target && !discovered && Math.random() < 0.15) { _%>
+@@generate_before
+【先贤遗泽·线索浮现】
+玩家正身处<%- yzCountry %>。这里与一位先贤的遗泽有关：<%- target %>。请以传闻、异象、老人之口、碑文残片等自然方式，把线索送进当前场景，但不要直接点破全貌。玩家若追问或前往，按「先贤遗泽总纲」展开考验。
+
+<%- await getwi('先贤遗泽总纲') %>
+<%_ } _%>

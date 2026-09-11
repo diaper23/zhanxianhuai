@@ -1,0 +1,67 @@
+---
+'事件总线_扫描': |-
+  @@preprocessing
+  <%
+  /**
+   * 事件总线 · 扫描阶段（@preprocessing）
+   *
+   * 设计遵循：
+   *   - 优先使用提示词模板扩展内置 getwi（见 .kilocode/rules/EJS实战指南 §多阶段人设）
+   *   - 被加载的"事件_* / 秘密_* / 诱饵_*"条目在 index.yaml 中设为启用:false，由本条目蓝灯常驻、
+   *     每回合 getwi 名单（硬编码）拼它们的 EJS；命中条件由它们各自的 EJS 自决。
+   *   - 命中文本不直接 print，而是收进 stat_data._本轮注入 数组（schema.ts 已声明）
+   *     再由 generate_after 阶段统一注入，避免预处理阶段产生空行+iFrame 噪声。
+   *
+   * 调度器规约（务必遵守）：
+   *   · 事件条目首次命中后立即写 门[id]=true（openDoor），同一门牌号绝不二次注入——剧透只暴露一次
+   *   · 不再用旧版"遍历 50 个条件死字符串 ==="模式；用工具库 keysMatch 容错匹配
+   *   · 工具库一次 define、事件条目复用；避免每个条目重复 define pollute 上下文
+   */
+  try { await getwi('事件总线_工具库'); }
+  catch (e) { console.error('[事件总线] 工具库加载失败: ' + e); }
+
+  // 重置本轮注入缓冲（message scope 顶层 stat_data 内，已由 schema.ts 声明）
+  setvar('stat_data._本轮注入', [], { scope: 'message' });
+
+  // 工具库中已 define inject(id, body, order)。但 inject 内调 openDoor，每次本轮注入队列 push；
+  // 工具库所需的 door/openDoor/markSecret/reach 已就绪。
+  define('inject', function (id, body, order) {
+    if (this.door(id)) return false;
+    const buf = this.getvar('stat_data._本轮注入', { defaults: [], noCache: true }) || [];
+    if (!buf.some(x => x.id === id)) {
+      buf.push({ id, body: String(body || ''), order: Number.isFinite(order) ? order : 0, ts: Date.now() });
+      this.setvar('stat_data._本轮注入', buf, { scope: 'message' });
+      this.openDoor(id);
+      console.info('[事件总线] 开门注入: ' + id);
+    }
+    return true;
+  });
+
+  // ── 事件/秘密条目名单（与 index.yaml 中"启用:false"的条目名一一对应）──
+  // 这是这套系统唯一允许硬编码之处；改条目名时同时改这里。
+  const ENTRIES = [
+    // 主线节点事件
+    '事件_接旨开局', '事件_桐淮破冰', '事件_四物_木心', '事件_四物_灯油',
+    '事件_四物_香灰', '事件_四物_初露', '事件_开坛仪式', '事件_启程前夜',
+    '事件_龙泽初抵', '事件_龙泽迎神日', '事件_龙泽巡游日', '事件_龙泽开江日',
+    '事件_龙泽收尾夜',
+    '事件_传闻轮盘',
+    // 秘密递送（单主角固定 <user>=苍家文官；终章诸门已封存未列入）
+    '秘密_苍家_起手', '秘密_苍家_苍晏封口', '秘密_苍家_苍羁线',
+    '秘密_苍家_圣旨含金量',
+    '秘密_严七_起手', '秘密_严七_寒坼毒', '秘密_严七_聂朝夕监控',
+    '秘密_严七_仙骨之实',
+    '秘密_云鹤来_起手', '秘密_云鹤来_铜钱坠同源', '秘密_云鹤来_桐淮骗窝',
+    '秘密_云鹤来_双半分裂',
+    // 环境诱饵（含稳定概率）
+    '诱饵_老槐心跳', '诱饵_刺猬食蘑话痨', '诱饵_梁一笑望远',
+    '诱饵_严山海抱病', '诱饵_天机雪夜现花',
+  ];
+
+  let touched = 0;
+  for (const name of ENTRIES) {
+    try { await getwi(name); touched++; }
+    catch (e) { /* 该条目尚未创建或被改了名 → 静默跳过，日志已留 */ console.warn('[事件总线] getwi 失败: ' + name); }
+  }
+  console.info('[事件总线] 遍历=' + touched);
+  %>

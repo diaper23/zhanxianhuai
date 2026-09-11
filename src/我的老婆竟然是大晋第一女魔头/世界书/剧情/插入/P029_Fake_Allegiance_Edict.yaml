@@ -1,0 +1,8 @@
+﻿---
+P029_Fake_Allegiance_Edict: |-
+  <%_/* 插入 :line: "假投靠阳谋" */
+  if ((matchChatMessages(['假传圣旨', '石虎', '戴渊', '淮北私兵'], { start: -4 })) && !hitDone('P029_Fake_Allegiance_Edict')) {
+    markHit('插入', 'P029_Fake_Allegiance_Edict', `<span style="display:none;">[插入剧情：P029_Fake_Allegiance_Edict]</span>
+    可插入斩间谍投名状、献联石战略麻痹戴渊、假圣旨调世家私兵。
+    推进目标：让<user>用阳谋把不可靠势力逼进抗赵局。`);
+  } _%>

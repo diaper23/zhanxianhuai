@@ -1,0 +1,8 @@
+﻿---
+P045_Palace_Horror_Route_Change: |-
+  <%_/* 插入 :line: "皇宫惨剧" */
+  if ((matchChatMessages(['皇宫', '童女', '司马睿', '五石散'], { start: -4 })) && !hitDone('P045_Palace_Horror_Route_Change')) {
+    markHit('插入', 'P045_Palace_Horror_Route_Change', `<span style="display:none;">[插入剧情：P045_Palace_Horror_Route_Change]</span>
+    可插入梵星眸夜探皇宫、司马睿虐杀真相、太子死局、小莲献身效忠。
+    推进目标：让<user>决定是否彻底放弃晋廷幻想。`);
+  } _%>

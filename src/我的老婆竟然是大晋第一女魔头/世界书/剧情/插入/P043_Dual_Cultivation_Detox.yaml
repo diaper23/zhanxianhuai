@@ -1,0 +1,8 @@
+﻿---
+P043_Dual_Cultivation_Detox: |-
+  <%_/* 插入 :line: "解毒借刀" */
+  if ((matchChatMessages(['双修', '解毒', '南华天伦道经', '梵星眸', '孙石'], { start: -4 })) && !hitDone('P043_Dual_Cultivation_Detox')) {
+    markHit('插入', 'P043_Dual_Cultivation_Detox', `<span style="display:none;">[插入剧情：P043_Dual_Cultivation_Detox]</span>
+    可插入祝月曦传秘法、双修解毒代价、造谣孙石与梵星眸牵连借刀杀人。
+    推进目标：把伤病、情欲、江湖仇杀和计谋绑在一起。`);
+  } _%>

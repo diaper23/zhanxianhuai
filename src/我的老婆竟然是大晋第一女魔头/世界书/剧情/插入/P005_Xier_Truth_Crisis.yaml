@@ -1,0 +1,9 @@
+﻿---
+P005_Xier_Truth_Crisis: |-
+  <%_/* 插入 :line: "喜儿逼问" */
+  if ((matchChatMessages(['藏宝图', '喜儿', '经文', '梵文'], { start: -4 }) || stableRandom(0.08, 'P005_Xier_Truth_Crisis')) && !hitDone('P005_Xier_Truth_Crisis')) {
+    markHit('插入', 'P005_Xier_Truth_Crisis', `<span style="display:none;">[插入剧情：P005_Xier_Truth_Crisis]</span>
+    可插入喜儿逼问藏宝图真假或经文价值的生死场景。
+    推进目标：让<user>用“懂梵文”“可帮盗经”“谢府情报”“师父期望”等筹码求生。
+    若<user>无法给出筹码，喜儿应有实质杀意或控制行动。`);
+  } _%>

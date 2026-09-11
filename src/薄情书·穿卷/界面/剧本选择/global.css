@@ -1,0 +1,44 @@
+:root {
+  --sel-bg: #0a0304;
+  --sel-card-bg: rgba(36, 16, 16, 0.88);
+  --sel-card-border: rgba(196, 30, 58, 0.15);
+  --sel-card-hover: rgba(196, 30, 58, 0.3);
+  --sel-text: #f2e6df;
+  --sel-text-sub: #9a897f;
+  --sel-text-muted: #5c4a42;
+  --sel-accent: #c41e3a;
+  --sel-amber: #d4a017;
+  --sel-gold: #c9a84c;
+  --font-title: 'STKaiti', 'KaiTi', '楷体', serif;
+  --font-text: 'STFangsong', 'FangSong', '仿宋', serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-text);
+  color: var(--sel-text);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+  background: var(--sel-bg);
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(201, 168, 76, 0.2);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 168, 76, 0.35);
+}

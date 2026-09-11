@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "系统": {
+      "type": "object",
+      "properties": {
+        "当前剧本": {
+          "default": "",
+          "type": "string"
+        },
+        "当前场景": {
+          "default": "",
+          "type": "string"
+        },
+        "当前时间": {
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "女主": {
+      "type": "object",
+      "properties": {
+        "名字": {
+          "default": "",
+          "type": "string"
+        },
+        "悔恨值": {
+          "default": 0,
+          "type": "number"
+        },
+        "执着度": {
+          "default": 50,
+          "type": "number"
+        },
+        "尊严值": {
+          "default": 80,
+          "type": "number"
+        },
+        "认知阶段": {
+          "default": "未觉醒",
+          "type": "string"
+        },
+        "当前情绪": {
+          "default": "",
+          "type": "string"
+        },
+        "关键记忆": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "记忆名"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "description": "记忆描述"
+          }
+        }
+      }
+    },
+    "纨绔世子": {
+      "type": "object",
+      "properties": {
+        "当前阶段": {
+          "default": "京城风云",
+          "type": "string",
+          "enum": [
+            "京城风云",
+            "暗流涌动",
+            "北境烽火",
+            "九五至尊"
+          ]
+        },
+        "势力": {
+          "type": "object",
+          "properties": {
+            "军力": {
+              "default": 5,
+              "type": "number"
+            },
+            "财力": {
+              "default": 10,
+              "type": "number"
+            },
+            "朝堂权势": {
+              "default": 3,
+              "type": "number"
+            },
+            "民间声望": {
+              "default": 20,
+              "type": "number"
+            }
+          }
+        },
+        "个人": {
+          "type": "object",
+          "properties": {
+            "武力": {
+              "default": 15,
+              "type": "number"
+            },
+            "天一决进度": {
+              "default": 0,
+              "type": "number"
+            },
+            "声名标签": {
+              "default": "京城第一纨绔",
+              "type": "string"
+            }
+          }
+        },
+        "人际网络": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "NPC姓名"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "好感度": {
+                "default": 0,
+                "type": "number"
+              },
+              "信任度": {
+                "default": 50,
+                "type": "number"
+              },
+              "立场": {
+                "default": "中立",
+                "type": "string"
+              },
+              "当前状态": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "剧情记录": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "事件名"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "状态": {
+                "type": "string",
+                "enum": [
+                  "进行中",
+                  "已触发",
+                  "已完成"
+                ]
+              },
+              "结果": {
+                "default": "",
+                "type": "string"
+              }
+            },
+            "required": [
+              "状态"
+            ]
+          }
+        },
+        "朝局": {
+          "type": "object",
+          "properties": {
+            "帝王态度": {
+              "default": "猜忌",
+              "type": "string",
+              "enum": [
+                "猜忌",
+                "中立",
+                "忌惮",
+                "敌对"
+              ]
+            },
+            "雪党势力": {
+              "default": 80,
+              "type": "number"
+            }
+          }
+        }
+      },
+      "required": [
+        "势力",
+        "个人",
+        "朝局"
+      ]
+    },
+    "情深不寿局": {
+      "type": "object",
+      "properties": {
+        "当前阶段": {
+          "default": "热搜点燃",
+          "type": "string",
+          "enum": [
+            "热搜点燃",
+            "重逢试探",
+            "记忆反噬",
+            "和解推拉",
+            "放手或回头"
+          ]
+        },
+        "真相已知度": {
+          "default": 0,
+          "type": "number"
+        },
+        "羁绊值": {
+          "default": 60,
+          "type": "number"
+        },
+        "体面值": {
+          "default": 90,
+          "type": "number"
+        },
+        "人物": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "NPC姓名"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "好感度": {
+                "default": 0,
+                "type": "number"
+              },
+              "立场": {
+                "default": "中立",
+                "type": "string"
+              },
+              "当前状态": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "剧情记录": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string",
+            "description": "事件名"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "状态": {
+                "default": "未触发",
+                "type": "string",
+                "enum": [
+                  "未触发",
+                  "进行中",
+                  "已完成"
+                ]
+              },
+              "结果": {
+                "default": "",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "舆情": {
+          "type": "object",
+          "properties": {
+            "热搜余温": {
+              "default": 100,
+              "type": "number"
+            }
+          }
+        }
+      },
+      "required": [
+        "舆情"
+      ]
+    }
+  },
+  "required": [
+    "系统",
+    "女主"
+  ]
+}

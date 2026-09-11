@@ -1,0 +1,8 @@
+﻿---
+P057_Guerrilla_Destroy_Enemy: |-
+  <%_/* 插入 :line: "山林追击" */
+  if ((matchChatMessages(['山林游击', '项飞', '陷阱', '全歼'], { start: -4 })) && !hitDone('P057_Guerrilla_Destroy_Enemy')) {
+    markHit('插入', 'P057_Guerrilla_Destroy_Enemy', `<span style="display:none;">[插入剧情：P057_Guerrilla_Destroy_Enemy]</span>
+    可插入流民军追击、陷阱、心理战、零伤亡神话或因轻敌付出代价。
+    推进目标：验证新军战法的可行性。`);
+  } _%>
