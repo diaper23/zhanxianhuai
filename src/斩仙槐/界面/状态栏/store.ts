@@ -57,15 +57,15 @@ interface WorldState {
   时段: string;
 }
 
-function readStat<T>(path: string, def: T): T {
-  try {
-    // MVU 接管 getvar 后其路径约定不带 stat_data. 前缀；无 MVU 环境则相反。两种都试
-    let v = getvar('stat_data.' + path, { defaults: undefined, noCache: true });
-    if (v === null || v === undefined) v = getvar(path, { defaults: undefined, noCache: true });
-    return (v ?? def) as T;
-  } catch {
-    return def;
+/* 前端界面里 getvar 取不到消息层变量（MVU 接管后一律返回默认值），
+ * 改用 getVariables({ message_id: 当前楼层 }) 整包读取，再按路径取值 */
+function sdGet(sd: any, path: string): any {
+  let cur = sd;
+  for (const seg of path.split('.')) {
+    if (cur == null || typeof cur !== 'object') return undefined;
+    cur = cur[seg];
   }
+  return cur;
 }
 
 /* 姓名存的是 <user> 宏（单主角固定），显示时替换为玩家角色名 */
@@ -107,67 +107,85 @@ export const useStatusStore = defineStore('zx-status', () => {
 
   const NORMALIZE_ATTRS = ['力量', '敏捷', '体质', '外貌', '智力', '意志', '教育', '体型'] as const;
 
-  function refresh() {
-    // ── 主角 ──
-    const c = readStat<Partial<CharacterStats>>('主角', {});
-    char.姓名 = resolveName(String(c.姓名 ?? ''));
-    char.身份 = String(c.身份 ?? '').replace(/^HO\d/, '');
-    char.性别 = String(c.性别 ?? '');
-    char.年龄 = Number(c.年龄 ?? 0) || 0;
-    char.出身 = String(c.出身 ?? '');
-    if (c.气血) { char.气血.当前 = Number(c.气血.当前) || 0; char.气血.上限 = Number(c.气血.上限) || 10; }
-    if (c.法力) { char.法力.当前 = Number(c.法力.当前) || 0; char.法力.上限 = Number(c.法力.上限) || 10; }
-    if (c.心神) { char.心神.当前 = Number(c.心神.当前) || 0; char.心神.上限 = Number(c.心神.上限) || 50; }
-    if (c.幸运 != null) char.幸运 = Number(c.幸运) || 50;
-    for (const key of NORMALIZE_ATTRS) {
-      if (c[key] != null) char[key] = Number(c[key]) || 50;
+  async function refresh() {
+    let sd: any = null;
+    try {
+      const mid = typeof getCurrentMessageId === 'function' ? getCurrentMessageId() : 0;
+      const v = await getVariables({ type: 'message', message_id: mid });
+      sd = v?.stat_data ?? null;
+    } catch {
+      sd = null;
     }
-    if (c.技能) char.技能 = { ...c.技能 };
-    if (c.物品栏) char.物品栏 = { ...c.物品栏 };
+    const r = <T,>(path: string, def: T): T => {
+      const v = sd ? sdGet(sd, path) : undefined;
+      return (v === undefined || v === null ? def : v) as T;
+    };
+
+    // ── 主角 ──
+    char.姓名 = resolveName(r('主角.姓名', ''));
+    char.身份 = String(r('主角.身份', '')).replace(/^HO\d/, '');
+    char.性别 = String(r('主角.性别', ''));
+    char.年龄 = Number(r('主角.年龄', 0)) || 0;
+    char.出身 = String(r('主角.出身', ''));
+    const hp = r<any>('主角.气血', null);
+    if (hp) { char.气血.当前 = Number(hp.当前) || 0; char.气血.上限 = Number(hp.上限) || 10; }
+    const mp = r<any>('主角.法力', null);
+    if (mp) { char.法力.当前 = Number(mp.当前) || 0; char.法力.上限 = Number(mp.上限) || 11; }
+    const san = r<any>('主角.心神', null);
+    if (san) { char.心神.当前 = Number(san.当前) || 0; char.心神.上限 = Number(san.上限) || 50; }
+    char.幸运 = Number(r('主角.幸运', 50)) || 50;
+    for (const key of NORMALIZE_ATTRS) {
+      const v = r<number>('主角.' + key, 50);
+      char[key] = Number(v) || 50;
+    }
+    const sk = r<any>('主角.技能', null);
+    if (sk && typeof sk === 'object') char.技能 = { ...sk };
+    const inv = r<any>('主角.物品栏', null);
+    if (inv && typeof inv === 'object') char.物品栏 = { ...inv };
 
     // ── 剧情进度 ──
-    plot.当前章节 = String(readStat('剧情进度.当前章节', ''));
-    plot.当前日 = Number(readStat('剧情进度.当前日', 1)) || 1;
-    plot.当前场景 = String(readStat('剧情进度.当前场景', ''));
-    plot.地点 = String(readStat('剧情进度.地点', ''));
-    const present = readStat<string[]>('剧情进度.在场角色', []);
+    plot.当前章节 = String(r('剧情进度.当前章节', ''));
+    plot.当前日 = Number(r('剧情进度.当前日', 1)) || 1;
+    plot.当前场景 = String(r('剧情进度.当前场景', ''));
+    plot.地点 = String(r('剧情进度.地点', ''));
+    const present = r<any>('剧情进度.在场角色', []);
     plot.在场角色 = Array.isArray(present) ? present : [];
-    plot.到达章节 = readStat<string[]>('剧情进度.到达章节', []);
-    plot.仪式四物 = readStat('剧情进度.仪式四物', { 向阳木心: false, 不灭灯油: false, 不落之尘: false, 清晨初露: false });
-    plot.任务目标 = readStat<Record<string, any>>('剧情进度.任务目标', {});
+    plot.到达章节 = r<string[]>('剧情进度.到达章节', []);
+    plot.仪式四物 = r('剧情进度.仪式四物', { 向阳木心: false, 不灭灯油: false, 不落之尘: false, 清晨初露: false });
+    plot.任务目标 = r<Record<string, any>>('剧情进度.任务目标', {});
 
     // ── 世界 ──
-    world.现实时间 = String(readStat('世界.现实时间', ''));
-    world.天气 = String(readStat('世界.天气', ''));
-    world.现实日期推进 = Number(readStat('世界.现实日期推进', 0)) || 0;
-    world.时段 = String(readStat('世界.时段', '清晨')) || '清晨';
+    world.现实时间 = String(r('世界.现实时间', ''));
+    world.天气 = String(r('世界.天气', ''));
+    world.现实日期推进 = Number(r('世界.现实日期推进', 0)) || 0;
+    world.时段 = String(r('世界.时段', '清晨')) || '清晨';
 
-    // ── 判词记录（新引擎字段为中文键）──
-    const stored = readStat<RollEntry[]>('_rollLog', []);
+    // ── 判词记录 ──
+    const stored = r<any[]>('_rollLog', []);
     if (Array.isArray(stored) && stored.length > 0) {
       rollLog.value = stored.slice(-8).reverse();
     }
 
     // ── 人物关系与秘密知晓 ──
-    const rel = readStat<Record<string, any>>('NPC关系表', {});
+    const rel = r<any>('NPC关系表', {});
     const normalized: Record<string, NPCEntry> = {};
     if (rel && typeof rel === 'object') {
       for (const [name, v] of Object.entries(rel)) {
         if (!v || typeof v !== 'object') continue;
         normalized[name] = {
-          警惕度: Number(v.警惕度) || 0,
-          态度: String(v.态度 ?? '中立'),
-          好感: Number(v.好感) || 0,
-          存活: v.存活 !== false,
-          备注: String(v.备注 ?? ''),
+          警惕度: Number((v as any).警惕度) || 0,
+          态度: String((v as any).态度 ?? '中立'),
+          好感: Number((v as any).好感) || 0,
+          存活: (v as any).存活 !== false,
+          备注: String((v as any).备注 ?? ''),
         };
       }
     }
     npcs.value = normalized;
-    const sk = readStat<Record<string, any>>('秘密知晓', {});
+    const skAll = r<any>('秘密知晓', {});
     const skOut: Record<string, boolean> = {};
-    if (sk && typeof sk === 'object') {
-      for (const [k, v] of Object.entries(sk)) {
+    if (skAll && typeof skAll === 'object') {
+      for (const [k, v] of Object.entries(skAll)) {
         if (v === true) skOut[k] = true;
       }
     }
@@ -175,7 +193,7 @@ export const useStatusStore = defineStore('zx-status', () => {
   }
 
   refresh();
-  const timer = setInterval(refresh, 2000);
+  const timer = setInterval(() => { refresh(); }, 2000);
 
   return { char, plot, rollLog, world, npcs, secrets, refresh };
 });
