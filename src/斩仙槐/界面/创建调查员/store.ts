@@ -45,7 +45,7 @@ export const useCreateStore = defineStore('zx-create', () => {
     幸运: 50,
   });
 
-  const method = ref<'A' | 'B'>('B'); // A=标准模板（全50） B=320点购
+  const method = ref<'A' | 'B'>('A'); // A=标准模板（全50，可直接出仕） B=320点购
 
   /* ── derived ── */
   const hpMax = computed(() => Math.floor((attrs.体质 + attrs.体型) / 10));
@@ -64,7 +64,7 @@ export const useCreateStore = defineStore('zx-create', () => {
 
   function init() {
     applyTemplate();
-    method.value = 'B';
+    method.value = 'A';
   }
 
   /* ── submit ── */

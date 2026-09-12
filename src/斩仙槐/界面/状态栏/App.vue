@@ -1,4 +1,10 @@
 <template>
+  <div class="stat-root 未建卡框" v-if="!store.char.姓名">
+    <div class="未建卡">
+      <span class="未建卡题">斩仙槐 · 尚未建卡</span>
+      <span class="未建卡注">在上方「调查创建」界面配置属性并领旨出仕后，此处点亮</span>
+    </div>
+  </div>
   <div class="stat-root" v-if="store.char.姓名">
     <!-- ═══ Top Row: Name + Identity + Chapter ═══ -->
     <div class="top-row">
@@ -362,6 +368,15 @@ function 档次(结果: string): string {
 .sub-item { letter-spacing: 0.5px; }
 .sub-item.origin { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* ── 未建卡占位 ── */
+.未建卡框 {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 96px; padding: 12px;
+}
+.未建卡 { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.未建卡题 { font-family: var(--font-title); font-size: 14px; color: var(--zx-text); letter-spacing: 3px; }
+.未建卡注 { font-size: 10px; color: var(--zx-text-muted); letter-spacing: 1px; line-height: 1.6; }
+
 /* ── 硬时钟 ── */
 .时钟行 { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; padding: 4px 7px; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--zx-border-light); }
 .时钟日 { font-family: var(--font-title); font-size: 11px; color: var(--zx-gold); letter-spacing: 1px; }
@@ -512,6 +527,15 @@ function 档次(结果: string): string {
 }
 .疑云印 { color: var(--zx-gold-dim); font-size: 9px; }
 .疑云注 { margin-top: 8px; text-align: center; font-size: 9px; color: var(--zx-text-muted); font-family: var(--font-title); letter-spacing: 1px; }
+
+/* ── 未建卡占位 ── */
+.未建卡框 {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 96px; padding: 12px;
+}
+.未建卡 { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.未建卡题 { font-family: var(--font-title); font-size: 14px; color: var(--zx-text); letter-spacing: 3px; }
+.未建卡注 { font-size: 10px; color: var(--zx-text-muted); letter-spacing: 1px; line-height: 1.6; }
 
 /* ── 空注 ── */
 .空注 { font-size: 10px; color: var(--zx-text-muted); text-align: center; padding: 8px 0; font-family: var(--font-title); }

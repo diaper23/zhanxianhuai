@@ -57,7 +57,7 @@
         </div>
       </div>
 
-      <div class="points-remaining" :class="{ warn: store.remaining < 5, over: store.remaining < 0 }">
+      <div class="points-remaining" v-if="store.method === 'B'" :class="{ warn: store.remaining < 5, over: store.remaining < 0 }">
         剩余点数：{{ store.remaining }} / 320
       </div>
 
