@@ -59,8 +59,10 @@ interface WorldState {
 
 function readStat<T>(path: string, def: T): T {
   try {
-    const v = getvar('stat_data.' + path, { defaults: def, noCache: true });
-    return v ?? def;
+    // MVU 接管 getvar 后其路径约定不带 stat_data. 前缀；无 MVU 环境则相反。两种都试
+    let v = getvar('stat_data.' + path, { defaults: undefined, noCache: true });
+    if (v === null || v === undefined) v = getvar(path, { defaults: undefined, noCache: true });
+    return (v ?? def) as T;
   } catch {
     return def;
   }
