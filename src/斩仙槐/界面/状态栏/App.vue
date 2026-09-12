@@ -55,10 +55,13 @@
       </div>
     </div>
 
+    <!-- 心绪行（非常态才显示） -->
+    <div class="心绪行" v-if="精神状态 !== '常态'" :class="心绪类">{{ 精神状态 }}</div>
+
     <!-- 折叠面板切换 -->
     <div class="折叠条">
       <button
-        v-for="t in (['属性','物证','奉旨','判词','场景'] as const)"
+        v-for="t in (['属性','物证','人物','疑云','奉旨','判词','场景'] as const)"
         :key="t"
         class="折叠按钮"
         :class="{ 激活: 展开 === t }"
@@ -99,6 +102,36 @@
           <span v-for="o in 四物列表" :key="o.名" class="仪式点" :class="{ 得: o.得 }">{{ o.名 }}</span>
         </span>
       </div>
+    </div>
+
+    <!-- ═══ 人物：关系与攻线阶段 ═══ -->
+    <div class="面板 人物" v-if="展开 === '人物'">
+      <div v-if="!npcList.length" class="空注">尚无相识之人</div>
+      <div class="人物列表" v-else>
+        <div v-for="n in npcList" :key="n.名" class="人物条" :class="{ 逝: !n.存活 }">
+          <div class="人物首行">
+            <span class="人物名">{{ n.名 }}</span>
+            <span class="阶段签" v-if="n.阶段">{{ n.阶段 }}</span>
+            <span class="态度签" :class="态度类(n.态度)">{{ n.态度 }}</span>
+          </div>
+          <div class="好感轨">
+            <div class="好感填充" :style="{ width: n.好感pct + '%' }" :class="{ 负: n.好感 < 0 }"></div>
+          </div>
+          <div class="人物尾行">
+            <span class="好感值">{{ n.好感 > 0 ? '+' : '' }}{{ n.好感 }}</span>
+            <span class="警惕值" v-if="n.警惕度 > 0">警惕 {{ n.警惕度 }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ 疑云：秘密知晓 ═══ -->
+    <div class="面板 疑云" v-if="展开 === '疑云'">
+      <div v-if="!secretList.length" class="空注">尚无疑云在心</div>
+      <div class="疑云列表" v-else>
+        <div v-for="s in secretList" :key="s" class="疑云条"><span class="疑云印">◈</span>{{ s }}</div>
+      </div>
+      <div class="疑云注" v-if="secretList.length">—— 亲历或悟得者，录于此 ——</div>
     </div>
 
     <!-- ═══ 属性 ═══ -->
@@ -224,11 +257,53 @@ const topSkills = computed(() =>
     .map(([name, sk]) => ({ name: name.replace(/_/g, '·'), val: sk.等级, job: sk.本职 }))
 );
 
-const 展开 = ref<'属性' | '物证' | '奉旨' | '判词' | '场景' | null>('场景');
+const 展开 = ref<'属性' | '物证' | '人物' | '疑云' | '奉旨' | '判词' | '场景' | null>('场景');
 const expandedItem = ref<string | null>(null);
 function toggleItem(name: string) {
   expandedItem.value = expandedItem.value === name ? null : name;
 }
+
+/* ── 心绪（与 schema 派生口径一致：心神比率）── */
+const 精神状态 = computed(() => {
+  const r = store.char.心神.当前 / Math.max(1, store.char.心神.上限);
+  return r > 0.8 ? '常态' : r > 0.6 ? '焦虑' : r > 0.4 ? '不安' : r > 0.2 ? '失常' : '濒临崩溃';
+});
+const 心绪类 = computed(() => ({ 焦虑: 精神状态.value === '焦虑', 不安: 精神状态.value === '不安', 失常: ['失常', '濒临崩溃'].includes(精神状态.value) }));
+
+/* ── 人物：攻线阶段 + 好感条 ── */
+const 攻线名单: Record<string, string> = { 黄绫: '复仇线', 沈茯苓: '药娘线', 柳拂衣: '掌柜线' };
+function 攻线阶段(名: string, 好感: number): string {
+  if (好感 >= 80) return '许诺';
+  if (好感 >= 60) return '倾心';
+  if (好感 >= 40) return '交心';
+  if (好感 >= 20) return '相识';
+  return 攻线名单[名] ? '初见' : '';
+}
+const npcList = computed(() => {
+  const list = Object.entries(store.npcs).map(([名, n]) => ({
+    名,
+    态度: n.态度,
+    好感: n.好感,
+    好感pct: Math.round(((n.好感 + 100) / 200) * 100),
+    警惕度: n.警惕度,
+    存活: n.存活,
+    阶段: 攻线名单[名] ? 攻线阶段(名, n.好感) : '',
+  }));
+  // 攻线三人置顶，其余按 |好感| 降序
+  return list.sort((a, b) => {
+    const ga = 攻线名单[a.名] ? 1 : 0;
+    const gb = 攻线名单[b.名] ? 1 : 0;
+    if (ga !== gb) return gb - ga;
+    return Math.abs(b.好感) - Math.abs(a.好感);
+  });
+});
+function 态度类(态度: string): string {
+  if (态度.includes('敌')) return '敌';
+  if (态度.includes('戒')) return '戒';
+  if (态度.includes('友') || 态度.includes('信')) return '友';
+  return '中';
+}
+const secretList = computed(() => Object.keys(store.secrets).sort());
 
 function 档次(结果: string): string {
   if (结果.includes('大成功')) return '大成功';
@@ -387,6 +462,56 @@ function 档次(结果: string): string {
 .判奖惩 { font-size: 8.5px; color: var(--zx-text-muted); padding: 0 4px; border: 1px solid var(--zx-border-light); }
 .判结果 { margin-left: auto; font-size: 10.5px; font-family: var(--font-title); letter-spacing: 1px; }
 .判来源 { font-size: 8.5px; color: var(--zx-text-muted); width: 100%; }
+
+/* ── 心绪行 ── */
+.心绪行 {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 8px; padding: 3px 8px;
+  font-family: var(--font-title); font-size: 10.5px; letter-spacing: 2px;
+  border: 1px solid var(--zx-border-light); background: rgba(0, 0, 0, 0.25);
+  &::before { content: '心绪 ▸'; color: var(--zx-text-muted); font-size: 9.5px; }
+  &.焦虑 { color: var(--zx-gold); border-color: var(--zx-gold-dim); }
+  &.不安 { color: #c8825f; border-color: rgba(168, 120, 95, 0.5); }
+  &.失常 { color: var(--zx-red); border-color: rgba(158, 42, 43, 0.5); animation: pulse 1.2s ease infinite; }
+}
+
+/* ── 人物 ── */
+.人物列表 { display: flex; flex-direction: column; gap: 5px; }
+.人物条 {
+  padding: 5px 7px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--zx-border-light);
+  &.逝 { opacity: 0.45; .人物名 { text-decoration: line-through; } }
+}
+.人物首行 { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.人物名 { font-family: var(--font-title); font-size: 11.5px; color: var(--zx-text); letter-spacing: 1px; }
+.阶段签 {
+  font-size: 8.5px; font-family: var(--font-title); color: var(--zx-red);
+  border: 1px solid rgba(158, 42, 43, 0.4); padding: 0 4px; background: rgba(158, 42, 43, 0.06);
+}
+.态度签 {
+  margin-left: auto; font-size: 9px; font-family: var(--font-title); padding: 0 5px; letter-spacing: 1px;
+  color: var(--zx-text-muted); border: 1px solid var(--zx-border-light);
+  &.友 { color: var(--zx-gold); border-color: var(--zx-gold-dim); }
+  &.戒 { color: #c8825f; border-color: rgba(168, 120, 95, 0.5); }
+  &.敌 { color: var(--zx-red); border-color: rgba(158, 42, 43, 0.5); }
+}
+.好感轨 { height: 2px; background: var(--zx-border); overflow: hidden; }
+.好感填充 {
+  height: 100%; background: var(--zx-gold-dim); transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  &.负 { background: var(--zx-red); }
+}
+.人物尾行 { display: flex; gap: 8px; margin-top: 3px; }
+.好感值 { font-family: var(--font-title); font-size: 9.5px; color: var(--zx-text-sub); }
+.警惕值 { font-size: 9px; color: var(--zx-text-muted); }
+
+/* ── 疑云 ── */
+.疑云列表 { display: flex; flex-direction: column; gap: 4px; }
+.疑云条 {
+  display: flex; align-items: baseline; gap: 7px;
+  padding: 4px 7px; font-size: 10.5px; font-family: var(--font-title); letter-spacing: 1px;
+  color: var(--zx-text); background: rgba(0, 0, 0, 0.2); border-left: 2px solid var(--zx-gold-dim);
+}
+.疑云印 { color: var(--zx-gold-dim); font-size: 9px; }
+.疑云注 { margin-top: 8px; text-align: center; font-size: 9px; color: var(--zx-text-muted); font-family: var(--font-title); letter-spacing: 1px; }
 
 /* ── 空注 ── */
 .空注 { font-size: 10px; color: var(--zx-text-muted); text-align: center; padding: 8px 0; font-family: var(--font-title); }

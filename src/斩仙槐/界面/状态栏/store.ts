@@ -42,6 +42,14 @@ interface PlotProgress {
 
 export const 时段序列 = ['清晨', '上午', '午后', '黄昏', '夜晚', '深夜'] as const;
 
+export interface NPCEntry {
+  警惕度: number;
+  态度: string;
+  好感: number;
+  存活: boolean;
+  备注: string;
+}
+
 interface WorldState {
   现实时间: string;
   天气: string;
@@ -92,6 +100,9 @@ export const useStatusStore = defineStore('zx-status', () => {
 
   const rollLog = ref<RollEntry[]>([]);
 
+  const npcs = ref<Record<string, NPCEntry>>({});
+  const secrets = ref<Record<string, boolean>>({});
+
   const NORMALIZE_ATTRS = ['力量', '敏捷', '体质', '外貌', '智力', '意志', '教育', '体型'] as const;
 
   function refresh() {
@@ -134,12 +145,37 @@ export const useStatusStore = defineStore('zx-status', () => {
     if (Array.isArray(stored) && stored.length > 0) {
       rollLog.value = stored.slice(-8).reverse();
     }
+
+    // ── 人物关系与秘密知晓 ──
+    const rel = readStat<Record<string, any>>('NPC关系表', {});
+    const normalized: Record<string, NPCEntry> = {};
+    if (rel && typeof rel === 'object') {
+      for (const [name, v] of Object.entries(rel)) {
+        if (!v || typeof v !== 'object') continue;
+        normalized[name] = {
+          警惕度: Number(v.警惕度) || 0,
+          态度: String(v.态度 ?? '中立'),
+          好感: Number(v.好感) || 0,
+          存活: v.存活 !== false,
+          备注: String(v.备注 ?? ''),
+        };
+      }
+    }
+    npcs.value = normalized;
+    const sk = readStat<Record<string, any>>('秘密知晓', {});
+    const skOut: Record<string, boolean> = {};
+    if (sk && typeof sk === 'object') {
+      for (const [k, v] of Object.entries(sk)) {
+        if (v === true) skOut[k] = true;
+      }
+    }
+    secrets.value = skOut;
   }
 
   refresh();
   const timer = setInterval(refresh, 2000);
 
-  return { char, plot, rollLog, world, refresh };
+  return { char, plot, rollLog, world, npcs, secrets, refresh };
 });
 
 if (import.meta.hot) {
